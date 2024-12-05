@@ -1,9 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html, body {
+  height: 100%; /* Ensures the root elements take full height */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root, #app {
+  height: 100%; /* Ensures the app container spans the full height */
+}
+
+
 @layer base {
   :root {
-    --background: 94 43% 92%; /* Light greenish background */
+    --background: 144 30% 90%; /* Light greenish background */
     --foreground: 94 20% 10%; /* Darker foreground */
     --card: 94 43% 92%; /* Matches background */
     --card-foreground: 94 20% 10%; /* Matches foreground */
@@ -63,5 +76,17 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

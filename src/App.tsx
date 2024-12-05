@@ -1,9 +1,9 @@
 import {  Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
-import UserForm from "./pages/form"
 import Marketplace from "./pages/marketplace/page"
 import Events from "./pages/events/page"
 
+import Dashboard from "./pages/dashboard/page"
 export default function App() {
   return (
     <>
@@ -16,6 +16,7 @@ export default function App() {
           <Route path="/marketplace/category/:category" element={<Marketplace />} />
           <Route path="/marketplace/category/:category/page/:page" element={<Marketplace />} />
         </Route>
+        <Route path="dashboard" element={<Dashboard/>} />
       </Routes>
     </>
   )
