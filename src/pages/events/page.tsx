@@ -1,13 +1,11 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { EventCard } from "@/components/ui/event-card";
 import { Event } from "@/utils/events";
 import { EventModal } from "@/components/ui/event-modal";
 import { events } from "@/utils/events";
 import EventHeader from "./EventHeader";
 
-export default function Home() {
+export default function EventPage() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   
   return (

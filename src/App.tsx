@@ -1,14 +1,14 @@
 import {  Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Marketplace from "./pages/marketplace/page"
-
 import Dashboard from "./pages/dashboard/page"
+import EventPage from "./pages/events/page"
 export default function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/form" element={<UserForm />} /> */}
+        <Route path="/events" element={<EventPage />} />
         <Route path="/marketplace" element={<Marketplace />}>
           <Route path="/marketplace/" element={<Marketplace />} />
           <Route path="/marketplace/category/:category" element={<Marketplace />} />

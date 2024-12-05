@@ -120,7 +120,7 @@ export function RightBox() {
           <div>Hello</div>
         </Box>
       </div>
-      <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar h-[465px]">
+      <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[465px]">
         <PastDetails orders={sampleOrder} />
       </Box>
     </div>

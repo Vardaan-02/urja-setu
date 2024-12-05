@@ -1,10 +1,7 @@
-"use client";
-
-import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "./product-card";
 import { Pagination } from "./pagination";
-import useDebounce from "@/hooks/useDebouce";
+import { useEffect, useState } from "react";
 
 interface ProductGridProps {
   category: string;
@@ -27,19 +24,18 @@ export default function ProductGrid({
   category,
   currentPage,
   priceRange,
-  setPriceRange,
 }: ProductGridProps) {
   const navigate = useNavigate();
   const productsPerPage = 12;
 
   // const debouncedPriceRange:Array<number> = useDebounce(priceRange, [0, 1000]);
 
-  const [filteredProducts, setFilteredProducts] = React.useState<Array<Product>>();
-  const [currentProducts, setCurrentProducts] = React.useState<Array<Product>>();
-  const [totalPages, setTotalPages] = React.useState<number>();
+  const [filteredProducts, setFilteredProducts] = useState<Array<Product>>();
+  const [currentProducts, setCurrentProducts] = useState<Array<Product>>();
+  const [totalPages, setTotalPages] = useState<number>();
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     const products = [
       {
         id: 1,
@@ -85,7 +81,8 @@ export default function ProductGrid({
     setFilteredProducts(
       products.filter((p) => {
         if(category == "All"){
-          return p;
+          return p.price <= priceRange[1] &&
+          p.price >= priceRange[0];
         }
         else{
           // console.log(debouncedPriceRange);
@@ -99,18 +96,18 @@ export default function ProductGrid({
         }
       })
     );
-  }, [priceRange]);
+  }, [priceRange,category]);
 
-  React.useEffect(()=>{
+  useEffect(()=>{
     if(filteredProducts){
       setCurrentProducts(filteredProducts.slice(
         (currentPage - 1) * productsPerPage,
         currentPage * productsPerPage
       ))
     }
-  }, [filteredProducts])
+  }, [filteredProducts,currentPage])
 
-  React.useEffect(()=>{
+  useEffect(()=>{
     if(filteredProducts){
       setTotalPages(Math.ceil(filteredProducts.length / productsPerPage))
     }
