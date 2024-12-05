@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ProductCard from "./product-card";
 import { Pagination } from "./pagination";
 import { useEffect, useState } from "react";
+import useDebounce from "@/hooks/useDebouce";
 
 interface ProductGridProps {
   category: string;
@@ -30,12 +31,12 @@ export default function ProductGrid({
 
   // const debouncedPriceRange:Array<number> = useDebounce(priceRange, [0, 1000]);
 
-  const [filteredProducts, setFilteredProducts] = React.useState<Array<Product>>();
-  const [currentProducts, setCurrentProducts] = React.useState<Array<Product>>();
-  const [totalPages, setTotalPages] = React.useState<number>();
+  const [filteredProducts, setFilteredProducts] = useState<Array<Product>>();
+  const [currentProducts, setCurrentProducts] = useState<Array<Product>>();
+  const [totalPages, setTotalPages] = useState<number>();
   const debouncedPriceRange = useDebounce(priceRange);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const image = [
       "https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg", "https://www.wastewiseproductsinc.com/wp-content/uploads/2014/02/coffee-can-planters.jpg","https://www.bhg.com/thmb/XAZVTUe7N7rZaOKuFyv28Zp6eMs=/550x0/filters:no_upscale():strip_icc()/101169186-81a603c6109643edb4170339d73d0ed1.jpg?height=200&width=200","https://transjardins.org/wp-content/uploads/2017/11/recup-562x424.jpg" 
     ]
@@ -96,7 +97,7 @@ export default function ProductGrid({
         }
       })
     );
-  }, [debouncedPriceRange]);
+  }, [debouncedPriceRange,category,priceRange]);
 
   useEffect(()=>{
     if(filteredProducts){

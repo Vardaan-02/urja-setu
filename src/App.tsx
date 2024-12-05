@@ -2,9 +2,7 @@ import {  Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Marketplace from "./pages/marketplace/page"
 import Events from "./pages/events/page"
-
 import Dashboard from "./pages/dashboard/page"
-import EventPage from "./pages/events/page"
 export default function App() {
   return (
     <>
