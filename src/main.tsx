@@ -9,7 +9,7 @@ import App from './App.tsx';
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
+  <BrowserRouter> 
     <Provider store={store}>
       <QueryClientProvider
         client={queryClient}>
