@@ -37,9 +37,12 @@ export default function ProductGrid({
   const [filteredProducts, setFilteredProducts] = React.useState<Array<Product>>();
   const [currentProducts, setCurrentProducts] = React.useState<Array<Product>>();
   const [totalPages, setTotalPages] = React.useState<number>();
-
+  const debouncedPriceRange = useDebounce(priceRange);
 
   React.useEffect(() => {
+    const image = [
+      "https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg", "https://www.wastewiseproductsinc.com/wp-content/uploads/2014/02/coffee-can-planters.jpg","https://www.bhg.com/thmb/XAZVTUe7N7rZaOKuFyv28Zp6eMs=/550x0/filters:no_upscale():strip_icc()/101169186-81a603c6109643edb4170339d73d0ed1.jpg?height=200&width=200","https://transjardins.org/wp-content/uploads/2017/11/recup-562x424.jpg" 
+    ]
     const products = [
       {
         id: 1,
@@ -47,7 +50,7 @@ export default function ProductGrid({
         price: 129.99,
         condition: "Like New",
         seller: "EcoFurniture",
-        image: "/placeholder.svg?height=200&width=200",
+        image: "https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg",
         category: "Furniture",
       },
       {
@@ -56,7 +59,7 @@ export default function ProductGrid({
         price: 299.99,
         condition: "Gently Used",
         seller: "TechRecycle",
-        image: "/placeholder.svg?height=200&width=200",
+        image: "https://www.wastewiseproductsinc.com/wp-content/uploads/2014/02/coffee-can-planters.jpg",
         category: "Electronics",
       },
       {
@@ -76,30 +79,28 @@ export default function ProductGrid({
         price: Math.random() * 900 + 50,
         condition: Math.random() > 0.5 ? "Like New" : "Gently Used",
         seller: `Seller ${index + 4}`,
-        image: "/placeholder.svg?height=200&width=200",
+        image: image[Math.floor(Math.random() * 4)],
         category: ["Furniture", "Electronics", "Clothing"][
           Math.floor(Math.random() * 3)
         ],
       })),
     ];
+    console.log(debouncedPriceRange);
     setFilteredProducts(
       products.filter((p) => {
         if(category == "All"){
-          return p;
+          return p.price <= priceRange[1] && p.price >= priceRange[0];
         }
         else{
-          // console.log(debouncedPriceRange);
-          // if(debouncedPriceRange){
             return (
               p.category === category &&
               p.price <= priceRange[1] &&
               p.price >= priceRange[0]
             );
-          // }
         }
       })
     );
-  }, [priceRange]);
+  }, [debouncedPriceRange]);
 
   React.useEffect(()=>{
     if(filteredProducts){

@@ -7,7 +7,7 @@ import { EventModal } from "@/components/ui/event-modal";
 import { events } from "@/utils/events";
 import EventHeader from "./EventHeader";
 
-export default function Home() {
+export default function Events() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   
   return (
