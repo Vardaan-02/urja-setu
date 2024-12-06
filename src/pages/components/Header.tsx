@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+
 const navigation = [
   { name: "Home", href: "/" },
   { name: "What We Do", href: "#" },
@@ -12,6 +13,8 @@ const navigation = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -20,7 +23,7 @@ export default function Header() {
       >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+            <span className="sr-only">Urja Setu</span>
             <img alt="" src="/image.png" className="h-8 w-auto" />
           </a>
         </div>
@@ -46,12 +49,12 @@ export default function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a
-            href="#"
+          <button
+            onClick={() => setLoginModalOpen(true)}
             className="text-xl font-semibold text-gray-900 hover:translate-y-1 hover:bg-[#76B947] rounded-md transition duration-300 p-2 hover:text-white"
           >
-            Log in with Google<span aria-hidden="true">&rarr;</span>
-          </a>
+            Log in <span aria-hidden="true">&rarr;</span>
+          </button>
         </div>
       </nav>
       <Dialog
@@ -89,15 +92,40 @@ export default function Header() {
                 ))}
               </div>
               <div className="py-6">
-                <a
-                  href="#"
+                <button
+                  onClick={() => setLoginModalOpen(true)}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Log in
-                </a>
+                </button>
               </div>
             </div>
           </div>
+        </DialogPanel>
+      </Dialog>
+      <Dialog
+        open={loginModalOpen}
+        onClose={setLoginModalOpen}
+        className="fixed inset-0 z-50 flex items-center justify-center"
+      >
+        <div className="fixed inset-0 bg-black bg-opacity-30" />
+        <DialogPanel className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+          <div className="space-y-4">
+            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition">
+              Log in as User
+            </button>
+            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition">
+              Log in as Organization
+            </button>
+            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition">
+              Log in as Delivery Person
+            </button>
+          </div>
+          <button
+            onClick={() => setLoginModalOpen(false)}
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          >
+          </button>
         </DialogPanel>
       </Dialog>
     </header>
