@@ -6,7 +6,7 @@ export default function useDebounce(state: any, initialValue?: any){
 
         const timeout = setTimeout(()=>{
             setNewState(state);
-        }, 1000);
+        }, 700);
 
         return () => clearTimeout(timeout);
     }, [state])

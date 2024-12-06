@@ -9,7 +9,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 export default function EventHeader() {
   return (
-    <div className="lg:flex lg:items-center lg:justify-between p-4 bg-[#DAFFED]">
+    <div className="lg:flex lg:items-center lg:justify-between p-4 bg-green-300">
       <div className="min-w-0 flex-1">
         <h2 className="text-2xl/7 font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
           Upcoming Events
@@ -53,7 +53,7 @@ export default function EventHeader() {
         <span className="sm:ml-3">
           <button
             type="button"
-            className="inline-flex items-center rounded-md bg-[#94C973] px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-[#2F5233] hover:text-white transition duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2f5233]"
+            className="inline-flex items-center rounded-md bg-black text-white px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-[#2F5233] hover:text-white transition duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2f5233]"
           >
             <BackwardIcon
               aria-hidden="true"

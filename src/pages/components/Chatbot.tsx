@@ -1,16 +1,49 @@
 import { useState } from "react";
+import axios from "axios";
+import { API_KEY } from "../../../apiKey";
 export default function Chatbot() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const handleQuestionSubmit = (e: React.FormEvent) => {
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  function delayResponse(index: number, word: string) {
+    setTimeout(() => {
+      setAnswer((prev) => (prev || "") + word);
+    }, index * 100);
+  }
+  async function generateAnswer(e: React.FormEvent) {
     e.preventDefault();
-    if (question.trim() === "") {
-      setAnswer("Please ask a valid question!");
-      return;
+    if (!question.trim()) return;
+    setGeneratingAnswer(true);
+    setQuestion("");
+    try {
+      const response = await axios({
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
+        method: "post",
+        data: {
+          contents: [{ parts: [{ text: question + "\nAnswer in 50 words" }] }],
+        },
+      });
+      const aiResponse =
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+      const responseArr = aiResponse.split("**");
+      let formattedResponse = "";
+      for (let i = 0; i < responseArr.length; i++) {
+        if (i % 2 == 0) formattedResponse += responseArr[i];
+        else formattedResponse += `<b>${responseArr[i]}</b>`;
+      }
+      formattedResponse = formattedResponse.split("*").join("<br/>");
+      const formattedResponseArray = formattedResponse.split(" ");
+      formattedResponseArray.forEach((word, index) => {
+        delayResponse(index, word + " ");
+      });
+      setAnswer(aiResponse);
+    } catch (error) {
+      console.log(error);
+      setAnswer("Sorry - something went wrong. Please try again");
+    } finally {
+      setGeneratingAnswer(false);
     }
-    setAnswer(`That's an interesting question`);
-    setQuestion(""); 
-  };
+  }
 
   return (
     <div className="relative isolate overflow-hidden py-16 sm:py-24 lg:py-32 border">
@@ -24,7 +57,7 @@ export default function Chatbot() {
               Urja AI: Igniting insights, powering possibilities, and always
               here to help!
             </p>
-            <form onSubmit={handleQuestionSubmit} className="mt-6 flex gap-x-4">
+            <form onSubmit={generateAnswer} className="mt-6 flex gap-x-4">
               <label htmlFor="ask-question" className="sr-only">
                 Ask a question
               </label>
@@ -40,17 +73,23 @@ export default function Chatbot() {
               />
               <button
                 type="submit"
-                className="flex-none rounded-md bg-[#94C973] px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-[#2F5233] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5233]"
+                className={`flex-none rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  generatingAnswer
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#94C973] hover:bg-[#2F5233] hover:text-white"
+                }`}
+                disabled={generatingAnswer}
               >
-                Get Answer
+                {generatingAnswer ? "Generating..." : "Get Answer"}
               </button>
             </form>
           </div>
           {answer && (
             <div className="flex items-center justify-center mt-6 lg:mt-0">
-              <div className="border border-black rounded-md p-4 w-full max-w-md">
-                <p className="text-gray-800">{answer}</p>
-              </div>
+              <div
+                className="border border-black rounded-md p-4 w-full max-w-md"
+                dangerouslySetInnerHTML={{ __html: answer }}
+              />
             </div>
           )}
         </div>

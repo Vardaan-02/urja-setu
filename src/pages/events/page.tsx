@@ -11,9 +11,9 @@ export default function Events() {
   return (
     <>
       <EventHeader />
-      <div className="relative min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="relative min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-green-50">
         
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10 ">
           <h1 className="text-4xl font-bold text-center text-gray-900 mb-12">
             Upcoming Events
           </h1>
