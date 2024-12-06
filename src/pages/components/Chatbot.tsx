@@ -1,26 +1,49 @@
-import { useContext, useState } from "react";
-import { Context } from "../chatbot-context/Context";
-import DomPurify from "dompurify";
+import { useState } from "react";
+import axios from "axios";
+import { API_KEY } from "../../../apiKey";
 export default function Chatbot() {
-  const context = useContext(Context);
-  const onSend = context?.onSend;
-  const resData = context?.resData;
-  // const setInput = context?.setInput;
-  const input = context?.input!;
-  const [question, setQuestion] = useState(input);
+  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const handleQuestionSubmit = async (e: React.FormEvent) => {
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  function delayResponse(index: number, word: string) {
+    setTimeout(() => {
+      setAnswer((prev) => (prev || "") + word);
+    }, index * 100);
+  }
+  async function generateAnswer(e: React.FormEvent) {
     e.preventDefault();
-    // if (input.trim() === "") {
-    //   setAnswer("Please ask a valid question!");
-    //   return;
-    // }
-    if (onSend) {
-      await onSend(input); 
-      setAnswer("Fetching response...");
-    }
+    if (!question.trim()) return;
+    setGeneratingAnswer(true);
     setQuestion("");
-  };
+    try {
+      const response = await axios({
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
+        method: "post",
+        data: {
+          contents: [{ parts: [{ text: question + "\nAnswer in 50 words" }] }],
+        },
+      });
+      const aiResponse =
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+      const responseArr = aiResponse.split("**");
+      let formattedResponse = "";
+      for (let i = 0; i < responseArr.length; i++) {
+        if (i % 2 == 0) formattedResponse += responseArr[i];
+        else formattedResponse += `<b>${responseArr[i]}</b>`;
+      }
+      formattedResponse = formattedResponse.split("*").join("<br/>");
+      const formattedResponseArray = formattedResponse.split(" ");
+      formattedResponseArray.forEach((word, index) => {
+        delayResponse(index, word + " ");
+      });
+      setAnswer(aiResponse);
+    } catch (error) {
+      console.log(error);
+      setAnswer("Sorry - something went wrong. Please try again");
+    } finally {
+      setGeneratingAnswer(false);
+    }
+  }
 
   return (
     <div className="relative isolate overflow-hidden py-16 sm:py-24 lg:py-32 border">
@@ -34,7 +57,7 @@ export default function Chatbot() {
               Urja AI: Igniting insights, powering possibilities, and always
               here to help!
             </p>
-            <form onSubmit={handleQuestionSubmit} className="mt-6 flex gap-x-4">
+            <form onSubmit={generateAnswer} className="mt-6 flex gap-x-4">
               <label htmlFor="ask-question" className="sr-only">
                 Ask a question
               </label>
@@ -43,30 +66,30 @@ export default function Chatbot() {
                 name="question"
                 type="text"
                 required
-                value={input}
-                onChange={(e) => context?.setInput(e.target.value)}
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
                 placeholder="Ask a question"
                 className="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 border border-black"
               />
               <button
                 type="submit"
-                className="flex-none rounded-md bg-[#94C973] px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-[#2F5233] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5233]"
-                onClick={() => onSend && onSend(input)}
+                className={`flex-none rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  generatingAnswer
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#94C973] hover:bg-[#2F5233] hover:text-white"
+                }`}
+                disabled={generatingAnswer}
               >
-                Get Answer
+                {generatingAnswer ? "Generating..." : "Get Answer"}
               </button>
             </form>
           </div>
           {answer && (
             <div className="flex items-center justify-center mt-6 lg:mt-0">
-              <div className="border border-black rounded-md p-4 w-full max-w-md">
-                <p
-                  className="text-gray-800"
-                  dangerouslySetInnerHTML={{
-                    __html: DomPurify.sanitize(resData || ""),
-                  }}
-                ></p>
-              </div>
+              <div
+                className="border border-black rounded-md p-4 w-full max-w-md"
+                dangerouslySetInnerHTML={{ __html: answer }}
+              />
             </div>
           )}
         </div>

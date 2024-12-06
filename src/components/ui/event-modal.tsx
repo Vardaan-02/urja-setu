@@ -4,10 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "./dialog";
-import { PersonStanding } from "lucide-react";
-
 interface EventModalProps {
   event: Event | null;
   isOpen: boolean;

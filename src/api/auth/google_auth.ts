@@ -2,8 +2,13 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../utils/firebase";
 import { db } from "../../utils/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { setAuthData } from "@/redux/authSlice";
+import { saveDeliveryPerson } from "./saveDelivery";
+import { saveOrganization } from "./saveOrganization";
+import { saveUser } from "./saveUser";
+import { getRoleDetails } from "../user/getRoleDetails";
 
-const saveDummyUser = async (user: { uid: string; name: string | null; email: string | null; photoURL: string | null }) => {
+const saveDummyUser = async (user: { uid: string; name: string | null; email: string | null; photoURL: string | null; role: string | null}) => {
   try {
     const userRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userRef);
@@ -13,10 +18,20 @@ const saveDummyUser = async (user: { uid: string; name: string | null; email: st
         name: user.name || "New User",
         email: user.email || "example@example.com",
         photoURL: user.photoURL || null,
+        role: user.role
       };
 
       await setDoc(userRef, newUser);
-      console.log("User saved successfully:", user.uid);
+      if(user.role == "DeliveryPerson"){
+        await saveDeliveryPerson(user.uid);
+      }
+      else if(user.role == "Organization"){
+        await saveOrganization(user.uid);
+      }
+      else{
+        await saveUser(user.uid);
+      }
+      // console.log("User saved successfully:", user.uid);
     }
     else{
       console.log("User already exists:", user.uid);
@@ -27,24 +42,35 @@ const saveDummyUser = async (user: { uid: string; name: string | null; email: st
   }
 };
 
-const handleGoogleSignIn = async () => {
+const handleGoogleSignIn = async (dispatch: any, role: string) => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
 
-    console.log("User Info:", {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-    });
+    // console.log("User Info:", {
+    //   uid: user.uid,
+    //   name: user.displayName,
+    //   email: user.email,
+    //   photoURL: user.photoURL,
+    // });
 
     await saveDummyUser({
       uid: user.uid,
       name: user.displayName,
       email: user.email,
       photoURL: user.photoURL,
+      role: role
     });
+    
+    dispatch(setAuthData({
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+      role: role
+    }))
+    await getRoleDetails(user.uid, dispatch);
+    return;
 
   } catch (error: any) {
     console.error("Error during Google sign-in:", error.message);

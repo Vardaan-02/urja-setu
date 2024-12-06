@@ -4,6 +4,7 @@ import Marketplace from "./pages/marketplace/page"
 import Events from "./pages/events/page"
 import { Dashboard } from "./pages/dashboard/page"
 import Login from "./pages/login"
+
 import Cart from "./pages/cart/cart"
 import ParentProductPage from "./pages/product/page"
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="cart" element={<Cart />}></Route>
         <Route path="dashboard" element={<Dashboard/>} />
         <Route path="login" element={<Login/>} />
+        {/* <Route path="role" element={<Role/>} /> */}
 
       </Routes>
     </>

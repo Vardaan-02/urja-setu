@@ -1,16 +1,15 @@
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 export const saveOrganization = async (id: string): Promise<void> => {
   try {
-    const orgRef = doc(db, "organizations", id);
-    const orgDoc = await getDoc(orgRef);
+    const orgRef = doc(db, "users", id);
 
     let defaultData: any = {
       address: "NA",
       events: [],
       followers: [],
-      role: "Organzation",
+      role: "Organization",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
