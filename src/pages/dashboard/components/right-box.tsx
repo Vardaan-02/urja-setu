@@ -1,8 +1,10 @@
 import { Box } from "./box";
 import { Events } from "./right-box-components/events";
 import PastDetails from "./right-box-components/past-details";
-import { SellGarbage } from "./right-box-components/sell-garbage";
+import { SellGarbageUser } from "./user-components/sell-garbage";
 import { WasteChart } from "./right-box-components/waste-chart";
+import { SellGarbageDeliveryBoy } from "./delivery-boy-components/sell-garbage";
+import { SellGarbageCompany } from "./company-components/purchase-garbage";
 
 export function RightBox() {
   const sampleOrder = [
@@ -108,6 +110,8 @@ export function RightBox() {
     },
   ];
 
+  const type = ['type','type'];
+
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 flex-grow">
@@ -118,10 +122,12 @@ export function RightBox() {
           <WasteChart />
         </Box>
         <Box className="bg-green-50 flex-1 aspect-square">
-          <SellGarbage />
+          {type.length==1 && <SellGarbageUser />}
+          {type.length==1 && <SellGarbageDeliveryBoy />}
+          {type.length==2 && <SellGarbageCompany />}
         </Box>
       </div>
-      <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[465px]">
+      <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[504px]">
         <PastDetails orders={sampleOrder} />
       </Box>
     </div>

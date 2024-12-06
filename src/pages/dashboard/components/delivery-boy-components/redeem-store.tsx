@@ -10,7 +10,7 @@ const items = [
   { name: 'Exclusive Products', icon: Award },
 ]
 
-export default function RedeemStore() {
+export default function RedeemStoreDevileryBoy() {
   const [isHovered, setIsHovered] = useState(false)
 
   return (

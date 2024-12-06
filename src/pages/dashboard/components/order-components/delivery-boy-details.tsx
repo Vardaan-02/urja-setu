@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-
 interface DeliveryPersonDetailsProps {
   person: {
     name: string;
@@ -10,12 +9,11 @@ interface DeliveryPersonDetailsProps {
     rating: number;
   };
 }
-
 export default function DeliveryPersonDetails({
   person,
 }: DeliveryPersonDetailsProps) {
   return (
-    <div className="items-center gap-4 hidden md:flex">
+    <div className="flex items-center gap-4">
       <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
         <Avatar>
           <AvatarImage src={person.photo} className="rounded-full h-12 w-12"/>
