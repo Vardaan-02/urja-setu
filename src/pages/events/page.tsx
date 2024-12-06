@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { EventCard } from "@/components/ui/event-card";
 import { Event } from "@/utils/events";
 import { EventModal } from "@/components/ui/event-modal";

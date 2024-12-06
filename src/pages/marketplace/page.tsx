@@ -1,14 +1,10 @@
-import AdSlider from "./components/ad-slider"
-import ProductShowcase from "./components/product-showcase"
-import Footer from '@/components/ui/Footer'
-
+import ProductShowcase from "./components/product-showcase";
+import Footer from "@/components/ui/Footer";
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8 py-8">
-      <AdSlider />
+    <div className="flex flex-col pt-12">
       <ProductShowcase />
       <Footer />
     </div>
-  )
+  );
 }
-

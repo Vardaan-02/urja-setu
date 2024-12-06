@@ -1,7 +1,9 @@
 import { Box } from "./box";
-import { Calendar } from "./calender";import { Goals } from "./goals";
-import RedeemStore from "./redeem-store";
-import { UserCard } from "./user-card";
+import RedeemStoreCompany from "./company-components/redeem-store";
+import RedeemStoreDevileryBoy from "./delivery-boy-components/redeem-store";
+import { Calendar } from "./left-box-components/calender";import { Goals } from "./left-box-components/goals";
+import { UserCard } from "./left-box-components/user-card";
+import RedeemStoreUser from "./user-components/redeem-store";
 
 export function LeftBox() {
   // User
@@ -27,12 +29,16 @@ export function LeftBox() {
     },
   ];
 
+  const type = ['one','two'];
+
   return (
     <Box className="flex flex-col gap-2 backdrop-blur-sm rounded-lg p-4 bg-green-50 shadow-xl">
       <UserCard user={user} />
       <Calendar markedDates={markedDates} />
       <Goals better={20} title="Weekly target" progress={12} total={20} trend="up"/>
-      <RedeemStore/>
+      {type.length==1 && <RedeemStoreUser/>}
+      {type.length==2 &&<RedeemStoreCompany/>}
+      {type.length==1 &&<RedeemStoreDevileryBoy/>}
     </Box>
   );
 }
