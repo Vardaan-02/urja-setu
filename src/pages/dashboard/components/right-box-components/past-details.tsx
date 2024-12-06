@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import OrderDetails from "./order-components/order-details";
-import DeliveryPersonDetails from "./order-components/delivery-person-details";
-import PickupTimeStatus from "./order-components/pickup-time-status";
-import ShowOrderDetailsButton from "./order-components/order-details-button";
+import OrderDetails from "../order-components/order-details";
+import PickupTimeStatus from "../order-components/pickup-time-status";
+import ShowOrderDetailsButton from "../order-components/order-details-button";
+import DeliveryPersonDetails from "../order-components/delivery-boy-details";
 
 interface PastDetailsProps {
   orders: {
@@ -32,7 +32,7 @@ export default function PastDetails({ orders }: PastDetailsProps) {
         Order Details
       </h1>
       <motion.div
-        className="rounded-lg flex flex-col gap-6"
+        className="rounded-lg flex flex-col gap-2"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -41,7 +41,7 @@ export default function PastDetails({ orders }: PastDetailsProps) {
           return (
             <div
               key={index}
-              className="p-6 flex flex-col sm:flex-row bg-white/50 justify-between items-center rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+              className="p-6 flex bg-white/50 justify-between items-center rounded-xl shadow-lg hover:shadow-xl transition-shadow"
             >
               {/* Left Section - Order Details */}
               <OrderDetails item={order.item} />

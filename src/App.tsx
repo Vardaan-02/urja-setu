@@ -2,6 +2,8 @@ import {  Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Marketplace from "./pages/marketplace/page"
 import Events from "./pages/events/page"
+import About from "./pages/about"
+import { Dashboard } from "./pages/dashboard/page"
 
 import Dashboard from "./pages/dashboard/page"
 import Login from "./pages/login"

@@ -1,17 +1,11 @@
 import {
   BriefcaseIcon,
-  CalendarIcon,
-  CheckIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
-  LinkIcon,
   MapPinIcon,
-  PencilIcon,
   BackwardIcon,
-  BackspaceIcon
 } from "@heroicons/react/20/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { DollarSign } from "lucide-react";
 
 export default function EventHeader() {
   return (

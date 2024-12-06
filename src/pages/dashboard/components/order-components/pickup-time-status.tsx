@@ -21,7 +21,7 @@ export default function PickupTimeStatus({ pickupTime }: PickupTimeStatusProps) 
         const seconds = Math.floor((diff % 60000) / 1000)
         setTimeRemaining(`${minutes}m ${seconds}s`)
       } else {
-        setTimeRemaining('Time up!')
+        setTimeRemaining('Now!')
       }
     }
 
@@ -32,11 +32,11 @@ export default function PickupTimeStatus({ pickupTime }: PickupTimeStatusProps) 
   return (
     <div className="flex justify-between items-center">
       <div>
-        <h3 className="text-lg font-semibold mb-2">Pickup Time & Status</h3>
-        <p className="text-sm text-gray-600 mb-2">
+        <h3 className="font-semibold mb-2 text-sm">Pickup Time</h3>
+        <p className="text-xs text-gray-600 mb-2">
           {pickupTime.start} - {pickupTime.end}
         </p>
-        <p className="text-sm font-medium">{timeRemaining}</p>
+        <p className="text-xs font-medium text-gray-800">{timeRemaining}</p>
       </div>
     </div>
   )

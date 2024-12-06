@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../chatbot-context/Context";
+import DomPurify from "dompurify";
 export default function Chatbot() {
-  const [question, setQuestion] = useState("");
+  const context = useContext(Context);
+  const onSend = context?.onSend;
+  const resData = context?.resData;
+  // const setInput = context?.setInput;
+  const input = context?.input!;
+  const [question, setQuestion] = useState(input);
   const [answer, setAnswer] = useState("");
-  const handleQuestionSubmit = (e: React.FormEvent) => {
+  const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (question.trim() === "") {
-      setAnswer("Please ask a valid question!");
-      return;
+    // if (input.trim() === "") {
+    //   setAnswer("Please ask a valid question!");
+    //   return;
+    // }
+    if (onSend) {
+      await onSend(input); 
+      setAnswer("Fetching response...");
     }
-    setAnswer(`That's an interesting question`);
-    setQuestion(""); 
+    setQuestion("");
   };
 
   return (
@@ -33,14 +43,15 @@ export default function Chatbot() {
                 name="question"
                 type="text"
                 required
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                value={input}
+                onChange={(e) => context?.setInput(e.target.value)}
                 placeholder="Ask a question"
                 className="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 border border-black"
               />
               <button
                 type="submit"
                 className="flex-none rounded-md bg-[#94C973] px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-[#2F5233] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5233]"
+                onClick={() => onSend && onSend(input)}
               >
                 Get Answer
               </button>
@@ -49,7 +60,12 @@ export default function Chatbot() {
           {answer && (
             <div className="flex items-center justify-center mt-6 lg:mt-0">
               <div className="border border-black rounded-md p-4 w-full max-w-md">
-                <p className="text-gray-800">{answer}</p>
+                <p
+                  className="text-gray-800"
+                  dangerouslySetInnerHTML={{
+                    __html: DomPurify.sanitize(resData || ""),
+                  }}
+                ></p>
               </div>
             </div>
           )}
