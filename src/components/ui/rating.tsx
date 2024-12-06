@@ -1,5 +1,4 @@
 import { Star } from 'lucide-react'
-import React from 'react'
 import { motion } from "framer-motion";
 
 function Rating({rating}: {rating: number}) {
