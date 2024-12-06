@@ -4,6 +4,7 @@ import Marketplace from "./pages/marketplace/page"
 import Events from "./pages/events/page"
 
 import Dashboard from "./pages/dashboard/page"
+import Login from "./pages/login"
 export default function App() {
   return (
     <>
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/marketplace/category/:category/page/:page" element={<Marketplace />} />
         </Route>
         <Route path="dashboard" element={<Dashboard/>} />
+        <Route path="login" element={<Login/>} />
       </Routes>
     </>
   )
