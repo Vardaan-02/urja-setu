@@ -5,8 +5,9 @@ import Events from "./pages/events/page"
 import About from "./pages/about"
 import Login from "./pages/login"
 import { Dashboard } from "./pages/dashboard/page"
-import Role from "./pages/role"
 
+import Dashboard from "./pages/dashboard/page"
+import Login from "./pages/login"
 export default function App() {
   return (
     <>
