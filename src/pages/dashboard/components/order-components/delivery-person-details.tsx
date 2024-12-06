@@ -16,7 +16,7 @@ export default function DeliveryPersonDetails({
   person,
 }: DeliveryPersonDetailsProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="items-center gap-4 hidden md:flex">
       <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
         <Avatar>
           <AvatarImage src={person.photo} className="rounded-full h-12 w-12"/>
