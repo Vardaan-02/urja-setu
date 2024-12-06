@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import OrderDetails from "./order-components/order-details";
-import DeliveryPersonDetails from "./order-components/delivery-person-details";
-import PickupTimeStatus from "./order-components/pickup-time-status";
-import ShowOrderDetailsButton from "./order-components/order-details-button";
+import OrderDetails from "../order-components/order-details";
+import DeliveryPersonDetails from "../order-components/delivery-person-details";
+import PickupTimeStatus from "../order-components/pickup-time-status";
+import ShowOrderDetailsButton from "../order-components/order-details-button";
 
 interface PastDetailsProps {
   orders: {

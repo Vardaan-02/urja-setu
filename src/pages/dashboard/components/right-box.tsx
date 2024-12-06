@@ -1,7 +1,8 @@
 import { Box } from "./box";
-import { Events } from "./events";
-import PastDetails from "./past-details";
-import { WasteChart } from "./waste-chart";
+import { Events } from "./right-box-components/events";
+import PastDetails from "./right-box-components/past-details";
+import { SellGarbage } from "./right-box-components/sell-garbage";
+import { WasteChart } from "./right-box-components/waste-chart";
 
 export function RightBox() {
   const sampleOrder = [
@@ -117,7 +118,7 @@ export function RightBox() {
           <WasteChart />
         </Box>
         <Box className="bg-green-50 flex-1 aspect-square">
-          <div>Hello</div>
+          <SellGarbage />
         </Box>
       </div>
       <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[465px]">

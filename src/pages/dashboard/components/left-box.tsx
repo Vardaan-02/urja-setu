@@ -1,7 +1,7 @@
 import { Box } from "./box";
-import { Calendar } from "./calender";import { Goals } from "./goals";
-import RedeemStore from "./redeem-store";
-import { UserCard } from "./user-card";
+import { Calendar } from "./left-box-components/calender";import { Goals } from "./left-box-components/goals";
+import RedeemStore from "./left-box-components/redeem-store";
+import { UserCard } from "./left-box-components/user-card";
 
 export function LeftBox() {
   // User

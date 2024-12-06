@@ -15,7 +15,7 @@ export default function RedeemStore() {
 
   return (
     <motion.div
-      className="overflow-hidden p-4 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-lg justify-between
+      className="overflow p-4 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-lg justify-between
      items-center w-full bg-red-500"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
