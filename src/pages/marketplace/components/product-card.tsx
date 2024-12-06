@@ -1,10 +1,8 @@
-"use client";
-
 import { Heart, ShoppingCart } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Product } from "./product-grid";
+import { Product } from "@/types/product";
 import Rating from "@/components/ui/rating";
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -14,7 +12,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <div
           className="relative aspect-square"
           style={{
-            backgroundImage: `url('${product.image}')`,
+            backgroundImage: `url('${product.images[0]}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
