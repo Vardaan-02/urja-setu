@@ -47,8 +47,8 @@ export default function DeliveryPersonProfile({
           </div>
         </div>
 
-        <div className="w-full">
-          <Rating rating={rating} />
+        <div className="flex w-full justify-center">
+          <Rating rating={rating} size={24} className="gap-8"/>
         </div>
 
         <Separator className="bg-gray-300"/>
