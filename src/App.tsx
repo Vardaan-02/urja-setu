@@ -2,7 +2,7 @@ import {  Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Marketplace from "./pages/marketplace/page"
 import Events from "./pages/events/page"
-
+import About from "./pages/about"
 import Dashboard from "./pages/dashboard/page"
 export default function App() {
   return (
@@ -17,6 +17,7 @@ export default function App() {
           <Route path="/marketplace/category/:category/page/:page" element={<Marketplace />} />
         </Route>
         <Route path="dashboard" element={<Dashboard/>} />
+        <Route path="/about" element={<About/>} />
       </Routes>
     </>
   )
