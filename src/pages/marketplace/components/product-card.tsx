@@ -1,55 +1,58 @@
-"use client"
+"use client";
 
-import { Heart, ShoppingCart } from 'lucide-react'
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-
-interface Product {
-  id: number
-  title: string
-  price: number
-  condition: string
-  seller: string
-  image: string
-}
+import { Heart, ShoppingCart } from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Product } from "./product-grid";
+import Rating from "@/components/ui/rating";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg">
+    <Card className="p-4 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-lg flex flex-col justify-between transition-all">
       <CardContent className="p-0">
         <div
-            className="relative aspect-square"
-            style={{
-                backgroundImage: `url('${product.image}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }}
-            >
-            <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-2 right-2 bg-white bg-opacity-50 hover:bg-opacity-100 transition-all"
-            >
-                <Heart className="h-5 w-5" />
-            </Button>
+          className="relative aspect-square"
+          style={{
+            backgroundImage: `url('${product.image}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 bg-white bg-opacity-50 hover:bg-opacity-100 transition-all hover:bg-white hover:text-black"
+          >
+            {product.liked ? (
+              <Heart fill="#22c55e" className="h-5 w-5 text-green-500" />
+            ) : (
+              <Heart className="h-5 w-5" />
+            )}
+          </Button>
         </div>
 
-        <div className="p-4">
+        <div className="px-1 py-4">
+        <div className="flex items-center justify-between">
+          
           <h3 className="font-semibold text-lg mb-1">{product.title}</h3>
+          <Badge variant={"outline"} className="bg-green-50"> {product.category} </Badge>
+          </div>
           <p className="text-xl font-bold mb-2">${product.price.toFixed(2)}</p>
-          <div className="flex items-center justify-between mb-2">
-            <Badge variant="secondary">{product.condition}</Badge>
-            <span className="text-sm text-muted-foreground">{product.seller}</span>
+          <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">
+            {product.seller}
+          </span>
+            <Rating rating={product.rating} />
           </div>
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <Button className="w-full">
-          <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
+      <CardFooter className="w-full">
+          <Button variant={"outline"} className="border-none text-gray-800 hover:bg-gray-300 hover:text-gray-800"> Show Details </Button>
+        <Button className="">
+          <ShoppingCart className="h-4 w-4" /> Add to Cart
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
-

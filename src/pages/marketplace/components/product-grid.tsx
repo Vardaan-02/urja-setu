@@ -11,12 +11,14 @@ interface ProductGridProps {
   setPriceRange: React.Dispatch<React.SetStateAction<Array<number>>>;
 }
 
-interface Product {
+export interface Product {
   id: number;
   title: string;
   price: number;
   condition: string;
   seller: string;
+  liked: boolean;
+  rating: number;
   image: string;
   category: string;
 }
@@ -47,6 +49,8 @@ export default function ProductGrid({
         price: 129.99,
         condition: "Like New",
         seller: "EcoFurniture",
+        liked: true,
+        rating: 4,
         image: "https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg",
         category: "Furniture",
       },
@@ -56,6 +60,8 @@ export default function ProductGrid({
         price: 299.99,
         condition: "Gently Used",
         seller: "TechRecycle",
+        liked: false,
+        rating: 3.5,
         image: "https://www.wastewiseproductsinc.com/wp-content/uploads/2014/02/coffee-can-planters.jpg",
         category: "Electronics",
       },
@@ -64,6 +70,8 @@ export default function ProductGrid({
         title: "Upcycled Denim Jacket",
         price: 59.99,
         condition: "Like New",
+        liked: true,
+        rating: 3.5,
         seller: "GreenThreads",
         image:
           "https://www.bhg.com/thmb/XAZVTUe7N7rZaOKuFyv28Zp6eMs=/550x0/filters:no_upscale():strip_icc()/101169186-81a603c6109643edb4170339d73d0ed1.jpg?height=200&width=200",
@@ -76,6 +84,8 @@ export default function ProductGrid({
         price: Math.random() * 900 + 50,
         condition: Math.random() > 0.5 ? "Like New" : "Gently Used",
         seller: `Seller ${index + 4}`,
+        liked: false,
+        rating: Math.floor(Math.random() * 6),
         image: image[Math.floor(Math.random() * 4)],
         category: ["Furniture", "Electronics", "Clothing"][
           Math.floor(Math.random() * 3)
@@ -121,7 +131,7 @@ export default function ProductGrid({
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-green-50 p-6 rounded-2xl shadow-md">
         {currentProducts && currentProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
