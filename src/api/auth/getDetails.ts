@@ -1,29 +1,25 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../../utils/firebase";
 import { saveUser } from "./saveUser";
 import { saveOrganization } from "./saveOrganization";
 import { saveDeliveryPerson } from "./saveDelivery";
+import { updateRole } from "@/redux/authSlice";
+import { getRoleDetails } from "../user/getRoleDetails";
 
 
-export const getDetails = async (role: string, id: string) => {
+export const getDetails = async (role: string, id: string, dispatch: any) => {
     try {
-        const userRef = doc(db, "users", id);
-        const userDoc = await getDoc(userRef);
-
-        if (userDoc.exists()) {
-            console.log("User already exists, skipping creation.");
-            return;
-        }
-
         if(role == "DeliveryPerson"){
+            dispatch(updateRole("DeliveryPerson"));
             await saveDeliveryPerson(id);
         }
         else if(role == "Organization"){
+            dispatch(updateRole("Organization"));
             await saveOrganization(id);
         }
         else{
-            await saveUser(id)
+            dispatch(updateRole("User"));
+            await saveUser(id);
         }
+        await getRoleDetails(id, dispatch);
         console.log("Date Saved Successfully");
         return;
     }
