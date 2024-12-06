@@ -1,7 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import handleGoogleSignIn from "@/api/auth/google_auth";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from '@/redux/hooks';
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -10,11 +13,20 @@ const navigation = [
   { name: "Company", href: "#" },
   { name: "About", href: "/about" },
 ];
+const handleLogin = async (role: string, dispatch: any) => {
+  await handleGoogleSignIn(dispatch, role);
+}
 
 export default function Header() {
+  const auth = useAppSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if(auth){
+      console.log(auth);
+    }
+  }, [auth])
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -111,13 +123,16 @@ export default function Header() {
         <div className="fixed inset-0 bg-black bg-opacity-30" />
         <DialogPanel className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
           <div className="space-y-4">
-            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition">
+            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
+            onClick={() => {handleLogin("User", dispatch)}}>
               Log in as User
             </button>
-            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition">
+            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
+            onClick={() => {handleLogin("Organization", dispatch)}}>
               Log in as Organization
             </button>
-            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition">
+            <button className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
+            onClick={() => {handleLogin("DeliveryPerson", dispatch)}}>
               Log in as Delivery Person
             </button>
           </div>

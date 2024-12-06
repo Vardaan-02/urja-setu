@@ -8,7 +8,7 @@ import { saveOrganization } from "./saveOrganization";
 import { saveUser } from "./saveUser";
 import { getRoleDetails } from "../user/getRoleDetails";
 
-const saveDummyUser = async (user: { uid: string; name: string | null; email: string | null; photoURL: string | null; role: string | null}, dispatch: any) => {
+const saveDummyUser = async (user: { uid: string; name: string | null; email: string | null; photoURL: string | null; role: string | null}) => {
   try {
     const userRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userRef);
@@ -31,10 +31,9 @@ const saveDummyUser = async (user: { uid: string; name: string | null; email: st
       else{
         await saveUser(user.uid);
       }
-      console.log("User saved successfully:", user.uid);
+      // console.log("User saved successfully:", user.uid);
     }
     else{
-      await getRoleDetails(user.uid, dispatch);
       console.log("User already exists:", user.uid);
     }
   }
@@ -61,7 +60,7 @@ const handleGoogleSignIn = async (dispatch: any, role: string) => {
       email: user.email,
       photoURL: user.photoURL,
       role: role
-    }, dispatch);
+    });
     
     dispatch(setAuthData({
       uid: user.uid,
@@ -70,6 +69,7 @@ const handleGoogleSignIn = async (dispatch: any, role: string) => {
       photoURL: user.photoURL,
       role: role
     }))
+    await getRoleDetails(user.uid, dispatch);
     return;
 
   } catch (error: any) {

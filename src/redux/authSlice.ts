@@ -6,7 +6,7 @@ export interface AuthState {
     email: string | null,
     photoURL: string | null,
     role: string | null,
-    details: Record<string, any>,
+    details: {},
 }
 
 const initialState: AuthState = {
@@ -32,10 +32,8 @@ export const authSlice = createSlice({
         state.details = details || {};
     },
     updateDetails: (state, action) => {
-        const { updates } = action.payload;
-        if (updates && typeof updates === 'object') {
-          state.details = { ...state.details, ...updates }; 
-        }
+        const {updates}  = action.payload;
+        state.details = { ...state.details, ...updates }; 
     },
     updateRole: (state, action) => {
         state.role = action.payload;

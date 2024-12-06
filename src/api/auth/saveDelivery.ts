@@ -17,7 +17,7 @@ export const saveDeliveryPerson = async (id: string): Promise<void> => {
       updatedAt: new Date().toISOString(),
     };
     await updateDoc(dpRef, defaultData);
-    console.log("Successfully Updated Default Data");
+    // console.log("Successfully Updated Default Data");
     return;
   }
   catch(error: any){

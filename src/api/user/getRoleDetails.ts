@@ -8,7 +8,9 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
         const userRef = doc(db, "users", id);
         const userDoc = await getDoc(userRef);
         const userData : DocumentData | undefined = userDoc.data();
+        // console.log("Hello, I'm under the water!!")
         if(userDoc.exists() && userData){
+            // console.log("Hello, I'm above the water!")
             const role = userData.role;
             let updates = {};
             if(role == "DelieveryPerson"){
@@ -35,7 +37,10 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
                     wallet: userData.wallet,
                 }
             }
-            dispatch(updateDetails(updates));
+            // console.log(userData);
+            // console.log("Updates being dispatched:", updates);
+            dispatch(updateDetails({updates}));
+            // console.log("Updates  dispatched:", updates);
             return;
         }
     }

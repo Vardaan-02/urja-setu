@@ -1,14 +1,9 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 export const saveUser = async (id: string): Promise<void> => {
   try {
     const userRef = doc(db, "users", id);
-    const userDoc = await getDoc(userRef);
-    console.log(userRef, userDoc);
-    console.log("hello");
-    
-
     let defaultData: any = {
       address: "NA",
       wallet: 100,
