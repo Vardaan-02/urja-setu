@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
 import { LeftBox } from "./components/right-box";
 import { RightBox } from "./components/left-box";
+import NavBar from "@/components/nav-bar";
 
 export default function OrderDetails() {
-  
   return (
     <>
+      <NavBar />
       <motion.div
-        className="h-full p-4 transition-all duration-300 ease-in-out"
+        className="h-full p-4 transition-all duration-300 ease-in-out pt-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}

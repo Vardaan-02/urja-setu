@@ -42,7 +42,7 @@ const saveDummyUser = async (user: { uid: string; name: string | null; email: st
   }
 };
 
-const handleGoogleSignIn = async (dispatch: any, role?: string) => {
+const handleGoogleSignIn = async (dispatch: any, role: string | null) => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;

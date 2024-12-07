@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { RightBox } from "./components/right-box";
 import { LeftBox } from "./components/left-box";
+import NavBar from "@/components/nav-bar";
+
 
 export default function Dashboard() {
   return (
     <>
+    <NavBar />
       <motion.div
-        className="h-full p-4 transition-all duration-300 ease-in-out"
+        className="h-full p-4 pt-0 transition-all duration-300 ease-in-out"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
