@@ -39,7 +39,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="flex items-center justify-between">
           
           <h3 className="font-semibold text-lg mb-1">{product.title}</h3>
-          <Badge variant={"outline"} className="bg-green-50"> {product.category} </Badge>
+          <Badge variant={"outline"} className="bg-green-50"> {product.category}</Badge>
           </div>
           <p className="text-xl font-bold mb-2">${product.price.toFixed(2)}</p>
           <div className="flex items-center justify-between">
