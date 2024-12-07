@@ -122,9 +122,9 @@ export function RightBox() {
           <WasteChart />
         </Box>
         <Box className="bg-green-50 flex-1 aspect-square">
-          {type.length==1 && <SellGarbageUser />}
+          {type.length==2 && <SellGarbageUser />}
           {type.length==1 && <SellGarbageDeliveryBoy />}
-          {type.length==2 && <SellGarbageCompany />}
+          {type.length==1 && <SellGarbageCompany />}
         </Box>
       </div>
       <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[504px]">

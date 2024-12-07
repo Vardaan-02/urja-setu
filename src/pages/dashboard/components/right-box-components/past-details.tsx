@@ -3,27 +3,7 @@ import OrderDetails from "../order-components/order-details";
 import PickupTimeStatus from "../order-components/pickup-time-status";
 import ShowOrderDetailsButton from "../order-components/order-details-button";
 import DeliveryPersonDetails from "../order-components/delivery-boy-details";
-
-interface PastDetailsProps {
-  orders: {
-    item: {
-      name: string;
-      price: number;
-      weight: number;
-      image: string;
-    };
-    deliveryPerson: {
-      name: string;
-      photo: string;
-      contact: string;
-      rating: number;
-    };
-    pickupTime: {
-      start: string;
-      end: string;
-    };
-  }[];
-}
+import { PastDetailsProps } from "@/types/order";
 
 export default function PastDetails({ orders }: PastDetailsProps) {
   return (
@@ -44,13 +24,17 @@ export default function PastDetails({ orders }: PastDetailsProps) {
               className="p-6 flex bg-white/50 justify-between items-center rounded-xl shadow-lg hover:shadow-xl transition-shadow"
             >
               {/* Left Section - Order Details */}
-              <OrderDetails item={order.item} />
+              {order.item && <OrderDetails item={order.item} />}
 
               {/* Middle Section - Delivery Person */}
-              <DeliveryPersonDetails person={order.deliveryPerson} />
+              {order.deliveryPerson && (
+                <DeliveryPersonDetails person={order.deliveryPerson} />
+              )}
 
               {/* Right Section - Pickup Time */}
-              <PickupTimeStatus pickupTime={order.pickupTime} />
+              {order.pickupTime && (
+                <PickupTimeStatus pickupTime={order.pickupTime} />
+              )}
 
               {/* Details Button */}
               <div className="mt-4 sm:mt-0">
