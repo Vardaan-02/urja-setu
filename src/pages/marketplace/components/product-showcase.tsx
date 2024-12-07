@@ -22,7 +22,7 @@ export default function ProductShowcase() {
   const [products, setProducts] = React.useState<Array<Product>>();
 
   React.useEffect(() => {
-    const prod = fetchProducts("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
+    fetchProducts("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
 
   }, [])
 

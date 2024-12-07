@@ -1,8 +1,7 @@
-import { collection, doc, DocumentData, getDocs } from "firebase/firestore";
+import { collection, DocumentData, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Product } from "@/types/product";
 import { setProducts } from "@/redux/productSlice";
-import { log } from "console";
 
 export const fetchProducts = async (userId: string, dispatch: any) => {
     try {
@@ -14,7 +13,6 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
         }));
 
         let prods: Product[] = [];
-        console.log(userId);
         
         products.forEach((i) => {
             const item = {
@@ -35,8 +33,6 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
             item.liked = i.liked.includes(userId) ? true : false;
             prods.push(item);
         });
-        console.log(prods);
-        
         dispatch(setProducts(prods))
         
     }

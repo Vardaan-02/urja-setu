@@ -20,7 +20,7 @@ import Rating from "@/components/ui/rating"
 
 const initialProducts: cartProduct[] = [
   {
-    id: 1,
+    id: "1",
     title: "Recycled Wood Coffee Table",
     price: 129.99,
     condition: "Like New",
@@ -32,7 +32,7 @@ const initialProducts: cartProduct[] = [
     category: "Furniture",
   },
   {
-    id: 2,
+    id: "2",
     title: "Refurbished Smartphone",
     price: 299.99,
     condition: "Gently Used",
@@ -44,7 +44,7 @@ const initialProducts: cartProduct[] = [
     category: "Electronics",
   },
   {
-    id: 3,
+    id: "3",
     title: "Upcycled Denim Jacket",
     price: 59.99,
     condition: "Like New",
@@ -83,13 +83,14 @@ export default function Cart() {
     setTotal(newTotal)
   }, [cartItems, shipping, discount])
 
-  const updateQuantity = (id: number, newQuantity: number) => {
+
+  const updateQuantity = (id: string, newQuantity: number) => {
     setCartItems(cartItems.map(item => 
       item.id === id ? { ...item, quantity: Math.max(0, newQuantity) } : item
     ))
   }
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setCartItems(cartItems.filter(item => item.id !== id))
   }
 
