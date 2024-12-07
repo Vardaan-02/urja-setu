@@ -1,12 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
+
+export interface UserDetails {
+    permissions: string[];
+    department: string;
+}
+
+export interface DeliveryPersonDetails {
+    shopName: string;
+    products: any[];
+    revenue: number;
+}
+
+export interface OrganizationDetails {
+    orders: any[];
+    wishlist: any[];
+}
+
+export type userDetails = 
+    | { role: 'User'; details: UserDetails }
+    | { role: 'DeliveryPerson'; details: DeliveryPersonDetails }
+    | { role: 'Organization'; details: OrganizationDetails };
+
 export interface AuthState {
-    uid: string | null,
-    name: string | null,
-    email: string | null,
-    photoURL: string | null,
-    role: string | null,
-    details: {},
+    uid: string | null;
+    name: string | null;
+    email: string | null;
+    photoURL: string | null;
+    role: UserRole | null;
+    details: Partial<UserDetails & DeliveryPersonDetails & OrganizationDetails>;
 }
 
 const initialState: AuthState = {
@@ -38,10 +61,13 @@ export const authSlice = createSlice({
     updateRole: (state, action) => {
         state.role = action.payload;
     },
+    updateOrders: (state, action) => {
+        state.details.orders = action.payload;
+    },
     resetAuth: () => initialState,
   },
 })
 
-export const {setAuthData, resetAuth, updateDetails, updateRole} = authSlice.actions
+export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders} = authSlice.actions
 
 export default authSlice.reducer

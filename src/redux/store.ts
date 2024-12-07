@@ -15,7 +15,13 @@ const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
   },
-})
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
+});
 
 
 const persistor = persistStore(store)
