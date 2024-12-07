@@ -53,7 +53,7 @@ const contributors = [
             <div className="absolute inset-0"></div>
             <div className="relative z-10 max-w-4xl">
               <h1 className="text-5xl font-bold mb-6 text-emerald-800">
-                Welcome to <span className="text-emerald-500">URja Setu</span>
+                Welcome to <span className="text-emerald-500">Urja Setu</span>
               </h1>
               <p className="text-lg text-emerald-700 mb-4">
                 We aim to revolutionize waste management by enabling efficient recycling and waste-to-energy solutions.

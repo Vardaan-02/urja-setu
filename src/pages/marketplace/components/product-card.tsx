@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/types/product";
 import Rating from "@/components/ui/rating";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const navigate = useNavigate();
+  function handleShowDetails(){
+    navigate(`/product/${product.id}`);
+  }
   return (
     <Card className="p-4 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-lg flex flex-col justify-between transition-all">
       <CardContent className="p-0">
@@ -46,7 +51,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </CardContent>
       <CardFooter className="w-full">
-          <Button variant={"outline"} className="border-none text-gray-800 hover:bg-gray-300 hover:text-gray-800"> Show Details </Button>
+          <Button onClick={handleShowDetails} variant={"outline"} className="border-none text-gray-800 hover:bg-gray-300 hover:text-gray-800"> Show Details </Button>
         <Button className="">
           <ShoppingCart className="h-4 w-4" /> Add to Cart
         </Button>
