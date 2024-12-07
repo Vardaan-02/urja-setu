@@ -1,7 +1,7 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../utils/firebase";
 import { db } from "../../utils/firebase";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, DocumentData } from "firebase/firestore";
 import { setAuthData } from "@/redux/authSlice";
 import { saveDeliveryPerson } from "./saveDelivery";
 import { saveOrganization } from "./saveOrganization";
@@ -53,14 +53,21 @@ const handleGoogleSignIn = async (dispatch: any, role: string | null) => {
     //   email: user.email,
     //   photoURL: user.photoURL,
     // });
-
-    await saveDummyUser({
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      role: role
-    });
+    if(role){
+      await saveDummyUser({
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        role: role
+      });
+    }
+    else{
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const userData : DocumentData | undefined = userDoc.data();
+        if(userData) role = userData.role;
+    }
     
     dispatch(setAuthData({
       uid: user.uid,
