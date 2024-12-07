@@ -23,4 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Google Maps
+APIKey.ts
+
+# Gemini
 apiKey.ts

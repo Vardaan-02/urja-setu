@@ -23,7 +23,7 @@ export default function ProductDetails({ product, isLiked, onLikeToggle }: Produ
         </button>
       </div>
       <div className="flex items-center space-x-2">
-        <Rating rating={product.rating} size={18} />
+        <Rating rating={product.rating} size={18} className='w-auto justify-start'/>
         <span className="text-muted-foreground">({product.reviews?.length} reviews)</span>
       </div>
       <div className="flex items-baseline space-x-2">

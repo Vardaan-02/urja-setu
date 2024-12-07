@@ -1,4 +1,4 @@
-import { Box } from "./box";
+import { Box } from "../../../components/box";
 import { Events } from "./right-box-components/events";
 import PastDetails from "./right-box-components/past-details";
 import { SellGarbageUser } from "./user-components/sell-garbage";

@@ -1,9 +1,18 @@
-import { Star } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Star } from "lucide-react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-function Rating({ rating, size = 12 }: { rating: number; size?: number }) {
+function Rating({
+  rating,
+  size = 12,
+  className = "",
+}: {
+  rating: number;
+  size?: number;
+  className?: string;
+}) {
   return (
-    <div className="flex">
+    <div className={cn("flex w-full justify-center", className)}>
       {[1, 2, 3, 4, 5].map((star) => (
         <motion.div
           key={star}
@@ -13,9 +22,7 @@ function Rating({ rating, size = 12 }: { rating: number; size?: number }) {
         >
           <Star
             className={`${
-              star <= rating
-                ? 'text-yellow-400 fill-current'
-                : 'text-gray-300'
+              star <= rating ? "text-yellow-400 fill-current" : "text-gray-300"
             }`}
             style={{ width: size, height: size }}
           />
