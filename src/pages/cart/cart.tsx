@@ -17,6 +17,8 @@ import {
 import { cartProduct } from "@/types/product"
 import { ShippingOption } from "@/types/product"
 import Rating from "@/components/ui/rating"
+import { fetchCart } from "@/api/cart/fetchCart"
+import { useDispatch } from "react-redux"
 
 const initialProducts: cartProduct[] = [
   {
@@ -65,6 +67,7 @@ const shippingOptions: ShippingOption[] = [
 ]
 
 export default function Cart() {
+  const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState<cartProduct[]>(initialProducts)
   const [subtotal, setSubtotal] = useState<number>(0)
   const [tax, setTax] = useState<number>(0)
@@ -83,6 +86,9 @@ export default function Cart() {
     setTotal(newTotal)
   }, [cartItems, shipping, discount])
 
+  useEffect(() => {
+    fetchCart("EHgoixNBX0VEREcoWOyl", dispatch);
+  }, [])
 
   const updateQuantity = (id: string, newQuantity: number) => {
     setCartItems(cartItems.map(item => 
