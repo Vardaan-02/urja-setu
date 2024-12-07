@@ -50,8 +50,8 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="w-full">
-          <Button onClick={handleShowDetails} variant={"outline"} className="border-none text-gray-800 hover:bg-gray-300 hover:text-gray-800"> Show Details </Button>
+      <CardFooter className="w-full flex justify-between items-center flex-wrap gap-2">
+        <Button onClick={handleShowDetails} variant={"outline"} className="border-none text-gray-800 hover:bg-gray-300 hover:text-gray-800"> Show Details </Button>
         <Button className="">
           <ShoppingCart className="h-4 w-4" /> Add to Cart
         </Button>
