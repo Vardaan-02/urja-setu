@@ -18,10 +18,10 @@ export default function App() {
           <Route path="/marketplace/category/:category" element={<Marketplace />} />
           <Route path="/marketplace/category/:category/page/:page" element={<Marketplace />} />
         </Route>
-        <Route path="/product" element={<ParentProductPage/>} />
-        <Route path="cart" element={<Cart />}></Route>
-        <Route path="dashboard" element={<Dashboard/>} />
-        <Route path="login" element={<Login/>} />
+        <Route path="/product/:product" element={<ParentProductPage/>} />
+        <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/login" element={<Login/>} />
         {/* <Route path="role" element={<Role/>} /> */}
 
       </Routes>
