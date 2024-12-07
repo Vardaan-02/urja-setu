@@ -7,11 +7,13 @@ import ProductGrid from "./product-grid";
 import ProductFilters from "./product-filters";
 import { Product } from "@/types/product";
 import { fetchProducts } from "@/api/products/fetchProducts";
+import { useDispatch } from "react-redux";
 
 const categories = ["All", "Furniture", "Electronics", "Clothing"];
 
 export default function ProductShowcase() {
   const { category = "All", page = "1" } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [priceRange, setPriceRange] = React.useState([0, 1000])
   const handleCategoryChange = (newCategory: string) => {
@@ -20,7 +22,7 @@ export default function ProductShowcase() {
   const [products, setProducts] = React.useState<Array<Product>>();
 
   React.useEffect(() => {
-    const prod = fetchProducts();
+    const prod = fetchProducts("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
 
   }, [])
 
@@ -30,7 +32,7 @@ export default function ProductShowcase() {
     ]
     const products = [
       {
-        id: 1,
+        id: "1",
         title: "Recycled Wood Coffee Table",
         price: 129.99,
         condition: "Like New",
@@ -41,7 +43,7 @@ export default function ProductShowcase() {
         category: "Furniture",
       },
       {
-        id: 2,
+        id: "2",
         title: "Refurbished Smartphone",
         price: 299.99,
         condition: "Gently Used",
@@ -52,7 +54,7 @@ export default function ProductShowcase() {
         category: "Electronics",
       },
       {
-        id: 3,
+        id: "3",
         title: "Upcycled Denim Jacket",
         price: 59.99,
         condition: "Like New",
@@ -65,7 +67,7 @@ export default function ProductShowcase() {
       },
       // Add more products here to test pagination
       ...[...Array(50)].map((_, index) => ({
-        id: index + 4,
+        id: "jhg",
         title: `Product ${index + 4}`,
         price: Math.random() * 900 + 50,
         condition: Math.random() > 0.5 ? "Like New" : "Gently Used",

@@ -12,6 +12,7 @@ export const saveUser = async (id: string): Promise<void> => {
       following: [],
       orders: [],
       role: "User",
+      liked: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

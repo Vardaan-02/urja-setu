@@ -3,19 +3,27 @@ import { createSlice } from '@reduxjs/toolkit'
 export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
 
 export interface UserDetails {
-    permissions: string[];
-    department: string;
+    address: string;
+    cart: string[];
+    eventDates: [],
+    following: string[],
+    liked: string[],
+    orders: string[],
+    wallet: number,
 }
 
 export interface DeliveryPersonDetails {
-    shopName: string;
-    products: any[];
-    revenue: number;
+    address: string;
+    assignedWork: string[];
+    rating: number;
+    organizationId: string;
+    orders: string[];
 }
 
 export interface OrganizationDetails {
-    orders: any[];
-    wishlist: any[];
+    address: string;
+    events: [];
+    followers: string[];
 }
 
 export type userDetails = 
@@ -64,6 +72,22 @@ export const authSlice = createSlice({
     updateOrders: (state, action) => {
         state.details.orders = action.payload;
     },
+
+    updateLikedProducts: (state, action) => {
+        const { productId, isLiked } = action.payload;
+        if(state.details.liked){
+            if(isLiked){
+                state.details.liked = state.details.liked.filter(
+                    (id: string) => id !== productId
+                );
+            }
+            else{
+                state.details.liked.push(productId);
+            }
+            // state.details.liked = [productId];
+        }
+    },
+
     resetAuth: () => initialState,
   },
 })

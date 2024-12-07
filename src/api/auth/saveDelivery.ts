@@ -8,7 +8,6 @@ export const saveDeliveryPerson = async (id: string): Promise<void> => {
     let defaultData: any = {
       address: "NA",
       organizationId: "",
-      eventDates: [],
       assignedWork: [],
       rating: 0,
       orders: [],
