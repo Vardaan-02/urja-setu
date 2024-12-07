@@ -1,3 +1,4 @@
+import NavBar from '@/components/nav-bar'
 import ProductPage from './components/product-page'
 import { Product } from '@/types/product'
 
@@ -50,9 +51,12 @@ export const sampleProduct: Product = {
 
 export default function ParentProductPage() {
   return (
+    <>
+    <NavBar />
     <main className="bg-background w-[80%] mx-[10%]">
       <ProductPage product={sampleProduct} />
     </main>
+    </>
   )
 }
 
