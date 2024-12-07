@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGrid from "./product-grid";
 import ProductFilters from "./product-filters";
 import { Product } from "@/types/product";
+import { fetchProducts } from "@/api/products/fetchProducts";
 
 const categories = ["All", "Furniture", "Electronics", "Clothing"];
 
@@ -17,6 +18,11 @@ export default function ProductShowcase() {
     navigate(`/marketplace/category/${newCategory}/page/1`);
   };
   const [products, setProducts] = React.useState<Array<Product>>();
+
+  React.useEffect(() => {
+    const prod = fetchProducts();
+
+  }, [])
 
   React.useEffect(() => {
     const image = [
