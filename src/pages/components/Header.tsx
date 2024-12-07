@@ -23,8 +23,8 @@ export default function Header() {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
-  console.log(isLogin);
-  console.log(auth);
+  // console.log(isLogin);
+  // console.log(auth);
   const handleLogin = async (role: string | null, dispatch: any) => {
     await handleGoogleSignIn(dispatch, role);
     setLoginModalOpen(false);

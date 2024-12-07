@@ -7,7 +7,6 @@ export const fetchCart = async (id: string, dispatch: any) => {
     try {
         const cartDocRef = doc(collection(db, "cart"), id);
 
-        // Fetch the cart document
         const cartSnapshot = await getDoc(cartDocRef);
 
         if (!cartSnapshot.exists()) {
@@ -15,7 +14,6 @@ export const fetchCart = async (id: string, dispatch: any) => {
             return null;
         }
 
-        // Get the cart data
         const cartData = cartSnapshot.data();
 
         if (!cartData || !Array.isArray(cartData.items)) {
@@ -23,7 +21,6 @@ export const fetchCart = async (id: string, dispatch: any) => {
             return null;
         }
 
-        // Populate items with product data
         const populatedItems = await Promise.all(
             cartData.items.map(async (item: { id: string; quantity: number }) => {
                 const productDocRef = doc(collection(db, "products"), item.id);
@@ -35,8 +32,18 @@ export const fetchCart = async (id: string, dispatch: any) => {
                 }
 
                 const productData = productSnapshot.data();
+                const organizationDocRef = doc(
+                    collection(db, "users"),
+                    productData.seller
+                );
+                const organizationSnapshot = await getDoc(organizationDocRef);
+
+                const organizationName = organizationSnapshot.exists()
+                    ? organizationSnapshot.data().name
+                    : "Urja Setu";
                 return {
                     ...productData,
+                    seller: organizationName,
                     id: item.id,
                     quantity: item.quantity,
                 } as Product & { quantity: number };
@@ -46,6 +53,7 @@ export const fetchCart = async (id: string, dispatch: any) => {
         cartData.items = populatedItems.filter((item) => item !== null);
 
         dispatch(setCart(cartData.items));
+        console.log(cartData.items);
         return;
     }
     catch(error){
