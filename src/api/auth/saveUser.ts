@@ -8,10 +8,11 @@ export const saveUser = async (id: string): Promise<void> => {
       address: "NA",
       wallet: 100,
       eventDates: [],
-      cart: [],
+      cart: "",
       following: [],
       orders: [],
       role: "User",
+      liked: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

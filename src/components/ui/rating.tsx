@@ -12,7 +12,7 @@ function Rating({
   className?: string;
 }) {
   return (
-    <div className={cn("flex w-full justify-center", className)}>
+    <div className={cn("flex justify-center", className)}>
       {[1, 2, 3, 4, 5].map((star) => (
         <motion.div
           key={star}

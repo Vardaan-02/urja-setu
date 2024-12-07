@@ -17,10 +17,11 @@ import {
 import { cartProduct } from "@/types/product"
 import { ShippingOption } from "@/types/product"
 import Rating from "@/components/ui/rating"
+import NavBar from "@/components/nav-bar"
 
 const initialProducts: cartProduct[] = [
   {
-    id: 1,
+    id: "1",
     title: "Recycled Wood Coffee Table",
     price: 129.99,
     condition: "Like New",
@@ -32,7 +33,7 @@ const initialProducts: cartProduct[] = [
     category: "Furniture",
   },
   {
-    id: 2,
+    id: "2",
     title: "Refurbished Smartphone",
     price: 299.99,
     condition: "Gently Used",
@@ -44,7 +45,7 @@ const initialProducts: cartProduct[] = [
     category: "Electronics",
   },
   {
-    id: 3,
+    id: "3",
     title: "Upcycled Denim Jacket",
     price: 59.99,
     condition: "Like New",
@@ -83,13 +84,14 @@ export default function Cart() {
     setTotal(newTotal)
   }, [cartItems, shipping, discount])
 
-  const updateQuantity = (id: number, newQuantity: number) => {
+
+  const updateQuantity = (id: string, newQuantity: number) => {
     setCartItems(cartItems.map(item => 
       item.id === id ? { ...item, quantity: Math.max(0, newQuantity) } : item
     ))
   }
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setCartItems(cartItems.filter(item => item.id !== id))
   }
 
@@ -100,8 +102,9 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-scree py-4">
-      <div className="w-[90%] mx-[5%]">
+    <div className="min-h-scree pb-6">
+      <NavBar />
+      <div className="w-[90%] mx-[5%] pt-12">
         <h1 className="text-3xl font-bold mb-8">Your Shopping Cart</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -145,8 +148,8 @@ export default function Cart() {
                             Sold by: {item.seller}
                           </span>
                         </div>
-                        <div className="pt-3">
-                            <Rating rating={item.rating}/>
+                        <div className="pt-3 flex justify-start">
+                            <Rating size={20} rating={item.rating}/>
                         </div>
                         
                         <div className="flex items-center mt-4">

@@ -117,7 +117,7 @@ export default function Header() {
                   <span>{auth.name}</span>
                 </div>
                 {isPopupVisible && (
-                  <div className="absolute bg-red-500 top-full flex justify-center items-center space-x-3 cursor-pointer px-4 py-2 rounded-xl hover:bg-black/10 transition duration-200 bg-black/5 shadow-md mt-2">
+                  <div className="absolute top-full flex justify-center items-center space-x-3 cursor-pointer px-4 py-2 rounded-xl hover:bg-black/10 transition duration-200 bg-black/5 shadow-md mt-2">
                     <button className="w-full text-gray-900 rounded-md transition duration-300 py-1 px-8" onClick={handleLogout}>
                       Logout
                     </button>

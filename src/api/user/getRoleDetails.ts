@@ -35,6 +35,7 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
                     orders: userData.orders,
                     address: userData.address,
                     wallet: userData.wallet,
+                    liked: userData.liked
                 }
             }
             // console.log(userData);
