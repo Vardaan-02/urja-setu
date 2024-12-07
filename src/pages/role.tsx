@@ -1,51 +1,42 @@
-import { useState } from "react";
-import { useHistory } from "react-router-dom"; 
-import { updateDoc, doc } from "firebase/firestore";
-import { db } from "../utils/firebase"; 
+import { useEffect, useState } from "react";
+import { getDetails } from "@/api/auth/getDetails";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from '@/redux/hooks';
 
-
-const RoleSelectionPage = ({ user }: { user: User }) => {
-  const [selectedRole, setSelectedRole] = useState<string>(""); 
-  const [loading, setLoading] = useState<boolean>(false);
-  const history = useHistory();
-  const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedRole(event.target.value);
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!selectedRole) {
-      alert("Please select a role.");
-      return;
+const Role = () => {
+    const dispatch = useDispatch();
+    const [selectedRole, setRole] = useState("Select")
+    const auth = useAppSelector((state) => state.auth);
+    const [id, setId] = useState("");
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log(id);
+        getDetails(selectedRole, id, dispatch);
+        console.log("Done");
     }
+    useEffect(() => {
+      if(auth){
+        console.log(auth);
+      }
+    }, [auth])
 
-    try {
-      setLoading(true);
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-        role: selectedRole,
-        updatedAt: new Date().toISOString(),
-      });
 
-      console.log("Role updated successfully:", selectedRole);
-      history.push(`/dashboard/${selectedRole}`);
-    } catch (error : any) {
-      console.error("Error updating role:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="role-selection-container">
       <h2>Choose Your Role</h2>
       <form onSubmit={handleSubmit}>
         <div>
+            <input type="text" value={id} onChange={(e) => setId(e.target.value)}/>
           <label htmlFor="role">Select Role: </label>
           <select
             id="role"
             value={selectedRole}
-            onChange={handleRoleChange}
+            onChange={(e) => {
+              setRole(e.target.value);
+              console.log(selectedRole);
+              
+            }}
             required
           >
             <option value="">Select a role</option>
@@ -56,8 +47,8 @@ const RoleSelectionPage = ({ user }: { user: User }) => {
         </div>
 
         <div>
-          <button type="submit" disabled={loading}>
-            {loading ? "Saving..." : "Save Role"}
+          <button type="submit">
+            Submit
           </button>
         </div>
       </form>
@@ -65,4 +56,4 @@ const RoleSelectionPage = ({ user }: { user: User }) => {
   );
 };
 
-export default RoleSelectionPage;
+export default Role;

@@ -3,7 +3,7 @@ import ProductCard from "./product-card";
 import { Pagination } from "./pagination";
 import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebouce";
-import { Product } from "./product-showcase";
+import { Product } from "@/types/product";
 
 interface ProductGridProps {
   category: string;
@@ -21,15 +21,14 @@ export default function ProductGrid({
 }: ProductGridProps) {
   const navigate = useNavigate();
   const productsPerPage = 12;
-
-  // const debouncedPriceRange:Array<number> = useDebounce(priceRange, [0, 1000]);
   
   const debouncedPriceRange = useDebounce(priceRange);
+  const [filteredProducts, setFilteredProducts] = useState<Array<Product>>();
   const [currentProducts, setCurrentProducts] = useState<Array<Product>>();
   const [totalPages, setTotalPages] = useState<number>();
 
   useEffect(()=>{
-    setCurrentProducts(
+    setFilteredProducts(
     products?.filter((p) => {
         if(category == "All"){
           return p.price <= priceRange[1] && p.price >= priceRange[0];
@@ -42,25 +41,25 @@ export default function ProductGrid({
             );
         }
       }))
-  }, [debouncedPriceRange, products, category, priceRange])
+  }, [debouncedPriceRange, products, category])
 
   useEffect(()=>{
-    if(products){
-      setCurrentProducts(products.slice(
+    if(filteredProducts){
+      setCurrentProducts(filteredProducts.slice(
         (currentPage - 1) * productsPerPage,
         currentPage * productsPerPage
       ))
     }
-  }, [products,currentPage])
+  }, [filteredProducts,currentPage])
 
   useEffect(()=>{
-    if(products){
-      setTotalPages(Math.ceil(products.length / productsPerPage))
+    if(filteredProducts){
+      setTotalPages(Math.ceil(filteredProducts.length / productsPerPage))
     }
-  }, [products])
+  }, [filteredProducts])
 
   const handlePageChange = (page: number) => {
-    navigate(`/marketplace/category/${category}/page/${page}`);
+    navigate(`/marketplace/category/${category}/page/${page}`, {replace: true});
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

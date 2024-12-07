@@ -1,10 +1,9 @@
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 export const saveDeliveryPerson = async (id: string): Promise<void> => {
   try {
-    const dpRef = doc(db, "deliveryPersons", id);
-    const dpDoc = await getDoc(dpRef);
+    const dpRef = doc(db, "users", id);
 
     let defaultData: any = {
       address: "NA",
@@ -18,7 +17,7 @@ export const saveDeliveryPerson = async (id: string): Promise<void> => {
       updatedAt: new Date().toISOString(),
     };
     await updateDoc(dpRef, defaultData);
-    console.log("Successfully Updated Default Data");
+    // console.log("Successfully Updated Default Data");
     return;
   }
   catch(error: any){

@@ -1,4 +1,4 @@
-import { Box } from "./box";
+import { Box } from "../../../components/box";
 import RedeemStoreCompany from "./company-components/redeem-store";
 import RedeemStoreDevileryBoy from "./delivery-boy-components/redeem-store";
 import { Calendar } from "./left-box-components/calender";import { Goals } from "./left-box-components/goals";

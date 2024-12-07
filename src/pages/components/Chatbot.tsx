@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import { API_KEY } from "../../../apiKey";
 export default function Chatbot() {
+  const API_KEY = import.meta.env.VITE_API_KEY;
+
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [generatingAnswer, setGeneratingAnswer] = useState(false);

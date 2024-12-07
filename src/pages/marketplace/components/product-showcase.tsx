@@ -5,18 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGrid from "./product-grid";
 import ProductFilters from "./product-filters";
-
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  condition: string;
-  seller: string;
-  liked: boolean;
-  rating: number;
-  image: string;
-  category: string;
-}
+import { Product } from "@/types/product";
 
 const categories = ["All", "Furniture", "Electronics", "Clothing"];
 
@@ -42,7 +31,7 @@ export default function ProductShowcase() {
         seller: "EcoFurniture",
         liked: true,
         rating: 4,
-        image: "https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg",
+        images: ["https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg"],
         category: "Furniture",
       },
       {
@@ -53,7 +42,7 @@ export default function ProductShowcase() {
         seller: "TechRecycle",
         liked: false,
         rating: 3.5,
-        image: "https://www.wastewiseproductsinc.com/wp-content/uploads/2014/02/coffee-can-planters.jpg",
+        images: ["https://www.wastewiseproductsinc.com/wp-content/uploads/2014/02/coffee-can-planters.jpg"],
         category: "Electronics",
       },
       {
@@ -64,12 +53,12 @@ export default function ProductShowcase() {
         liked: true,
         rating: 3.5,
         seller: "GreenThreads",
-        image:
-          "https://www.bhg.com/thmb/XAZVTUe7N7rZaOKuFyv28Zp6eMs=/550x0/filters:no_upscale():strip_icc()/101169186-81a603c6109643edb4170339d73d0ed1.jpg?height=200&width=200",
+        images:
+          ["https://www.bhg.com/thmb/XAZVTUe7N7rZaOKuFyv28Zp6eMs=/550x0/filters:no_upscale():strip_icc()/101169186-81a603c6109643edb4170339d73d0ed1.jpg?height=200&width=200"],
         category: "Clothing",
       },
       // Add more products here to test pagination
-      ...[...Array(100)].map((_, index) => ({
+      ...[...Array(50)].map((_, index) => ({
         id: index + 4,
         title: `Product ${index + 4}`,
         price: Math.random() * 900 + 50,
@@ -77,7 +66,7 @@ export default function ProductShowcase() {
         seller: `Seller ${index + 4}`,
         liked: false,
         rating: Math.floor(Math.random() * 6),
-        image: image[Math.floor(Math.random() * 4)],
+        images: [image[Math.floor(Math.random() * 4)]],
         category: ["Furniture", "Electronics", "Clothing"][
           Math.floor(Math.random() * 3)
         ],

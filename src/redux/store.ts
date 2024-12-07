@@ -1,13 +1,29 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { counterSlice } from './counterSlice'; 
+import { configureStore } from '@reduxjs/toolkit'
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import authReducer from './authSlice'
 
-export const store = configureStore({
+
+const persistConfig = {
+  key: 'auth',
+  storage,
+}
+
+const persistedAuthReducer = persistReducer(persistConfig, authReducer)
+
+const store = configureStore({
   reducer: {
-    counter: counterSlice.reducer,
+    auth: persistedAuthReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: { counter: CounterState }
-export type AppDispatch = typeof store.dispatch;
+
+const persistor = persistStore(store)
+
+export { store, persistor }
