@@ -71,5 +71,6 @@ export interface Order {
       start?: string;
       end?: string;
     };
+    chatId?: string;
   };
 }
