@@ -9,20 +9,28 @@ import { useDispatch } from "react-redux";
 import { updateLikedProducts } from "@/redux/authSlice";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { useState } from "react";
+import { addToCart } from "@/api/cart/addToCart";
+import { updateProdLike } from "@/redux/productSlice";
 
 export default function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const {auth} = useIsAuthorized();
-  const [liked, setLiked] = useState(product.liked);
+  const {auth} = useIsAuthorized();
+  console.log(product);
+  // const [liked, setLiked] = useState<boolean>(product.liked);
+  // console.log(liked);
   function handleShowDetails(){
     navigate(`/product/${product.id}`);
   }
 
+  function handleAddToCart(){
+    // addToCart(cartId, product.id, 1, dispatch)
+  }
+
   function handleLike(){
-    // dispatch(updateProdLike({ productId:product.id, isLiked:false }));
-    // dispatch(updateLikedProducts({ productId:product.id, isLiked:false, userId:auth.uid}));
-    setLiked(liked => !liked);
+    dispatch(updateProdLike({ productId:product.id, isLiked:product.liked }));
+    dispatch(updateLikedProducts({ productId:product.id, isLiked:product.liked, userId:auth.uid}));
+    // setLiked(liked => !liked);
   }
 
   return (
@@ -42,7 +50,7 @@ export default function ProductCard({ product }: { product: Product }) {
             size="icon"
             className="absolute top-2 right-2 bg-white bg-opacity-50 hover:bg-opacity-100 transition-all hover:bg-white hover:text-black"
           >
-            {liked ? (
+            {product.liked ? (
               <Heart fill="#22c55e" className="h-5 w-5 text-green-500" />
             ) : (
               <Heart className="h-5 w-5" />
@@ -76,7 +84,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </CardContent>
       <CardFooter className="w-full flex justify-between items-center flex-wrap gap-2">
         <Button onClick={handleShowDetails} variant={"outline"} className="border-none text-gray-800 hover:bg-gray-300 hover:text-gray-800"> Show Details </Button>
-        <Button className="">
+        <Button onClick={handleAddToCart}>
           <ShoppingCart className="h-4 w-4" /> Add to Cart
         </Button>
       </CardFooter>

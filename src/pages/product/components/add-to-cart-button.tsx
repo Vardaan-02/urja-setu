@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { addToCart } from '@/api/cart/addToCart'
+import { useDispatch } from 'react-redux'
 
-export default function AddToCartButton() {
+export default function AddToCartButton({product} : {product: string}) {
+  const dispatch = useDispatch();
   const [isAdded, setIsAdded] = useState(false)
 
   const handleAddToCart = () => {
-    setIsAdded(true)
-    setTimeout(() => setIsAdded(false), 2000)
+    // addToCart(cartId, product, 1, dispatch);
   }
 
   return (

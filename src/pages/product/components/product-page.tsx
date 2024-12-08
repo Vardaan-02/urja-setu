@@ -4,6 +4,9 @@ import ProductGallery from './product-gallery';
 import ProductDetails from './product-details';
 import ProductReviews from './product-reviews';
 import { useDispatch } from 'react-redux';
+import { updateProdLike } from '@/redux/productSlice';
+import { updateLikedProducts } from '@/redux/authSlice';
+import { useIsAuthorized } from '@/hooks/useIsAuthorized';
 
 interface ProductPageProps {
   product: Product;
@@ -11,12 +14,10 @@ interface ProductPageProps {
 
 export default function ProductPage({ product }: ProductPageProps) {
   const dispatch = useDispatch();
+  const {auth} = useIsAuthorized();
   const [isLiked, setIsLiked] = useState(product.liked);
 
   const toggleLike = () => {
-    // dispatch(updateProdLike({ productId: product.id, isLiked: false }));
-    // dispatch(updateLikedProducts({ productId: product.id, isLiked: false, userId: auth.uid }));
-    setIsLiked(!isLiked);
   };
 
   // Ensure product.reviews is always an array (empty array if undefined)

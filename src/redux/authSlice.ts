@@ -80,14 +80,20 @@ export const authSlice = createSlice({
 
     updateLikedProducts: (state, action) => {
         const { userId, productId, isLiked } = action.payload;
+        console.log(productId, isLiked);
         if(state.details.liked){
+            console.log(state.details.liked);
             if(isLiked){
+                console.log(isLiked, "removed");
                 state.details.liked = state.details.liked.filter(
                     (id: string) => id !== productId
                 );
+                console.log(state.details.liked)
             }
             else{
+                console.log(isLiked, "added");
                 state.details.liked.push(productId);
+                console.log(state.details.liked)
             }
             toggleLikeProduct(productId, userId);
             // state.details.liked = [productId];

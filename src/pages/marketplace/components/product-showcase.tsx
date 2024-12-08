@@ -8,11 +8,13 @@ import ProductFilters from "./product-filters";
 import { fetchProducts } from "@/api/products/fetchProducts";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 
 const categories = ["All", "Furniture", "Electronics", "Clothing"];
 
 export default function ProductShowcase() {
   const { category = "All", page = "1" } = useParams();
+  const {auth} = useIsAuthorized();
   const dispatch = useDispatch();
   const products = useAppSelector((state) => state.product);
   const navigate = useNavigate();
@@ -22,7 +24,9 @@ export default function ProductShowcase() {
   };
 
   React.useEffect(() => {
-      fetchProducts("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
+    if(auth.uid){
+      fetchProducts(auth.uid, dispatch);
+    }
   }, [])
 
   return (

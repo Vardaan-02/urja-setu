@@ -5,6 +5,7 @@ import { setProducts } from "@/redux/productSlice";
 
 export const fetchProducts = async (userId: string, dispatch: any) => {
     try {
+        console.log(userId);
         const productsCollectionRef = collection(db, "products");
         const productsSnapshot = await getDocs(productsCollectionRef);
         const products = await Promise.all(
@@ -62,6 +63,8 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
             item.liked = Array.isArray(i.liked) && i.liked.includes(userId) ? true : false;
             prods.push(item);
         });        
+
+        console.log(prods);
         dispatch(setProducts(prods))
         
     }

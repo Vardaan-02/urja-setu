@@ -3,6 +3,11 @@ import { Product } from '@/types/product'
 import { Badge } from '@/components/ui/badge'
 import Rating from '@/components/ui/rating'
 import AddToCartButton from './add-to-cart-button'
+import { useDispatch } from 'react-redux'
+import { updateProdLike } from '@/redux/productSlice'
+import { updateLikedProducts } from '@/redux/authSlice'
+import { useIsAuthorized } from '@/hooks/useIsAuthorized'
+import { useState } from 'react'
 
 interface ProductDetailsProps {
   product: Product
@@ -11,6 +16,12 @@ interface ProductDetailsProps {
 }
 
 export default function ProductDetails({ product, isLiked, onLikeToggle }: ProductDetailsProps) {
+  const dispatch = useDispatch();
+  const {auth} = useIsAuthorized();
+  function handleLike(){
+    dispatch(updateProdLike({ productId: product.id, isLiked: false }));
+    dispatch(updateLikedProducts({ productId: product.id, isLiked: false, userId: auth.uid }));
+  }
   console.log(product);
   return (
     <div className="space-y-4 bg-white/30 shadow-lg rounded-xl p-4 h-full">
@@ -19,8 +30,11 @@ export default function ProductDetails({ product, isLiked, onLikeToggle }: Produ
           <h1 className="text-3xl font-bold">{product.title}</h1>
           <p className="text-muted-foreground">by {product.seller}</p>
         </div>
-        <button onClick={onLikeToggle} className="text-primary">
-          <Heart className={`h-6 w-6 ${isLiked ? 'fill-primary' : ''}`} />
+        <button onClick={handleLike} className="text-primary">
+          {
+            product.liked ? <Heart className={`h-6 w-6 fill-primary`} /> : <Heart className={`h-6 w-6`} />
+          }
+          
         </button>
       </div>
       <div className="flex items-center space-x-2">
@@ -49,7 +63,7 @@ export default function ProductDetails({ product, isLiked, onLikeToggle }: Produ
         <Badge>{product.category}</Badge>
         <Badge variant="outline">{product.condition}</Badge>
       </div> */}
-      <AddToCartButton />
+      <AddToCartButton product={product.id} />
     </div>
   )
 }

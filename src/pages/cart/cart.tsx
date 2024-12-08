@@ -68,6 +68,7 @@ const shippingOptions: ShippingOption[] = [
 ]
 
 export default function Cart() {
+
   const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState<cartProduct[]>(initialProducts)
   const [subtotal, setSubtotal] = useState<number>(0)
