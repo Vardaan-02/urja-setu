@@ -26,7 +26,7 @@ export default function ProductShowcase() {
   }, [])
 
   return (
-    <div className="container w-[90%] mx-[5%]">
+    <div className="container w-[90%] mx-[5%] pt-12">
       <h2 className="text-3xl font-bold mb-6">Recycled Treasures</h2>
       <Tabs
         value={category}

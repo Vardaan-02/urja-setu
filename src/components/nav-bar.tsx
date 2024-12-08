@@ -25,7 +25,7 @@ export default function NavBar() {
   const [activeTab, setActiveTab] = useState("home");
 
   return (
-    <nav className="sticky top-2 px-8 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-2 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="h-auto md:h-16 px-4 md:px-8 flex md:flex-row w-full gap-4 justify-between items-center bg-green-50 backdrop-blur-lg rounded-lg shadow-md p-3">
         <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
           <img
@@ -71,14 +71,27 @@ export default function NavBar() {
         </div>
 
         <div className="flex items-center gap-4 md:w-auto">
-          <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8"/>
+          <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8" />
           <Notifications />
+          {/* <div className="flex justify-center items-center gap-2">
+            {" "}
+            <Avatar>
+              {" "}
+              <AvatarImage src="profile.jpg" />{" "}
+              <AvatarFallback>Vardaan</AvatarFallback>{" "}
+            </Avatar>{" "}
+            <p className="font-semibold text-xl">Vardaan</p>{" "}
+          </div> */}
           <Button className="hidden md:flex font-bold px-4 md:px-8 py-2 md:py-5 text-md md:w-auto">
             Login
           </Button>
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden bg-white/30 shadow-lg">
+              <Button
+                variant="outline"
+                size="icon"
+                className="md:hidden bg-white/30 shadow-lg"
+              >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>

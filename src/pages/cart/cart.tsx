@@ -17,6 +17,7 @@ import {
 import { cartProduct } from "@/types/product"
 import { ShippingOption } from "@/types/product"
 import Rating from "@/components/ui/rating"
+import NavBar from "@/components/nav-bar"
 import { fetchCart } from "@/api/cart/fetchCart"
 import { useDispatch } from "react-redux"
 
@@ -107,8 +108,9 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-scree py-4">
-      <div className="w-[90%] mx-[5%]">
+    <div className="min-h-scree pb-6">
+      <NavBar />
+      <div className="w-[90%] mx-[5%] pt-12">
         <h1 className="text-3xl font-bold mb-8">Your Shopping Cart</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -152,8 +154,8 @@ export default function Cart() {
                             Sold by: {item.seller}
                           </span>
                         </div>
-                        <div className="pt-3">
-                            <Rating rating={item.rating}/>
+                        <div className="pt-3 flex justify-start">
+                            <Rating size={20} rating={item.rating}/>
                         </div>
                         
                         <div className="flex items-center mt-4">

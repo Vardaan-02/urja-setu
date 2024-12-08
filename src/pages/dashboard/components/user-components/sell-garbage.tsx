@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/moving-border";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
+import SellGarbagre from "@/pages/sell-garbage/page";
 import { motion } from "framer-motion";
 
 export function SellGarbageUser() {
@@ -27,12 +27,7 @@ export function SellGarbageUser() {
         planet thrive. Start today—small actions create big impacts! 🌍♻️
       </motion.p>
       <div className="w-full h-full flex justify-center items-center">
-      <Button
-        borderRadius="100px"
-        className="bg-white dark:bg-slate-900 text-black dark:text-white border-neutral-200 dark:border-slate-800"
-      >
-        Sell Garbage
-      </Button>
+      <SellGarbagre />
       </div>
     </div>
   );
