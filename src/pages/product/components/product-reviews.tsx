@@ -35,7 +35,8 @@ class ErrorBoundary extends Component<{ children: React.ReactNode }, { hasError:
 
 export default function ProductReviews({ reviews, id }: ProductReviewsProps) {
   console.log(reviews) // To check the reviews prop
-
+  console.log(id);
+  
   return (
     <ErrorBoundary>
       <div className="mt-12 bg-green-50 p-6 rounded-2xl">

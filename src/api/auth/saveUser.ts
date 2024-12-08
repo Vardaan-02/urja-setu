@@ -7,7 +7,7 @@ export const saveUser = async (id: string): Promise<void> => {
     let defaultData: any = {
       address: "NA",
       wallet: 100,
-      eventDates: [],
+      eventsId: [],
       cart: "",
       phone: "",
       following: [],

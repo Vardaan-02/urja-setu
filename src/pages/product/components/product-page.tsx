@@ -30,7 +30,7 @@ export default function ProductPage({ product }: ProductPageProps) {
           <ProductDetails product={product} isLiked={isLiked} onLikeToggle={toggleLike} />
         </div>
       </div>
-      {<ProductReviews reviews={reviews} />}
+      {<ProductReviews reviews={reviews} id={product.id} />}
     </div>
   );
 }

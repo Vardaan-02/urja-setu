@@ -10,6 +10,8 @@ function FeedbackForm({product} : {product: string}) {
   const dispatch = useDispatch();
   const [feedback, setFeedback] = useState("");
   function handleFeedback(){
+    console.log(product);
+    
     if(auth.uid && auth.name && auth.photoURL){
         const payload = {
             id: auth.uid,
