@@ -2,9 +2,16 @@ import { motion } from "framer-motion";
 import { RightBox } from "./components/right-box";
 import { LeftBox } from "./components/left-box";
 import NavBar from "@/components/nav-bar";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchOrdersBySellerId } from "@/api/orders/fetchOrdersBySellerId";
 
 
 export default function Dashboard() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    fetchOrdersBySellerId("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
+  }, [])
   return (
     <>
     <NavBar />

@@ -1,18 +1,21 @@
 export interface PastDetailsProps {
   orders: {
     seller?: {
+      id: string,
       name: string;
       image: string;
       phone: string;
       address: string;
     };
     company?: {
+      id: string,
       name: string;
       image: string;
       phone: string;
       address: string;
     };
     item?: {
+      id: string,
       name: string;
       price: number;
       weight: number;
@@ -20,6 +23,7 @@ export interface PastDetailsProps {
       category: string;
     };
     deliveryPerson?: {
+      id: string,
       name: string;
       photo: string;
       contact: string;
@@ -35,18 +39,21 @@ export interface PastDetailsProps {
 export interface Order {
   order: {
     seller?: {
+      id?: string,
       name?: string;
       image?: string;
       phone?: string;
       address?: string;
     };
     company?: {
+      id?: string,
       name?: string;
       image?: string;
       phone?: string;
       address?: string;
     };
     item?: {
+      id: string,
       name?: string;
       price?: number;
       weight?: number;
@@ -54,6 +61,7 @@ export interface Order {
       category?: string;
     };
     deliveryPerson?: {
+      id?: string,
       name?: string;
       photo?: string;
       contact?: string;
