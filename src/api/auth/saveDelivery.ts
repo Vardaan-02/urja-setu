@@ -11,6 +11,7 @@ export const saveDeliveryPerson = async (id: string): Promise<void> => {
       assignedWork: [],
       rating: 0,
       orders: [],
+      phone: "",
       role: "DeliveryPerson",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

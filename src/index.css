@@ -2,16 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-#root, #app {
+#root,
+#app {
   height: 100%; /* Ensures the app container spans the full height */
 }
-
 
 @layer base {
   :root {

@@ -9,6 +9,7 @@ export const saveOrganization = async (id: string): Promise<void> => {
       address: "NA",
       events: [],
       followers: [],
+      phone: "",
       role: "Organization",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

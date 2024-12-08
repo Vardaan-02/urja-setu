@@ -21,11 +21,21 @@ export default function Chatbot() {
         url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
         method: "post",
         data: {
-          contents: [{ parts: [{ text: question + "\nAnswer in 50 words" }] }],
+          contents: [
+            {
+              parts: [
+                {
+                  text:
+                    "Urja Setu is a transformative initiative aimed at bridging energy access gaps in underserved communities. It focuses on promoting renewable energy solutions, empowering rural regions with sustainable power sources, and fostering eco-friendly development. Urja Setu integrates technology, education, and collaboration to enhance energy equity, reduce carbon footprints, and drive socio-economic progress." +
+                    question +
+                    "\nAnswer in 50 words with context to Urja Setu.",
+                },
+              ],
+            },
+          ],
         },
       });
-      const aiResponse =
-        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+      const aiResponse = response["data"]["candidates"][0]["content"]["parts"][0]["text"];
       const responseArr = aiResponse.split("**");
       let formattedResponse = "";
       for (let i = 0; i < responseArr.length; i++) {

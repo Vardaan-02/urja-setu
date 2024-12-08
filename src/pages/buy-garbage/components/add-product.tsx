@@ -4,50 +4,105 @@ import { PlusCircle, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/text-area";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Combobox } from "@/components/ui/combo-box";
 import { FileUpload } from "@/components/ui/file-upload";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 
-export interface Product {
-  seller: string;
-}
-
-const options = [{value:"1",label:"1"},{value:"2",label:"2"},{value:"3",label:"3"}];
-
+const options = [
+  { label: "Electronics", value: "Electronics" },
+  { label: "Clothing", value: "Clothing" },
+  { label: "Books", value: "Books" },
+  { label: "Home Goods", value: "Home Goods" },
+  { label: "Other", value: "Other" },
+];
 
 export default function AddProduct() {
+  // Define Zod schema
+  const formSchema = z.object({
+    productName: z
+      .string()
+      .min(2, { message: "Product name must be at least 2 characters." }),
+    productDescription: z
+      .string()
+      .min(10, { message: "Description must be at least 10 characters." }),
+    features: z.array(
+      z.string().min(2, { message: "Feature cannot be empty." })
+    ),
+    price: z.number().min(1, { message: "Price must be greater than 0." }),
+    condition: z.string().nonempty({ message: "Condition is required." }),
+    category: z.string().nonempty({ message: "Category is required." }),
+    discount: z
+      .string()
+      .regex(/^\d+$/, { message: "Discount must be a number." })
+      .optional(),
+    files: z.array(z.instanceof(File)).optional(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      productName: "",
+      productDescription: "",
+      features: [],
+      price: 0,
+      condition: "",
+      category: "",
+      discount: "",
+      files: [],
+    },
+  });
+
+  const { handleSubmit, control, setValue, watch } = form;
   const [textAreas, setTextAreas] = useState<string[]>([]);
-  const [price, setPrice] = useState<number>(0)
-  const [category,setCategory] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
   const [files, setFiles] = useState<File[]>([]);
-  const handleFileUpload = (files: File[]) => {
-    setFiles(files);
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log("Form Data:", values);
+  };
+
+  const handleFileUpload = (uploadedFiles: File[]) => {
     console.log(files);
+    setFiles(uploadedFiles);
+    setValue("files", uploadedFiles);
   };
 
   const formatPrice = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value)
-  }
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "INR",
+    }).format(value);
+  };
 
   const addTextArea = () => {
     setTextAreas([...textAreas, ""]);
+    setValue("features", [...watch("features"), ""]);
   };
 
+  const textAreasRef = useRef<string[]>(textAreas);
+
   const updateTextArea = (index: number, value: string) => {
-    const updatedTextAreas = [...textAreas];
-    updatedTextAreas[index] = value;
-    setTextAreas(updatedTextAreas);
+    textAreasRef.current[index] = value;
+    setValue("features", [...textAreasRef.current], { shouldValidate: true });
   };
 
   const removeTextArea = (index: number) => {
     const updatedTextAreas = textAreas.filter((_, i) => i !== index);
     setTextAreas(updatedTextAreas);
+
+    const updatedFeatures = watch("features").filter((_, i) => i !== index);
+    setValue("features", updatedFeatures);
   };
 
   return (
@@ -61,155 +116,154 @@ export default function AddProduct() {
         <h2 className="text-xl font-semibold mb-4 flex items-center">
           <PlusCircle className="mr-2" /> Add New Product
         </h2>
-        <form className="space-y-4">
-          <div>
-            <Label
-              htmlFor="product-name"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Product Name
-            </Label>
-            <Input
-              type="text"
-              id="product-name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Product Name"
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={control}
+              name="productName"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="product-name">Product Name</Label>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      id="product-name"
+                      placeholder="Product Name"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div>
-            <Label
-              htmlFor="product-description"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Product Description
-            </Label>
-            <Textarea
-              id="product-description"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Enter product description"
+            <FormField
+              control={control}
+              name="productDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="product-description">
+                    Product Description
+                  </Label>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      id="product-description"
+                      placeholder="Description"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div>
-            <Label
-              htmlFor="product-features"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Features
-            </Label>
-            <AnimatePresence>
-              {textAreas.map((text, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative mt-2"
-                >
-                  <Textarea
-                    value={text}
-                    onChange={(e) => updateTextArea(index, e.target.value)}
-                    placeholder="Write something..."
-                    className="col-auto w-full h-12 p-2 pr-10 border rounded focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
-                  />
-                  <Button
-                    onClick={() => removeTextArea(index)}
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-transparent absolute top-2 right-2 text-gray-400 hover:text-black transition-colors duration-200"
-                    type="button"
-                  >
-                    <X className="h-4 w-4" />
+            <FormItem>
+              <Label htmlFor="features">Features</Label>
+              <FormControl>
+                <div>
+                  <AnimatePresence>
+                    <div>
+                      {textAreas.map((text, index) => (
+                        <motion.div
+                          key={index + text}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.3 }}
+                          className="relative mt-2"
+                        >
+                          <Textarea
+                            onChange={(e) =>
+                              updateTextArea(index, e.target.value)
+                            }
+                            placeholder="Feature"
+                            className="w-full"
+                          />
+                          <Button
+                            onClick={() => removeTextArea(index)}
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2"
+                            type="button"
+                          >
+                            <X />
+                          </Button>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </AnimatePresence>
+                  <Button onClick={addTextArea} type="button" className="mt-2">
+                    <PlusCircle className="mr-2" /> Add Feature
                   </Button>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-            <Button
-              onClick={addTextArea}
-              className="w-full flex items-center justify-center mt-2 hover:bg-background"
-              variant="outline"
-              type="button"
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Text Area
+                </div>
+              </FormControl>
+            </FormItem>
+            <FormItem>
+              <Label htmlFor="price">Price</Label>
+              <FormControl>
+                <div className="flex items-center gap-4">
+                  <Slider
+                    min={0}
+                    max={10000}
+                    step={100}
+                    value={[price]}
+                    onValueChange={(value) => {
+                      setPrice(value[0]);
+                      setValue("price", value[0]);
+                    }}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold">{formatPrice(price)}</div>
+                </div>
+              </FormControl>
+            </FormItem>
+            <FormField
+              control={control}
+              name="condition"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="condition">Condition</Label>
+                  <FormControl>
+                    <Input {...field} id="condition" placeholder="e.g., New" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="category">Category</Label>
+                  <FormControl>
+                    <Combobox {...field} options={options} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="discount"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="discount">Discount</Label>
+                  <FormControl>
+                    <Input {...field} id="discount" placeholder="e.g., 10" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormItem>
+              <Label htmlFor="files">Product Images</Label>
+              <FormControl>
+                <FileUpload onChange={handleFileUpload} />
+              </FormControl>
+            </FormItem>
+            <Button type="submit" className="w-full bg-green-500 text-white">
+              Add Product
             </Button>
-          </div>
-          <div>
-            <Label
-              htmlFor="selling-price"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Selling Price
-            </Label>
-            <div className="flex items-center gap-4">
-              <Slider
-                min={0}
-                max={10000}
-                step={100}
-                value={[price]}
-                onValueChange={(value) => setPrice(value[0])}
-                className="w-full"
-              />
-              <div className="text-center text-2xl font-bold flex items-center h-full">
-                {formatPrice(price)}
-              </div>
-            </div>
-          </div>
-          <div>
-            <Label
-              htmlFor="product-condition"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Condition
-            </Label>
-            <Input
-              type="text"
-              id="product-condition"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="New"
-            />
-          </div>
-          <div>
-            <Label
-              htmlFor="product-image"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Image
-            </Label>
-            <FileUpload onChange={handleFileUpload} />
-          </div>
-          <div>
-            <Label
-              htmlFor="product-category"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Category
-            </Label>
-            <Combobox value={category} onChange={setCategory} options={options} className="w-[360px]"/>
-          </div>
-          <div>
-            <Label
-              htmlFor="product-discount"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Discount
-            </Label>
-            <Input
-              type="text"
-              id="product-discount"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="eg: 10 means 10%"
-            />
-          </div>
-          <motion.button
-            type="submit"
-            className={`w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-300`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Add Product
-          </motion.button>
-        </form>
+          </form>
+        </Form>
       </div>
     </motion.div>
   );

@@ -9,16 +9,39 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { useState } from "react";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Drivers = [
-  { label: "1", value: "1" },
-  { label: "2", value: "2" },
-  { label: "3", value: "3" },
+  { label: "Driver 1", value: "1" },
+  { label: "Driver 2", value: "2" },
+  { label: "Driver 3", value: "3" },
 ];
 
+// Define Zod schema for validation
+const schema = z.object({
+  driver: z.string().nonempty({ message: "Driver selection is required." }),
+});
+
+type FormData = z.infer<typeof schema>;
+
 export default function AssignDriver() {
-    const [driver,setDriver] = useState<string>("");
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { driver: "" },
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log("Selected Driver:", data.driver);
+  };
 
   return (
     <Dialog>
@@ -35,7 +58,41 @@ export default function AssignDriver() {
           <DialogHeader>
             <DialogTitle className="mb-6">Choose Driver</DialogTitle>
             <DialogDescription>
-              <Combobox options={Drivers} value={driver} onChange={setDriver}/>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <FormField
+                    control={form.control}
+                    name="driver"
+                    render={({ field }) => (
+                      <FormItem>
+                        <label
+                          htmlFor="driver"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Select a Driver
+                        </label>
+                        <FormControl>
+                          <Combobox
+                            options={Drivers}
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Choose a driver"
+                            className="w-full"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <button
+                    type="submit"
+                    className="mt-8 w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                  >
+                    Assign Driver
+                  </button>
+                </form>
+              </Form>
             </DialogDescription>
           </DialogHeader>
         </div>

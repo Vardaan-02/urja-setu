@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { Event } from '@/types/event';
 
 export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
@@ -10,6 +10,7 @@ export interface UserDetails {
     following: string[],
     liked: string[],
     orders: string[],
+    phone: string | null;
     wallet: number,
 }
 
@@ -18,12 +19,14 @@ export interface DeliveryPersonDetails {
     assignedWork: string[];
     rating: number;
     organizationId: string;
+    phone: string | null;
     orders: string[];
 }
 
 export interface OrganizationDetails {
     address: string;
     events: [];
+    phone: string | null;
     followers: string[];
 }
 
@@ -94,24 +97,10 @@ export const authSlice = createSlice({
         state.details.events = events;
     },
 
-    updateUserEvents: (state, action: PayloadAction<Event>) => {
-        const updatedEvent: Event = action.payload;
-        if (state.details.events) {
-            const eventIndex = state.details.events.findIndex((event) => event.id === updatedEvent.id);
-    
-            if (eventIndex !== -1) {
-                state.details.events[eventIndex] = updatedEvent;
-            }
-            else {
-                state.details.events = [updatedEvent];
-            }
-        }
-    },
-
     resetAuth: () => initialState,
   },
 })
 
-export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents, updateUserEvents} = authSlice.actions
+export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents} = authSlice.actions
 
 export default authSlice.reducer

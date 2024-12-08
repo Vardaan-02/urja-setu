@@ -9,6 +9,7 @@ export const saveUser = async (id: string): Promise<void> => {
       wallet: 100,
       eventDates: [],
       cart: "",
+      phone: "",
       following: [],
       orders: [],
       role: "User",

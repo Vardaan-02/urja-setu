@@ -5,6 +5,7 @@ import authReducer from './authSlice'
 import productReducer from './productSlice'
 import cartReducer from './cartSlice'
 import eventReducer from './eventSlice'
+import orderReducer from './orderSlice'
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer)
 const persistedProductReducer = persistReducer(persistConfig, productReducer)
 const persistedCartReducer = persistReducer(persistConfig, cartReducer)
 const persistedEventReducer = persistReducer(persistConfig, eventReducer)
+const persistedOrderReducer = persistReducer(persistConfig, orderReducer)
 
 const store = configureStore({
   reducer: {
@@ -22,6 +24,7 @@ const store = configureStore({
     product: persistedProductReducer,
     cart: persistedCartReducer,
     event: persistedEventReducer,
+    order: persistedOrderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
