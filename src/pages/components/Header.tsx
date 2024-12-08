@@ -240,19 +240,19 @@ export default function Header() {
           <div className="flex space-x-4 mt-3">
             <button
               className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
-              onClick={() => handleLogin(null)}
+              onClick={() => handleLogin("User")}
             >
               User
             </button>
             <button
               className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
-              onClick={() => handleLogin(null)}
+              onClick={() => handleLogin("Organization")}
             >
               Organization
             </button>
             <button
               className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
-              onClick={() => handleLogin(null)}
+              onClick={() => handleLogin("DeliveryPerson")}
             >
               Delivery Person
             </button>
