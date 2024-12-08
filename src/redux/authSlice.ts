@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Event } from '@/types/event';
 
 export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
 
 export interface UserDetails {
     address: string;
     cart: string;
-    eventDates: [],
+    events: Event[],
     following: string[],
     liked: string[],
     orders: string[],
+    phone: string | null;
     wallet: number,
 }
 
@@ -17,12 +19,14 @@ export interface DeliveryPersonDetails {
     assignedWork: string[];
     rating: number;
     organizationId: string;
+    phone: string | null;
     orders: string[];
 }
 
 export interface OrganizationDetails {
     address: string;
     events: [];
+    phone: string | null;
     followers: string[];
 }
 
@@ -37,7 +41,7 @@ export interface AuthState {
     email: string | null;
     photoURL: string | null;
     role: UserRole | null;
-    details: Partial<UserDetails & DeliveryPersonDetails & OrganizationDetails>;
+    details: Partial<UserDetails & DeliveryPersonDetails & OrganizationDetails> ;
 }
 
 const initialState: AuthState = {
@@ -87,10 +91,16 @@ export const authSlice = createSlice({
             // state.details.liked = [productId];
         }
     },
+
+    setUserEvents: (state, action) => {
+        const events = action.payload;
+        state.details.events = events;
+    },
+
     resetAuth: () => initialState,
   },
 })
 
-export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts} = authSlice.actions
+export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents} = authSlice.actions
 
 export default authSlice.reducer
