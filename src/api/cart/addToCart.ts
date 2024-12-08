@@ -1,8 +1,9 @@
 import { collection, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { fetchCart } from "./fetchCart";
+import { updateCartId } from "@/redux/authSlice";
 
-export const addToCart = async (cartId: string, prodId: string, quantity: number, dispatch: any) => {
+export const addToCart = async (cartId: string, prodId: string, userId: string, quantity: number, dispatch: any) => {
     try {
         const cartDocRef = doc(collection(db, "cart"), cartId);
 
@@ -13,6 +14,12 @@ export const addToCart = async (cartId: string, prodId: string, quantity: number
                 items: [{ id: prodId, quantity }],
             });
             console.log(`New cart created with product ${prodId} and quantity ${quantity}`);
+            const userDocRef = doc(collection(db, "users"), userId);
+            await updateDoc(userDocRef, {
+                cartId: cartId,  
+            });
+            dispatch(updateCartId(cartId));
+            fetchCart(cartId, dispatch);
             return;
         }
 
