@@ -5,12 +5,26 @@ import { Badge } from "@/components/ui/badge";
 import { Product } from "@/types/product";
 import Rating from "@/components/ui/rating";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateLikedProducts } from "@/redux/authSlice";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import { useState } from "react";
 
 export default function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const {auth} = useIsAuthorized();
+  const [liked, setLiked] = useState(product.liked);
   function handleShowDetails(){
     navigate(`/product/${product.id}`);
   }
+
+  function handleLike(){
+    // dispatch(updateProdLike({ productId:product.id, isLiked:false }));
+    // dispatch(updateLikedProducts({ productId:product.id, isLiked:false, userId:auth.uid}));
+    setLiked(liked => !liked);
+  }
+
   return (
     <Card className="p-4 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-lg flex flex-col justify-between transition-all">
       <CardContent className="p-0">
@@ -23,11 +37,12 @@ export default function ProductCard({ product }: { product: Product }) {
           }}
         >
           <Button
+            onClick={handleLike}
             variant="ghost"
             size="icon"
             className="absolute top-2 right-2 bg-white bg-opacity-50 hover:bg-opacity-100 transition-all hover:bg-white hover:text-black"
           >
-            {product.liked ? (
+            {liked ? (
               <Heart fill="#22c55e" className="h-5 w-5 text-green-500" />
             ) : (
               <Heart className="h-5 w-5" />
@@ -41,7 +56,16 @@ export default function ProductCard({ product }: { product: Product }) {
           <h3 className="font-semibold text-lg mb-1">{product.title}</h3>
           <Badge variant={"outline"} className="bg-green-50"> {product.category}</Badge>
           </div>
-          <p className="text-xl font-bold mb-2">${product.price.toFixed(2)}</p>
+          {/* <p className="text-xl font-bold mb-2">${product.price.toFixed(2)}</p> */}
+          <div className="flex items-baseline space-x-2">
+        {product.discount ? (<>
+          <span className="text-xl font-bold">${(product.price - (product.price * (product.discount / 100))).toFixed(2)}</span>
+        </>) : (<>
+          <span className="text-xl font-bold">${product.price}</span>
+        </>)}
+        <span className="text-sm text-muted-foreground line-through">${product.price.toFixed(2)}</span>
+        {product.discount && <Badge className="px-1 py-[2px] m-0" variant="success">{(product.discount).toFixed(2)}% OFF</Badge>}
+      </div>
           <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
             {product.seller}
