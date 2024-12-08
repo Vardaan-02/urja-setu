@@ -73,15 +73,15 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   const handleCardClose = (index: number) => {
     if (carouselRef.current) {
       const { scrollLeft, clientWidth } = carouselRef.current;
-      const cardWidth = isMobile() ? 230 : 384; 
+      const cardWidth = isMobile() ? 230 : 384;
       const gap = isMobile() ? 4 : 8;
       const cardStart = (cardWidth + gap) * index;
       const cardEnd = cardStart + cardWidth;
-      if(cardStart < scrollLeft || cardEnd > scrollLeft + clientWidth) {
+      if (cardStart < scrollLeft || cardEnd > scrollLeft + clientWidth) {
         carouselRef.current.scrollTo({
           left: cardStart,
-          behavior: "smooth"
-        })
+          behavior: "smooth",
+        });
       }
       setCurrentIndex(index);
     }
@@ -110,7 +110,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
           <div
             className={cn(
               "flex flex-row justify-start gap-4 pl-4 pr-4",
-              "max-w-7xl" 
+              "max-w-7xl"
             )}
           >
             {items.map((item, index) => (
@@ -130,7 +130,10 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
                   },
                 }}
                 key={"card" + index}
-                className={cn("rounded-xl", index === items.length - 1 && "last:pr-0")}
+                className={cn(
+                  "rounded-xl",
+                  index === items.length - 1 && "last:pr-0"
+                )}
               >
                 {item}
               </motion.div>
@@ -203,12 +206,12 @@ export const Card = ({
     <>
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 h-screen z-50 overflow-auto hover:shadow-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="bg-black/80 backdrop-blur-lg h-full w-full fixed inset-0"
+              className="bg-black/80 backdrop-blur-lg fixed inset-0"
             />
             <motion.div
               initial={{ opacity: 0 }}
@@ -216,27 +219,27 @@ export const Card = ({
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="max-w-5xl mx-auto bg-white dark:bg-neutral-900 h-fit z-[60] my-10 p-4 md:p-10 rounded-3xl font-sans relative"
+              className="w-[90%] md:w-[50%] max-w-lg bg-white dark:bg-neutral-900 h-auto z-[60] p-6 md:p-8 rounded-3xl font-sans relative"
             >
               <button
-                className="sticky top-4 h-8 w-8 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
+                className="absolute top-4 right-4 h-8 w-8 bg-black dark:bg-white rounded-full flex items-center justify-center"
                 onClick={handleClose}
               >
                 <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
               </button>
               <motion.p
                 layoutId={layout ? `category-${card.title}` : undefined}
-                className="text-base font-medium text-black dark:text-white"
+                className="text-lg font-medium text-black dark:text-white"
               >
                 {card.category}
               </motion.p>
               <motion.p
                 layoutId={layout ? `title-${card.title}` : undefined}
-                className="text-2xl md:text-5xl font-semibold text-neutral-700 mt-4 dark:text-white"
+                className="text-2xl md:text-4xl font-semibold text-neutral-700 mt-4 dark:text-white"
               >
                 {card.title}
               </motion.p>
-              <div className="py-10">{card.content}</div>
+              <div className="py-6">{card.content}</div>
             </motion.div>
           </div>
         )}
@@ -244,9 +247,9 @@ export const Card = ({
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="rounded-3xl bg-gray-100 dark:bg-neutral-900 h-60 w-44 md:h-[30rem] md:w-80 overflow-hidden flex flex-col items-start justify-start relative z-10"
+        className="relative z-10 h-60 w-44 md:h-[30rem] md:w-80 overflow-hidden flex flex-col items-start justify-start rounded-3xl bg-gray-100 dark:bg-neutral-900"
       >
-        <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
         <div className="relative z-40 p-8">
           <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
@@ -261,11 +264,11 @@ export const Card = ({
             {card.title}
           </motion.p>
         </div>
-        <BlurImage
+        <img
           src={card.src}
           alt={card.title}
-          fill
-          className="object-cover absolute z-10 inset-0" height={window.innerHeight} width={window.innerWidth}        />
+          className="absolute inset-0 h-full w-full object-cover z-10"
+        />
       </motion.button>
     </>
   );
@@ -302,7 +305,6 @@ export const BlurImage = ({
       height={height}
       loading="lazy"
       decoding="async"
-      blurDataURL={typeof src === "string" ? src : undefined}
       alt={alt ? alt : "Background of a beautiful view"}
       {...rest}
     />
