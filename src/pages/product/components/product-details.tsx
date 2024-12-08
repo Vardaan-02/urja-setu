@@ -11,6 +11,7 @@ interface ProductDetailsProps {
 }
 
 export default function ProductDetails({ product, isLiked, onLikeToggle }: ProductDetailsProps) {
+  console.log(product);
   return (
     <div className="space-y-4 bg-white/30 shadow-lg rounded-xl p-4 h-full">
       <div className="flex justify-between items-start">
@@ -27,11 +28,13 @@ export default function ProductDetails({ product, isLiked, onLikeToggle }: Produ
         <span className="text-muted-foreground">({product.reviews?.length} reviews)</span>
       </div>
       <div className="flex items-baseline space-x-2">
-        <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
-        {product.discount && (
-          <span className="text-lg text-muted-foreground line-through">${(product.price / (1 - product.discount)).toFixed(2)}</span>
-        )}
-        {product.discount && <Badge variant="success">{(product.discount * 100).toFixed(0)}% OFF</Badge>}
+        {product.discount ? (<>
+          <span className="text-3xl font-bold">${(product.price - (product.price * (product.discount / 100))).toFixed(2)}</span>
+        </>) : (<>
+          <span className="text-3xl font-bold">${product.price}</span>
+        </>)}
+        <span className="text-lg text-muted-foreground line-through">${product.price.toFixed(2)}</span>
+        {product.discount && <Badge variant="success">{(product.discount).toFixed(2)}% OFF</Badge>}
       </div>
       <p className="text-black">{product.description}</p>
       <div className='text-gray-800'>

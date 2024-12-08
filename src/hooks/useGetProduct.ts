@@ -9,7 +9,7 @@ export function useGetProduct(prodId: string, userId: string) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(!product){
+        if(product.length == 0){
             fetchProducts(userId, dispatch);
         }
         const foundProduct = product.find((prod: { id: string }) => prod.id === prodId);

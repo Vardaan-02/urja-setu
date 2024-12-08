@@ -27,7 +27,7 @@ export default function App() {
             element={<Marketplace />}
           />
         </Route>
-        <Route path="/product/:product" element={<ParentProductPage />} />
+        <Route path="/product/:id" element={<ParentProductPage />} />
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />

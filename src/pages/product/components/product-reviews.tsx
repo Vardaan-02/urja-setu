@@ -4,10 +4,11 @@ import Rating from '@/components/ui/rating'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 interface ProductReviewsProps {
-  reviews?: Review[]
+  reviews: Review[]
 }
 
 export default function ProductReviews({ reviews }: ProductReviewsProps) {
+  console.log(reviews);
   return (
     <div className="mt-12 bg-green-50 p-6 rounded-2xl">
       <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
@@ -17,13 +18,13 @@ export default function ProductReviews({ reviews }: ProductReviewsProps) {
             <div className="flex items-center justify-between mb-2">
               <div className='flex gap-4'>
                 <Avatar>
-                  <AvatarImage src="https://www.weareteachers.com/wp-content/uploads/plastic-bottle-fairy-house-night-lights-680.jpg" />
+                  <AvatarImage src={review.photoURL} />
                   <AvatarFallback>
-                    {review.user}
+                    {review.name[0]}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col items-start justify-start">
-                  <span className="font-semibold">{review.user}</span>
+                  <span className="font-semibold">{review.name}</span>
                   <div className="flex">
                   <Rating rating={review.rating} size={14}/>
                   </div>
