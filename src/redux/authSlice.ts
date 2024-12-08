@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Event } from '@/types/event';
+import { toggleLikeProduct } from '@/api/products/toggleLikeProduct';
 
 export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
 
@@ -78,7 +79,7 @@ export const authSlice = createSlice({
     },
 
     updateLikedProducts: (state, action) => {
-        const { productId, isLiked } = action.payload;
+        const { userId, productId, isLiked } = action.payload;
         if(state.details.liked){
             if(isLiked){
                 state.details.liked = state.details.liked.filter(
@@ -88,6 +89,7 @@ export const authSlice = createSlice({
             else{
                 state.details.liked.push(productId);
             }
+            toggleLikeProduct(productId, userId);
             // state.details.liked = [productId];
         }
     },
