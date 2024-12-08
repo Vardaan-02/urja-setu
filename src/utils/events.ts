@@ -1,16 +1,4 @@
-export interface Event {
-    id: string;
-    title: string;
-    shortDescription: string;
-    fullDescription: string;
-    date: string;
-    companyName?: string;
-    time: string;
-    location: string;
-    image: string;
-    potentialEarnings?: number;
-    registered? :number
-}
+import { Event } from "@/types/event"
 
 export const events: Event[] = [
     {

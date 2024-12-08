@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EventCard } from "@/components/ui/event-card";
-import { Event } from "@/utils/events";
+import { Event } from "@/types/event";
 import { EventModal } from "@/components/ui/event-modal";
 import { events } from "@/utils/events";
 import EventHeader from "./EventHeader";
+import { fetchEvents } from "@/api/events/fetchEvents";
+import { useDispatch } from "react-redux";
 
 export default function Events() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    fetchEvents(dispatch);
+  }, [])
   return (
     <>
       <EventHeader />
