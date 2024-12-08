@@ -39,6 +39,11 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
         let prods: Product[] = [];
         
         validProducts.forEach((i) => {
+            let averageRating = 0;
+            if (Array.isArray(i.reviews) && i.reviews.length > 0) {
+                const totalRating = i.reviews.reduce((sum, review) => sum + review.rating, 0);
+                averageRating = totalRating / i.reviews.length;
+            }
             const item = {
                 category: i.category,
                 condition: i.condition,
@@ -48,7 +53,7 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
                 id: i.id,
                 images: i.images,
                 price: i.price,
-                rating: i.rating,
+                rating: averageRating,
                 reviews: i.reviews,
                 seller: i.seller,
                 title: i.title,
