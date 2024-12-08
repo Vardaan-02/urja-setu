@@ -1,19 +1,26 @@
-import { useState } from 'react'
-import { Product } from '@/types/product'
-import ProductGallery from './product-gallery'
-import ProductDetails from './product-details'
-import ProductReviews from './product-reviews'
+import { useState } from 'react';
+import { Product } from '@/types/product';
+import ProductGallery from './product-gallery';
+import ProductDetails from './product-details';
+import ProductReviews from './product-reviews';
+import { useDispatch } from 'react-redux';
 
 interface ProductPageProps {
-  product: Product
+  product: Product;
 }
 
 export default function ProductPage({ product }: ProductPageProps) {
-  const [isLiked, setIsLiked] = useState(product.liked)
+  const dispatch = useDispatch();
+  const [isLiked, setIsLiked] = useState(product.liked);
 
   const toggleLike = () => {
-    setIsLiked(!isLiked)
-  }
+    // dispatch(updateProdLike({ productId: product.id, isLiked: false }));
+    // dispatch(updateLikedProducts({ productId: product.id, isLiked: false, userId: auth.uid }));
+    setIsLiked(!isLiked);
+  };
+
+  // Ensure product.reviews is always an array (empty array if undefined)
+  const reviews = Array.isArray(product.reviews) ? product.reviews : [];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -23,8 +30,7 @@ export default function ProductPage({ product }: ProductPageProps) {
           <ProductDetails product={product} isLiked={isLiked} onLikeToggle={toggleLike} />
         </div>
       </div>
-      {product.reviews && <ProductReviews reviews={product.reviews} />}
+      {<ProductReviews reviews={reviews} />}
     </div>
-  )
+  );
 }
-

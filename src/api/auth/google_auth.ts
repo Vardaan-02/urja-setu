@@ -34,6 +34,7 @@ const saveDummyUser = async (user: { uid: string; name: string | null; email: st
       // console.log("User saved successfully:", user.uid);
     }
     else{
+
       console.log("User already exists:", user.uid);
     }
   }
@@ -53,6 +54,9 @@ const handleGoogleSignIn = async (dispatch: any, role: string | null) => {
     //   email: user.email,
     //   photoURL: user.photoURL,
     // });
+    if(role == null){
+      role = "User";
+    }
     if(role){
       await saveDummyUser({
         uid: user.uid,

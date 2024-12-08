@@ -5,6 +5,7 @@ import { fetchReviews } from "./fetchReviews";
 
 export const postReview = async (productId: string, review: Review, dispatch: any) => {
     try {
+        console.log(review, "call aa gayi");
         const productDocRef = doc(db, "products", productId);
 
         await updateDoc(productDocRef, {
