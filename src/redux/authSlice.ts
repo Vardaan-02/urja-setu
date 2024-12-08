@@ -7,7 +7,7 @@ export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
 export interface UserDetails {
     address: string;
     cart: string;
-    events: Event[],
+    eventsId: Event[],
     following: string[],
     liked: string[],
     orders: string[],
@@ -96,13 +96,18 @@ export const authSlice = createSlice({
 
     setUserEvents: (state, action) => {
         const events = action.payload;
-        state.details.events = events;
+        state.details.eventsId = events;
+    },
+
+    updateUserEvents: (state, action) => {
+        const eventId = action.payload;
+        state.details.eventsId?.push(eventId);
     },
 
     resetAuth: () => initialState,
   },
 })
 
-export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents} = authSlice.actions
+export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents, updateUserEvents} = authSlice.actions
 
 export default authSlice.reducer

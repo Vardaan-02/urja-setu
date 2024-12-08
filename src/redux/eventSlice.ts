@@ -26,9 +26,13 @@ export const eventSlice = createSlice({
             // console.log("Updated event: ", state.events[index]);
         }
     },
+    addEvent: (state, action: PayloadAction<Event>) => {
+      state.events.push(action.payload);
+      console.log("Added event: ", action.payload);
+    },
   },
 });
 
-export const { setEvents, removeEvent, updateEvent } = eventSlice.actions;
+export const { setEvents, removeEvent, updateEvent, addEvent } = eventSlice.actions;
 
 export default eventSlice.reducer;
