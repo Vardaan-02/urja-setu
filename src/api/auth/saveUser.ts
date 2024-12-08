@@ -8,7 +8,7 @@ export const saveUser = async (id: string): Promise<void> => {
       address: "NA",
       wallet: 100,
       eventsId: [],
-      cart: "",
+      cartId: "",
       phone: "",
       following: [],
       orders: [],

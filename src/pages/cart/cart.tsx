@@ -20,6 +20,7 @@ import Rating from "@/components/ui/rating"
 import NavBar from "@/components/nav-bar"
 import { fetchCart } from "@/api/cart/fetchCart"
 import { useDispatch } from "react-redux"
+import { useGetCart } from "@/hooks/useGetCart"
 
 const initialProducts: cartProduct[] = [
   {
@@ -86,7 +87,8 @@ export default function Cart() {
     setTax(newTax)
     setTotal(newTotal)
   }, [cartItems, shipping, discount])
-
+  
+  useGetCart();
   useEffect(() => {
     fetchCart("EHgoixNBX0VEREcoWOyl", dispatch);
   }, [])

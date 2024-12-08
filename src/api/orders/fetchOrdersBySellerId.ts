@@ -13,6 +13,7 @@ export const fetchOrdersBySellerId = async (sellerId: string, dispatch: any): Pr
         const data = doc.data().order;
         return {
           id: doc.id,
+          chatId: null,
           order: {
             seller: {
               id: data.seller?.id ?? "",
