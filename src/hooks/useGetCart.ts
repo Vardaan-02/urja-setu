@@ -10,5 +10,5 @@ export function useGetCart(prodId?: string) {
         setIsPresent(!productInCart);
     }, [cart]);
 
-    return {isPresent};
+    return {isPresent, cart};
 }
