@@ -8,6 +8,7 @@ import { updateProdLike } from '@/redux/productSlice'
 import { updateLikedProducts } from '@/redux/authSlice'
 import { useIsAuthorized } from '@/hooks/useIsAuthorized'
 import { useState } from 'react'
+import { addToCart } from '@/api/cart/addToCart'
 
 interface ProductDetailsProps {
   product: Product
