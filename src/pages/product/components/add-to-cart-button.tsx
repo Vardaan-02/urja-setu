@@ -1,40 +1,58 @@
-import { useEffect, useState } from 'react'
-import { ShoppingCart } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { addToCart } from '@/api/cart/addToCart'
-import { useDispatch } from 'react-redux'
-import { useIsAuthorized } from '@/hooks/useIsAuthorized'
+import { useEffect, useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { addToCart } from '@/api/cart/addToCart';
+import { useDispatch } from 'react-redux';
+import { useIsAuthorized } from '@/hooks/useIsAuthorized';
+import { fetchCart } from '@/api/cart/fetchCart';
+import { useAppSelector } from '@/redux/hooks';
 
-export default function AddToCartButton({product} : {product: string}) {
+interface Product {
+  id: string;
+  [key: string]: any; // Allow additional properties if needed
+}
+
+interface AddToCartButtonProps {
+  product: string;
+}
+
+export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const dispatch = useDispatch();
-  const [isAdded, setIsAdded] = useState(false);
-  const {auth} = useIsAuthorized();
-  function handleAddToCart(){
-    if(isAdded == false){
-      if(auth.uid){
-        console.log("before added to cart");
-        addToCart(product, auth.uid, 1, dispatch, "1");
-        console.log("added to cart");
+  const cart = useAppSelector((state) => state.cart);
+  const [isAdded, setIsAdded] = useState<boolean>(false);
+  const { auth } = useIsAuthorized();
+
+  function handleAddToCart() {
+    if (!isAdded) {
+      if (auth.uid) {
+        console.log('Before adding to cart');
+        addToCart(auth.uid, product, 1, dispatch);
+        console.log('Added to cart');
       }
-    }
-    else{
-      console.log("remove from cart");
+    } else {
+      console.log('Remove from cart');
     }
   }
 
-  useEffect(()=>{
-    console.log(auth);
-  }, [auth]);
+  useEffect(() => {
+    if (auth.uid) {
+      console.log(auth.uid);
+      fetchCart(auth.uid, dispatch);
+    }
+  }, [auth, dispatch]);
+
+  useEffect(() => {
+    if (cart.cart) {
+      const found = cart.cart.find((item) => item.id === product);
+      setIsAdded(!!found);
+      console.log(isAdded); 
+    }
+  }, [cart, product]);
 
   return (
-    <Button
-      size="lg"
-      className="w-full"
-      onClick={handleAddToCart}
-    >
+    <Button size="lg" className="w-full" onClick={handleAddToCart}>
       <ShoppingCart className="mr-2 h-5 w-5" />
       {isAdded ? 'Added to Cart!' : 'Add to Cart'}
     </Button>
-  )
+  );
 }
-
