@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateLikedProducts } from "@/redux/authSlice";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
-import { useState } from "react";
+// import { useState } from "react";
 import { addToCart } from "@/api/cart/addToCart";
 import { updateProdLike } from "@/redux/productSlice";
 

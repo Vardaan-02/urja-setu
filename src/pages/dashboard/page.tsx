@@ -9,9 +9,9 @@ import { fetchOrdersBySellerId } from "@/api/orders/fetchOrdersBySellerId";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    fetchOrdersBySellerId("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
-  }, [])
+  // useEffect(() => {
+  //   fetchOrdersBySellerId("hnTUEE5tJpZVm1wjwYKuf1Nw8e92", dispatch);
+  // }, [])
   return (
     <>
     <NavBar />

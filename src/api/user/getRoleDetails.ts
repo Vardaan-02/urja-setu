@@ -32,7 +32,7 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
             }
             else{
                 updates = {
-                    eventDates: userData.eventDates,
+                    eventId: userData.eventDates,
                     following: userData.following,
                     orders: userData.orders,
                     address: userData.address,

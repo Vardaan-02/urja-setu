@@ -5,8 +5,22 @@ import { SellGarbageUser } from "./user-components/sell-garbage";
 import { WasteChart } from "./right-box-components/waste-chart";
 import { SellGarbageDeliveryBoy } from "./delivery-boy-components/sell-garbage";
 import { SellGarbageCompany } from "./company-components/purchase-garbage";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import { fetchOrdersBySellerId } from "@/api/orders/fetchOrdersBySellerId";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/redux/hooks";
+import { orderWithId } from "@/redux/orderSlice";
 
 export function RightBox() {
+  const auth = useIsAuthorized();
+  const dispatch = useDispatch();
+  let order;
+  if(auth && auth.auth.uid){    
+    console.log(auth);
+    
+    fetchOrdersBySellerId(auth.auth.uid, dispatch);
+    order = useAppSelector(state => (state.order));
+  }
   const sampleOrder = [
     {
       item: {
