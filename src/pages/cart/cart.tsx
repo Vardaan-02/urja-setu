@@ -21,6 +21,7 @@ import NavBar from "@/components/nav-bar"
 import { fetchCart } from "@/api/cart/fetchCart"
 import { useDispatch } from "react-redux"
 import { useGetCart } from "@/hooks/useGetCart"
+import { useIsAuthorized } from "@/hooks/useIsAuthorized"
 
 const initialProducts: cartProduct[] = [
   {
@@ -78,6 +79,7 @@ export default function Cart() {
   const [total, setTotal] = useState<number>(0)
   const [couponCode, setCouponCode] = useState<string>("")
   const [discount, setDiscount] = useState<number>(0)
+  const {auth} = useIsAuthorized();
 
   useEffect(() => {
     const newSubtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -91,7 +93,8 @@ export default function Cart() {
   
   useGetCart();
   useEffect(() => {
-    fetchCart("EHgoixNBX0VEREcoWOyl", dispatch);
+    console.log(auth.details.cartId);
+    fetchCart(dispatch, auth.details.cartId);
   }, [])
 
   const updateQuantity = (id: string, newQuantity: number) => {

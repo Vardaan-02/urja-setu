@@ -1,16 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { addToCart } from '@/api/cart/addToCart'
 import { useDispatch } from 'react-redux'
+import { useIsAuthorized } from '@/hooks/useIsAuthorized'
 
 export default function AddToCartButton({product} : {product: string}) {
   const dispatch = useDispatch();
-  const [isAdded, setIsAdded] = useState(false)
-
-  const handleAddToCart = () => {
-    // addToCart(cartId, product, 1, dispatch);
+  const [isAdded, setIsAdded] = useState(false);
+  const {auth} = useIsAuthorized();
+  function handleAddToCart(){
+    if(isAdded == false){
+      if(auth.uid){
+        console.log("before added to cart");
+        addToCart(product, auth.uid, 1, dispatch, "1");
+        console.log("added to cart");
+      }
+    }
+    else{
+      console.log("remove from cart");
+    }
   }
+
+  useEffect(()=>{
+    console.log(auth);
+  }, [auth]);
 
   return (
     <Button
