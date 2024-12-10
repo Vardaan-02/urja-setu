@@ -10,119 +10,18 @@ import { fetchOrdersBySellerId } from "@/api/orders/fetchOrdersBySellerId";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
 import { orderWithId } from "@/redux/orderSlice";
+import { useEffect } from "react";
 
 export function RightBox() {
   const auth = useIsAuthorized();
   const dispatch = useDispatch();
-  let order;
-  if(auth && auth.auth.uid){    
-    console.log(auth);
-    
-    fetchOrdersBySellerId(auth.auth.uid, dispatch);
-    order = useAppSelector(state => (state.order));
-  }
-  const sampleOrder = [
-    {
-      item: {
-        name: "Item 1",
-        price: 10.99,
-        weight: 0.5,
-        image:
-          "https://5.imimg.com/data5/MB/QV/MY-9702965/small-size-jute-bags-500x500.jpg",
-      },
-      deliveryPerson: {
-        name: "John Doe",
-        photo:
-          "https://img.freepik.com/premium-psd/portrait-young-pizza-delivery-boy_1162740-29585.jpg",
-        contact: "+1 (555) 123-4567",
-        rating: 4.5,
-      },
-      pickupTime: {
-        start: "3:00 PM",
-        end: "3:30 PM",
-      },
-    },
-    {
-      item: {
-        name: "Item 1",
-        price: 10.99,
-        weight: 0.5,
-        image:
-          "https://5.imimg.com/data5/MB/QV/MY-9702965/small-size-jute-bags-500x500.jpg",
-      },
-      deliveryPerson: {
-        name: "John Doe",
-        photo:
-          "https://img.freepik.com/premium-psd/portrait-young-pizza-delivery-boy_1162740-29585.jpg",
-        contact: "+1 (555) 123-4567",
-        rating: 4.5,
-      },
-      pickupTime: {
-        start: "3:00 PM",
-        end: "3:30 PM",
-      },
-    },
-    {
-      item: {
-        name: "Item 1",
-        price: 10.99,
-        weight: 0.5,
-        image:
-          "https://5.imimg.com/data5/MB/QV/MY-9702965/small-size-jute-bags-500x500.jpg",
-      },
-      deliveryPerson: {
-        name: "John Doe",
-        photo:
-          "https://img.freepik.com/premium-psd/portrait-young-pizza-delivery-boy_1162740-29585.jpg",
-        contact: "+1 (555) 123-4567",
-        rating: 4.5,
-      },
-      pickupTime: {
-        start: "3:00 PM",
-        end: "3:30 PM",
-      },
-    },
-    {
-      item: {
-        name: "Item 1",
-        price: 10.99,
-        weight: 0.5,
-        image:
-          "https://5.imimg.com/data5/MB/QV/MY-9702965/small-size-jute-bags-500x500.jpg",
-      },
-      deliveryPerson: {
-        name: "John Doe",
-        photo:
-          "https://img.freepik.com/premium-psd/portrait-young-pizza-delivery-boy_1162740-29585.jpg",
-        contact: "+1 (555) 123-4567",
-        rating: 4.5,
-      },
-      pickupTime: {
-        start: "3:00 PM",
-        end: "3:30 PM",
-      },
-    },
-    {
-      item: {
-        name: "Item 1",
-        price: 10.99,
-        weight: 0.5,
-        image:
-          "https://5.imimg.com/data5/MB/QV/MY-9702965/small-size-jute-bags-500x500.jpg",
-      },
-      deliveryPerson: {
-        name: "John Doe",
-        photo:
-          "https://img.freepik.com/premium-psd/portrait-young-pizza-delivery-boy_1162740-29585.jpg",
-        contact: "+1 (555) 123-4567",
-        rating: 4.5,
-      },
-      pickupTime: {
-        start: "3:00 PM",
-        end: "3:30 PM",
-      },
-    },
-  ];
+  const orders = useAppSelector(state => (state.order.order));
+  useEffect(() => {
+    if(auth?.auth?.uid){    
+      console.log(auth);    
+      fetchOrdersBySellerId(auth.auth.uid, dispatch);
+    }
+  }, [])
 
   const type = ['type','type'];
 
@@ -142,7 +41,7 @@ export function RightBox() {
         </Box>
       </div>
       <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[504px]">
-        <PastDetails orders={sampleOrder} />
+        <PastDetails orders={orders} />
       </Box>
     </div>
   );

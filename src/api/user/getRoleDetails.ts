@@ -19,7 +19,8 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
                     rating: userData.rating,
                     assigned_work: userData.assigned_work,
                     address: userData.address,
-                    phone: userData.phone
+                    phone: userData.phone,
+                    code: userData.code
                 }
             }
             else if(role == "Organization"){
@@ -32,13 +33,12 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
             }
             else{
                 updates = {
-                    eventId: userData.eventDates,
+                    eventsId: userData.eventsId,
                     following: userData.following,
                     orders: userData.orders,
                     address: userData.address,
                     wallet: userData.wallet,
                     liked: userData.liked,
-                    cartId: userData.cartId,
                     phone: userData.phone
                 }
             }

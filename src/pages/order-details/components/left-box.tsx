@@ -2,21 +2,28 @@ import { Box } from "@/components/box";
 import MapComponent from "../map/map";
 import { OrderDetails } from "./order-details";
 import DeliveryPersonProfile from "./delivery-boy-details";
+import { useParams } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
 
 export function RightBox() {
+  const {id} = useParams();
+  const order = useAppSelector(state => state.order.order);
+  const selectedOrder = order.find((o) => o.id === id);
+  console.log(selectedOrder);
+
   return (
     <div className="flex flex-col space-y-4">
       <div className="md:flex-row space-y-4 md:space-y-0 md:space-x-4 flex-grow grid grid-cols-7">
         <Box className="bg-green-50 col-span-3">
           <DeliveryPersonProfile
-            name="John Doe"
-            photoUrl="/placeholder.svg?height=64&width=64"
-            contactNumber="(555) 123-4567"
-            rating={4.7}
+            name={selectedOrder?.order.deliveryPerson?.name || "NA"}
+            photoUrl={selectedOrder?.order.deliveryPerson?.photo || "/placeholder.svg"}
+            contactNumber={selectedOrder?.order.deliveryPerson?.contact || "N/A"}
+            rating={selectedOrder?.order.deliveryPerson?.rating || 0}
           />
         </Box>
         <Box className="bg-green-50 col-span-4">
-          <OrderDetails orderDetails={dummyOrder} />
+          <OrderDetails orderDetails={selectedOrder} />
         </Box>
       </div>
       <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[504px]">

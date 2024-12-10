@@ -22,7 +22,7 @@ export default function OrderDetails({ item }: OrderDetailsProps) {
         />
         <div className="flex flex-col">
           <p className="text-sm text-gray-600">
-            Total: ${item.price.toFixed(2)}
+            Total: ${item.price}
           </p>
           <p className="text-sm text-gray-600">Weight: {item.weight}kg</p>
         </div>

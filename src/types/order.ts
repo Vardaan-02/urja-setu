@@ -52,7 +52,7 @@ export interface Order {
       name?: string;
       image?: string;
       phone?: string;
-      address?: Address;
+      address?: Address[];
     };
     company?: {
       id?: string,

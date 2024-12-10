@@ -1,19 +1,18 @@
+import { Address } from "cluster";
+
 declare global {
     interface User {
-      uid: string;
       name: string | null;
       email: string | null;
       photoURL: string | null;
-      address: string | null;
+      address: Address[] | null;
       wallet: number | null;
-      eventDates: [];
-      cart: [];
+      eventsId: [];
       following: [];
       orders: [];
       role: "User";
     }
     interface Organization {
-      uid: string;
       name: string | null;
       email: string | null;
       photoURL: string | null;
@@ -23,7 +22,6 @@ declare global {
       role: "Organization"
     }
     interface DeliveryPerson {
-      uid: string;
       name: string | null;
       email: string | null;
       photoURL: string | null;
@@ -31,6 +29,7 @@ declare global {
       rating: number | null;
       assigned_work: [];
       address: string,
+      code: number,
       role: "DeliveryPerson"
     }
 }
