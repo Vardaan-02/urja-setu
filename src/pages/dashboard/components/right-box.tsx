@@ -6,10 +6,11 @@ import { WasteChart } from "./right-box-components/waste-chart";
 import { SellGarbageDeliveryBoy } from "./delivery-boy-components/sell-garbage";
 import { SellGarbageCompany } from "./company-components/purchase-garbage";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
-import { fetchOrdersById } from "@/api/orders/fetchOrdersById";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect } from "react";
+import { fetchOrdersByDelivery } from "@/api/orders/fetchOrderByDelivery";
+import { fetchOrdersById } from "@/api/orders/fetchOrdersById";
 
 export function RightBox() {
   const auth = useIsAuthorized();
@@ -17,8 +18,13 @@ export function RightBox() {
   const orders = useAppSelector(state => (state.order.order));
   useEffect(() => {
     if(auth?.auth?.uid){    
-      console.log(auth);    
-      fetchOrdersById(auth.auth.uid, dispatch);
+      console.log(auth); 
+      // if(auth.auth.role == "DeliveryPerson"){
+      //   fetchOrdersByDelivery(auth.auth.uid, dispatch);
+      // }   
+      // else{
+        fetchOrdersById(auth.auth.uid, dispatch);
+      // }
     }
   }, [])
 

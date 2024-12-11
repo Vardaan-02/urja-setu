@@ -3,9 +3,9 @@ import OrderDetails from "../order-components/order-details";
 import PickupTimeStatus from "../order-components/pickup-time-status";
 import ShowOrderDetailsButton from "../order-components/order-details-button";
 import DeliveryPersonDetails from "../order-components/delivery-boy-details";
-import { PastDetailsProps } from "@/types/order";
+import { sellWithId } from "@/api/orders/fetchPendingOrders";
 
-export default function PastDetails({ orders }: PastDetailsProps) {
+export default function PastDetails( {orders} : sellWithId[]) {
   console.log(orders);
   
   return (
@@ -19,14 +19,23 @@ export default function PastDetails({ orders }: PastDetailsProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {orders?.length > 0 && orders.map((order, index) => {
+        {orders?.length > 0 && orders.map((order: any, index: number) => {
+          console.log(order);
+          
+          const item = {
+            name: order.order.itemName, 
+            weight: order.order.weight, 
+            image: order.order.image,  
+            price: 100 
+          };
+          
           return (
             <div
               key={index}
               className="p-6 flex bg-white/50 justify-between items-center rounded-xl shadow-lg hover:shadow-xl transition-shadow"
             >
               {/* Left Section - Order Details */}
-              {order.order.item && <OrderDetails item={order.order.item} />}
+              {item && <OrderDetails item={item} />}
 
               {/* Middle Section - Delivery Person */}
               {order.order.deliveryPerson && (
@@ -40,7 +49,7 @@ export default function PastDetails({ orders }: PastDetailsProps) {
 
               {/* Details Button */}
               <div className="mt-4 sm:mt-0">
-                <ShowOrderDetailsButton id={order.id}/>
+                <ShowOrderDetailsButton id={order.id ?? ""}/>
               </div>
             </div>
           );

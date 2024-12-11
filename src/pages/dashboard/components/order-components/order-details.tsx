@@ -10,6 +10,7 @@ interface OrderDetailsProps {
 }
 
 export default function OrderDetails({ item }: OrderDetailsProps) {
+  
   return (
     <div className="flex gap-2">
       <motion.div className="flex items-center gap-4">

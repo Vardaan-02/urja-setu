@@ -7,7 +7,7 @@ import { UserCard } from "./left-box-components/user-card";
 import RedeemStoreUser from "./user-components/redeem-store";
 import { fetchRegisteredEvents } from "@/api/events/fetchRegisteredEvents";
 import { Event } from "@/types/event";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export function LeftBox() {
   // User
@@ -18,21 +18,19 @@ export function LeftBox() {
       return;
   }
 
-const fetchDates = async () => {
-  try {
-    const events = await fetchRegisteredEvents(auth.auth.details.eventsId);
-    setDates(events);
-    console.log("Hello");
+// const fetchDates = useMemo(async () => {
+  // try {
+    // if(auth.auth.role == "User"){
+      // const events = await fetchRegisteredEvents(auth.auth.details.eventsId);
+      // setDates(events);
+      // console.log("Hello");
+    // }
     
-  }
-  catch (error) {
-      console.error("Error fetching events:", error);
-  }
-};
-  
-if (eventDates.length === 0) {
-    fetchDates();
-}
+  // }
+  // catch (error) {
+      // console.error("Error fetching events:", error);
+  // }
+// },[]);
   
 
   const user = {

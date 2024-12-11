@@ -4,7 +4,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export interface orderWithId extends Order{
   id: string | null;
   chatId: string | null;
-  status: string | null;
 }
 
 const initialState = {
