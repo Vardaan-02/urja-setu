@@ -1,9 +1,8 @@
 import { collection, getDocs } from "firebase/firestore";
-import { Order } from "@/types/order";
 import { db } from "../../utils/firebase";
 import { orderWithId, setOrders } from "@/redux/orderSlice";
 
-export const fetchOrdersBySellerId = async (sellerId: string, dispatch: any): Promise<void> => {
+export const fetchOrdersById = async (userId: string, dispatch: any): Promise<void> => {
   try {
     const ordersCollection = collection(db, "orders");
     const querySnapshot = await getDocs(ordersCollection);
@@ -13,6 +12,7 @@ export const fetchOrdersBySellerId = async (sellerId: string, dispatch: any): Pr
         const data = doc.data().order;
         return {
           id: doc.id,
+          chatId: null,
           order: {
             seller: {
               id: data.seller?.id ?? "",
@@ -50,7 +50,8 @@ export const fetchOrdersBySellerId = async (sellerId: string, dispatch: any): Pr
           },
         };
       })
-      .filter((order) => order.order.seller?.id === sellerId)
+      .filter((order) => (order.order.seller?.id === userId) || 
+      (order.order.company?.id === userId) || (order.order.deliveryPerson?.id === userId))
       .sort((a, b) => {
         const startTimeA = new Date(a.order.pickupTime?.start || "").getTime();
         const startTimeB = new Date(b.order.pickupTime?.start || "").getTime();

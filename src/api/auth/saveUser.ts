@@ -5,10 +5,9 @@ export const saveUser = async (id: string): Promise<void> => {
   try {
     const userRef = doc(db, "users", id);
     let defaultData: any = {
-      address: "NA",
+      address: [],
       wallet: 100,
-      eventDates: [],
-      cart: "",
+      eventsId: [],
       phone: "",
       following: [],
       orders: [],

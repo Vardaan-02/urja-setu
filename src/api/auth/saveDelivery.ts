@@ -10,6 +10,7 @@ export const saveDeliveryPerson = async (id: string): Promise<void> => {
       organizationId: "",
       assignedWork: [],
       rating: 0,
+      code: 0,
       orders: [],
       phone: "",
       role: "DeliveryPerson",

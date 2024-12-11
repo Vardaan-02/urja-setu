@@ -187,7 +187,7 @@ export default function Header() {
                     onClick={togglePopup}
                   >
                     <Avatar>
-                      <AvatarImage src={auth?.photoURL} />
+                      <AvatarImage src={auth?.photoURL || ""} />
                       <AvatarFallback>{auth.name && auth.name[0]}</AvatarFallback>
                     </Avatar>
                     <span>{auth.name}</span>
@@ -218,33 +218,50 @@ export default function Header() {
         className="fixed inset-0 z-50 flex items-center justify-center"
       >
         <div className="fixed inset-0 bg-black bg-opacity-30" />
-        <DialogPanel className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
-          <h2 className="text-center text-2xl mb-4">Signup as</h2>
-          <div className="flex space-x-4">
+        <DialogPanel className="relative bg-white rounded-lg shadow-lg p-6 max-w-[600px] w-full">
+          <h2 className="text-center text-2xl p-2 mb-3">Signup as</h2>
+          <div className="flex space-x-4 w-full items-center justify-between">
+            <img
+              src="/user.webp"
+              alt=""
+              className="h-20 w-[30%] object-cover rounded-full"
+            />
+            <img
+              src="/delivery-boy.webp"
+              alt=""
+              className="h-20 w-[30%] object-cover rounded-full"
+            />
+            <img
+              src="/factory.jpg"
+              alt=""
+              className="h-20 w-[30%] object-cover rounded-full"
+            />
+          </div>
+          <div className="flex space-x-4 mt-3">
             <button
+              className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
               onClick={() => handleLogin("User")}
-              className="w-full bg-[#76B947] text-white py-2 rounded-md hover:bg-[#2F5233]"
             >
               User
             </button>
             <button
+              className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
               onClick={() => handleLogin("Organization")}
-              className="w-full bg-[#76B947] text-white py-2 rounded-md hover:bg-[#2F5233]"
             >
               Organization
             </button>
             <button
+              className="w-full bg-[#76B947] hover:bg-[#2F5233] text-white font-semibold py-2 rounded-md transition"
               onClick={() => handleLogin("DeliveryPerson")}
-              className="w-full bg-[#76B947] text-white py-2 rounded-md hover:bg-[#2F5233]"
             >
               Delivery Person
             </button>
           </div>
           <button
             onClick={() => setLoginModalOpen(false)}
-            className="absolute top-2 right-2 text-gray-500"
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 p-2"
           >
-            <XMarkIcon className="h-6 w-6" />
+            <XMarkIcon aria-hidden="true" className="size-6" />
           </button>
         </DialogPanel>
       </Dialog>

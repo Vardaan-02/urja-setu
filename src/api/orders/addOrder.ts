@@ -39,6 +39,7 @@ export const addOrder = async (sellerDetails: Order['order']['seller'], itemDeta
           start: "",
           end: "",
         },
+        chatId: ""
       },
     };
 

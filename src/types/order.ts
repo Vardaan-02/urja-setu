@@ -1,3 +1,12 @@
+interface Address{
+  city: string,
+  state: string,
+  houseNo: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  }
+}
 export interface PastDetailsProps {
   orders: {
     seller?: {
@@ -5,14 +14,14 @@ export interface PastDetailsProps {
       name: string;
       image: string;
       phone: string;
-      address: string;
+      address: Address[];
     };
     company?: {
       id: string,
       name: string;
       image: string;
       phone: string;
-      address: string;
+      address: Address;
     };
     item?: {
       id: string,
@@ -43,14 +52,14 @@ export interface Order {
       name?: string;
       image?: string;
       phone?: string;
-      address?: string;
+      address?: Address[];
     };
     company?: {
       id?: string,
       name?: string;
       image?: string;
       phone?: string;
-      address?: string;
+      address?: Address;
     };
     item?: {
       id: string,
@@ -71,5 +80,6 @@ export interface Order {
       start?: string;
       end?: string;
     };
+    chatId?: string;
   };
 }

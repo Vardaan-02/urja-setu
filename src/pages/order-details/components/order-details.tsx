@@ -23,8 +23,8 @@ interface Order {
 
 
 export function OrderDetails({ orderDetails }: Order) {
-  const { orderId, itemName, price, weight, imageUrl, pickupTime, status } =
-    orderDetails;
+  // const { orderId, itemName, price, weight, imageUrl, pickupTime, status } =
+  //   orderDetails;
   const isLoading = false;
 
   const getProgressValue = (status: string) => {
@@ -57,7 +57,7 @@ export function OrderDetails({ orderDetails }: Order) {
               variant="secondary"
               className="px-4 py-2 text-sm bg-green-600 text-white border-none rounded-md hover:bg-green-500"
             >
-              ID: {orderId}
+                ID: {orderDetails.id}
             </Badge>
           </div>
 
@@ -83,8 +83,8 @@ export function OrderDetails({ orderDetails }: Order) {
                 >
                   <AspectRatio ratio={4 / 3}>
                     <img
-                      src={imageUrl}
-                      alt={itemName}
+                      src={orderDetails.order.item.image}
+                      alt={orderDetails.order.item.name}
                       className="w-full h-full object-cover rounded-md shadow-sm"
                     />
                   </AspectRatio>
@@ -95,28 +95,28 @@ export function OrderDetails({ orderDetails }: Order) {
                   {/* Item Details */}
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold text-gray-800">
-                      {itemName || "Item Name Unavailable"}
+                      {orderDetails.order.item.name || "Item Name Unavailable"}
                     </h2>
                     <motion.div
                       className="flex items-center gap-2 text-gray-600"
                     >
                       <DollarSign className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Price:</span>
-                      <span>${price?.toFixed(2) || "N/A"}</span>
+                      <span>${orderDetails.order.item.price || "N/A"}</span>
                     </motion.div>
                     <motion.div
                       className="flex items-center gap-2 text-gray-600"
                     >
                       <Weight className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Weight:</span>
-                      <span>{weight || "N/A"}</span>
+                      <span>{orderDetails.order.item.weight || "N/A"}</span>
                     </motion.div>
                     <motion.div
                       className="flex items-center gap-2 text-gray-600"
                     >
                       <Clock className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Pickup Time:</span>
-                      <span>{pickupTime || "Not scheduled"}</span>
+                      <span>{orderDetails.order.pickupTime.start} - {orderDetails.order.pickupTime.end}</span>
                     </motion.div>
                   </div>
                 </div>

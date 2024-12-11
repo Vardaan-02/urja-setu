@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Event } from '@/types/event';
+import { toggleLikeProduct } from '@/api/products/toggleLikeProduct';
 
 export type UserRole = 'User' | 'DeliveryPerson' | 'Organization';
 
 export interface UserDetails {
     address: string;
-    cart: string;
-    events: Event[],
+    cartId: string;
+    eventsId: Event[],
     following: string[],
     liked: string[],
     orders: string[],
@@ -78,29 +79,45 @@ export const authSlice = createSlice({
     },
 
     updateLikedProducts: (state, action) => {
-        const { productId, isLiked } = action.payload;
+        const { userId, productId, isLiked } = action.payload;
+        console.log(productId, isLiked);
         if(state.details.liked){
+            console.log(state.details.liked);
             if(isLiked){
+                console.log(isLiked, "removed");
                 state.details.liked = state.details.liked.filter(
                     (id: string) => id !== productId
                 );
+                console.log(state.details.liked)
             }
             else{
+                console.log(isLiked, "added");
                 state.details.liked.push(productId);
+                console.log(state.details.liked)
             }
+            toggleLikeProduct(productId, userId);
             // state.details.liked = [productId];
         }
     },
 
     setUserEvents: (state, action) => {
         const events = action.payload;
-        state.details.events = events;
+        state.details.eventsId = events;
+    },
+
+    updateUserEvents: (state, action) => {
+        const eventId = action.payload;
+        state.details.eventsId?.push(eventId);
+    },
+
+    updateCartId: (state, action) => {
+        state.details.cartId = action.payload;
     },
 
     resetAuth: () => initialState,
   },
 })
 
-export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents} = authSlice.actions
+export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents, updateUserEvents, updateCartId} = authSlice.actions
 
 export default authSlice.reducer

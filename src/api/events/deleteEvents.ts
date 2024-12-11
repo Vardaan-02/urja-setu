@@ -1,7 +1,7 @@
 import { doc, deleteDoc, getDocs, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
 import { removeEvent } from '@/redux/eventSlice';
-import { updateEventDates } from '@/redux/authSlice';
+// import { updateEventDates } from '@/redux/authSlice';
 
 export const deleteEvent = async (eventId: string, dispatch: any): Promise<void> => {
   try {
@@ -26,7 +26,7 @@ export const deleteEvent = async (eventId: string, dispatch: any): Promise<void>
     });
 
     await Promise.all(userUpdates);
-    dispatch(updateEventDates(eventId));
+    // dispatch(updateEventDates(eventId));
 
   } 
   catch(error){

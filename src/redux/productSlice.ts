@@ -1,5 +1,6 @@
 import { Product, Review } from '@/types/product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { log } from 'console';
 
 const initialState = {
   product: [] as Product[],
@@ -20,9 +21,17 @@ export const productSlice = createSlice({
         state.product[productIndex].reviews = reviews;
       }
     },
+    updateProdLike: (state, action : PayloadAction<{productId: string, isLiked: boolean}>) => {
+      const {productId, isLiked} = action.payload
+      const productIndex = state.product.findIndex((product) => product.id === productId);
+      if (productIndex !== -1) {
+        state.product[productIndex].liked = !isLiked
+        console.log(state.product[productIndex], state);
+      }
+    },  
   },
 });
 
-export const { setProducts, setReviews } = productSlice.actions;
+export const { setProducts, setReviews, updateProdLike } = productSlice.actions;
 
 export default productSlice.reducer;
