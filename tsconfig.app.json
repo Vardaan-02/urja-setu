@@ -33,5 +33,5 @@
   },
   "include": [
     "src"
-, "APIKey.ts"  ]
+, "src/APIKey.ts"  ]
 }

@@ -25,6 +25,7 @@ interface Order {
 export function OrderDetails({ orderDetails }: Order) {
   // const { orderId, itemName, price, weight, imageUrl, pickupTime, status } =
   //   orderDetails;
+  
   const isLoading = false;
 
   const getProgressValue = (status: string) => {

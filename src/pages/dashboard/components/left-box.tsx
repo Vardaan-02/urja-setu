@@ -22,6 +22,8 @@ const fetchDates = async () => {
   try {
     const events = await fetchRegisteredEvents(auth.auth.details.eventsId);
     setDates(events);
+    console.log("Hello");
+    
   }
   catch (error) {
       console.error("Error fetching events:", error);

@@ -25,9 +25,10 @@ export default function ProductShowcase() {
 
   React.useEffect(() => {
     if(auth.uid){
+      console.log(auth.uid);
       fetchProducts(auth.uid, dispatch);
     }
-  }, [])
+  }, [auth])
 
   return (
     <div className="container w-[90%] mx-[5%] pt-12">

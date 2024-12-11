@@ -1,7 +1,7 @@
-interface Address{
+export interface Address{
   city: string,
   state: string,
-  houseNo: string;
+  address: string;
   coordinates: {
     lat: number;
     lng: number;
@@ -42,7 +42,7 @@ export interface PastDetailsProps {
       start: string;
       end: string;
     };
-  }[];
+  };
 }
 
 export interface Order {
@@ -83,3 +83,40 @@ export interface Order {
     chatId?: string;
   };
 }
+
+
+export interface sellGarbage {
+  chatId: string;
+  order: {
+    seller?: {
+      id: string,
+      name: string;
+      image: string;
+      phone: string;
+      address: Address;
+    };
+    company?: {
+      id: string,
+      name: string;
+      image: string;
+      phone: string;
+      address: Address;
+    };
+    itemName: string;
+    status: string;
+    image: string;
+    weight: string;
+    deliveryPerson?: {
+      id: string,
+      name: string;
+      photo: string;
+      contact: string;
+      rating: number;
+    };
+    pickupTime?: {
+      start: string;
+      end: string;
+    };
+  };
+}
+

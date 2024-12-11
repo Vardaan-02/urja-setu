@@ -1,26 +1,34 @@
 import { collection, addDoc } from "firebase/firestore";
-import { Order } from "@/types/order";
+import { storage } from "../../utils/firebase"; 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
 import { db } from "../../utils/firebase";
+import { Order } from "@/types/order"; 
 
-export const addOrder = async (sellerDetails: Order['order']['seller'], itemDetails: Order['order']['item']): Promise<void> => {
+export const addOrder = async (
+  sellerDetails: Order['order']['seller'],
+  itemName: string,
+  weight: number,
+  imageFile: File,
+): Promise<void> => {
   try {
-    const newOrder: Order = {
+    const imageRef = ref(storage, `orders/${Date.now()}_${imageFile.name}`);
+    const snapshot = await uploadBytes(imageRef, imageFile);
+    const imageURL = await getDownloadURL(snapshot.ref);
+
+    
+    const newOrder: any = {
+      chatId: "",
       order: {
         seller: {
           id: sellerDetails?.id ?? "",
           name: sellerDetails?.name ?? "",
           image: sellerDetails?.image ?? "",
-          phone: sellerDetails?.phone ?? "",
-          address: sellerDetails?.address ?? "",
+          phone: sellerDetails?.phone?.[0] ?? "",
+          address: sellerDetails?.address?.[0] ?? "",
         },
-        item: {
-          id: itemDetails?.id ?? "",
-          name: itemDetails?.name ?? "",
-          price: itemDetails?.price ?? 0,
-          weight: itemDetails?.weight ?? 0,
-          image: itemDetails?.image ?? "",
-          category: itemDetails?.category ?? "Uncategorized",
-        },
+        itemName: itemName,
+        weight: weight,
+        image: imageURL,
         company: {
           id: "",
           name: "",
@@ -39,15 +47,14 @@ export const addOrder = async (sellerDetails: Order['order']['seller'], itemDeta
           start: "",
           end: "",
         },
-        chatId: ""
+        status: "pending", 
       },
     };
 
     const ordersCollection = collection(db, "orders");
     await addDoc(ordersCollection, newOrder);
     console.log("Order added successfully:", newOrder);
-  } 
-  catch(error){
+  } catch (error) {
     console.error("Error adding order:", error);
     throw new Error("Failed to add order");
   }

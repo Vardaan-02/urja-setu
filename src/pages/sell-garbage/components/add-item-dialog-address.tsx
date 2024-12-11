@@ -12,6 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import LocationAutocomplete from "./map-auto-complete";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import { addAddress } from "@/api/user/addAddress";
+
 
 interface AddItemDialogProps {
   title: string;
@@ -38,7 +41,13 @@ export function AddItemDialogAddress({
     lng: -1,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const auth = useIsAuthorized();
+  if(!auth.auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { address, city, state } = formData;
 
@@ -61,7 +70,19 @@ export function AddItemDialogAddress({
 
     setFormData({});
     setOpen(false);
+    const newAddress = {
+      address: formData.address,
+      state: formData.state,
+      city: formData.city,
+      coordinates: coordinates
+    }
+    console.log(formData);
+    
+    await addAddress(auth.auth.uid ?? "", newAddress);
   };
+
+  // console.log(formData);
+  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

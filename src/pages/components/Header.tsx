@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState, useRef } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -11,7 +10,7 @@ import { resetAuth } from "@/redux/authSlice";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Marketplace", href: "/marketplace" },
-  { name: "Events", href: "/events"},
+  { name: "Events", href: "/events" },
   { name: "About", href: "/about" },
 ];
 
@@ -104,9 +103,15 @@ export default function Header() {
             </>
           ) : (
             <div className="relative flex items-center">
+              {isLogin && auth.details.wallet &&  (
+                <div className="flex shadow-md p-2 rounded-xl mr-2 items-center h-12 bg-black/5 hover:bg-black/10 transition">
+                  <p className="mr-2">{auth.details.wallet} </p>
+                  <img src="/images/urjacoins2.png" alt="" className="h-5 w-5" />
+                </div>
+              )}
               <div
                 ref={avatarRef}
-                className="flex items-center space-x-3 cursor-pointer px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 transition"
+                className="flex items-center space-x-3 cursor-pointer px-4 py-2 rounded-xl  bg-black/5 hover:bg-black/10 transition"
                 onClick={togglePopup}
               >
                 <Avatar>
@@ -188,7 +193,9 @@ export default function Header() {
                   >
                     <Avatar>
                       <AvatarImage src={auth?.photoURL || ""} />
-                      <AvatarFallback>{auth.name && auth.name[0]}</AvatarFallback>
+                      <AvatarFallback>
+                        {auth.name && auth.name[0]}
+                      </AvatarFallback>
                     </Avatar>
                     <span>{auth.name}</span>
                   </div>
