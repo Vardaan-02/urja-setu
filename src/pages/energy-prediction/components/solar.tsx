@@ -1,31 +1,39 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  location: z.string().min(2, {
-    message: "Location must be at least 2 characters.",
-  }),
+  lat: z.number(),
+  lng: z.number(),
   startTime: z.string(),
   endTime: z.string(),
   panelEfficiency: z.number().min(0).max(100),
   panelArea: z.number().positive(),
-})
+});
 
 export default function SolarForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: "",
+      lat: 0,
+      lng: 0,
       startTime: "",
       endTime: "",
       panelEfficiency: 0,
       panelArea: 0,
     },
-  })
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -33,23 +41,39 @@ export default function SolarForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter location" {...field} />
-              </FormControl>
-              <FormDescription>
-                The location where the solar panels are installed.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="flex w-full">
+          <FormField
+            control={form.control}
+            name="lat"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Latitude</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter location" {...field} className="w-1/2"/>
+                </FormControl>
+                <FormDescription>
+                  The location where the solar panels are installed.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lat"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Longitude</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter location" {...field} className="w-1/2"/>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="startTime"
@@ -89,7 +113,14 @@ export default function SolarForm() {
             <FormItem>
               <FormLabel>Panel Efficiency (%)</FormLabel>
               <FormControl>
-                <Input type="number" min="0" max="100" step="0.1" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 The efficiency of the solar panels (0-100%).
@@ -105,7 +136,13 @@ export default function SolarForm() {
             <FormItem>
               <FormLabel>Area of Panel (m²)</FormLabel>
               <FormControl>
-                <Input type="number" min="0" step="0.01" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 The total area of the solar panels in square meters.
@@ -117,6 +154,5 @@ export default function SolarForm() {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  )
+  );
 }
-
