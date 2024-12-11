@@ -17,6 +17,7 @@ export default function ProductShowcase() {
   const {auth} = useIsAuthorized();
   const dispatch = useDispatch();
   const products = useAppSelector((state) => state.product);
+  const [categories, setCategories] = React.useState<Array<string>>();
   const navigate = useNavigate();
   const [priceRange, setPriceRange] = React.useState([0, 1000])
   const handleCategoryChange = (newCategory: string) => {
@@ -30,6 +31,11 @@ export default function ProductShowcase() {
     }
   }, [auth])
 
+  React.useEffect(() => {
+    const categoriesTemp = ["All", ...products.product.map((p) => p.category)];
+    setCategories(categoriesTemp);
+  }, [products]);
+
   return (
     <div className="container w-[90%] mx-[5%] pt-12">
       <h2 className="text-3xl font-bold mb-6">Recycled Treasures</h2>
@@ -41,7 +47,7 @@ export default function ProductShowcase() {
         <div className="flex justify-between items-center mb-4">
           <TabsList>
             <div>
-              {categories.map((cat) => (
+              {categories?.map((cat) => (
                 <TabsTrigger className="bg-white text-gray-800" key={cat} value={cat}>
                   {cat}
                 </TabsTrigger>
@@ -52,7 +58,7 @@ export default function ProductShowcase() {
             </div>
           </TabsList>
         </div>
-        {categories.map((cat) => (
+        {categories?.map((cat) => (
           <TabsContent key={cat} value={cat}>
             {products && <ProductGrid products={products.product} category={cat} currentPage={parseInt(page)} priceRange={priceRange} setPriceRange={setPriceRange} /> }
           </TabsContent>
