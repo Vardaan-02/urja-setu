@@ -41,7 +41,14 @@ const CartItem = memo(({ item, onRemove, onIncrease, onDecrease }: CartItemProps
         </div>
         <div className="flex items-center mt-2">
           <span className="text-2xl font-bold text-black">
-            ${item.price.toFixed(2)}
+            <div className='flex justify-center items-center gap-1'>
+            <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-5 w-5"
+                      />
+            {item.price.toFixed(2)}
+            </div>
           </span>
         </div>
         <div className="flex items-center mt-2">

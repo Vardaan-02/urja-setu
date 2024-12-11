@@ -44,7 +44,17 @@ export default function ProductDetails({ product, isLiked, onLikeToggle }: Produ
       </div>
       <div className="flex items-baseline space-x-2">
         {product.discount ? (<>
-          <span className="text-3xl font-bold">${(product.price - (product.price * (product.discount / 100))).toFixed(2)}</span>
+          <span className="text-3xl font-bold">
+            <div className='flex items-center gap-1'>
+
+          <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-5 w-5"
+                        />
+            {(product.price - (product.price * (product.discount / 100))).toFixed(2)}
+                        </div>
+            </span>
         </>) : (<>
           <span className="text-3xl font-bold">${product.price}</span>
         </>)}

@@ -46,26 +46,67 @@ const OrderSummary = memo(({
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-gray-600">Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>
+                <div className='flex items-center gap-1'>
+                <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-3 w-3"
+                      />
+                  {subtotal.toFixed(2)}
+                </div>
+                </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Tax</span>
-              <span>${tax.toFixed(2)}</span>
+              
+              <span><div className='flex items-center gap-1'>
+                <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-3 w-3"
+                      />
+                  {tax.toFixed(2)}
+                </div>
+                </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Shipping</span>
-              <span>${shipping.toFixed(2)}</span>
+              <span>
+              <div className='flex items-center gap-1'>
+                <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-3 w-3"
+                      />
+                  {shipping.toFixed(2)}
+                </div>
+              </span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between text-black">
                 <span>Discount</span>
-                <span>-${discount.toFixed(2)}</span>
+                <span><div className='flex items-center gap-1'>
+                -<img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-3 w-3"
+                      />
+                  {discount.toFixed(2)}
+                </div></span>
               </div>
             )}
             <Separator className="my-4" />
             <div className="flex justify-between text-lg font-semibold">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span><div className='flex items-center gap-1'>
+                <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-4 w-4"
+                      />
+                  {total.toFixed(2)}
+                </div></span>
             </div>
           </div>
           <div className="mt-6 space-y-4">
@@ -83,7 +124,14 @@ const OrderSummary = memo(({
                 <SelectContent>
                   {shippingOptions.map((option) => (
                     <SelectItem key={option.id} value={option.price.toString()}>
-                      {option.name} - ${option.price.toFixed(2)}
+                      <div className='flex items-center gap-1'>
+                      
+                      {option.name} - <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-3 w-3"
+                      />{option.price.toFixed(2)}
+                </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
