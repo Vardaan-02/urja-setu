@@ -1,31 +1,43 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { AnimatePresence, motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { SelectableCard } from "./selectable-cards"
-import { formSchema, FormValues } from "../../../types/sell-garbage-zod-schema"
-import { AddItemDialogAddress } from "./add-item-dialog-address"
-import { AddItemDialogPhone } from "./add-item-dialog-phone"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { SelectableCard } from "./selectable-cards";
+import { formSchema, FormValues } from "../../../types/sell-garbage-zod-schema";
+import { AddItemDialogAddress } from "./add-item-dialog-address";
+import { AddItemDialogPhone } from "./add-item-dialog-phone";
+import { Label } from "@/components/ui/label";
 
 export function FinalForm() {
   const [addresses, setAddresses] = useState<
-    { id: string; address: string; city: string; state: string }[]
-  >([])
-  const [phoneNumbers, setPhoneNumbers] = useState<{ id: string; value: string }[]>([])
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
-  const [selectedPhoneNumberId, setSelectedPhoneNumberId] = useState<string | null>(null)
+    {
+      id: string;
+      address: string;
+      city: string;
+      state: string;
+      coordinates: { lat: number; lng: number };
+    }[]
+  >([]);
+  const [phoneNumbers, setPhoneNumbers] = useState<
+    { id: string; value: string }[]
+  >([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+    null
+  );
+  const [selectedPhoneNumberId, setSelectedPhoneNumberId] = useState<
+    string | null
+  >(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -35,42 +47,58 @@ export function FinalForm() {
       weight: 0,
       image: undefined,
     },
-  })
+  });
 
   const onSubmit = (data: FormValues) => {
-    console.log(data)
+    console.log(data);
     // Handle form submission
-  }
+  };
 
-  const addAddress = (newAddress: { id: string; address: string; city: string; state: string }) => {
-    const updatedAddresses = [...addresses, newAddress]
-    setAddresses(updatedAddresses)
-    form.setValue("addresses", updatedAddresses)
-  }
+  const addAddress = (newAddress: {
+    id: string;
+    address: string;
+    city: string;
+    state: string;
+    coordinates: { lat: number; lng: number };
+  }) => {
+    if (
+      !newAddress.coordinates ||
+      typeof newAddress.coordinates.lat !== "number" ||
+      typeof newAddress.coordinates.lng !== "number"
+    ) {
+      console.error("Coordinates are not valid.");
+      return;
+    }
+    const updatedAddresses = [...addresses, newAddress];
+    setAddresses(updatedAddresses);
+    form.setValue("addresses", updatedAddresses);
+  };
 
   const addPhoneNumber = (newPhoneNumber: { id: string; value: string }) => {
-    const updatedPhoneNumbers = [...phoneNumbers, newPhoneNumber]
-    setPhoneNumbers(updatedPhoneNumbers)
-    form.setValue("phoneNumbers", updatedPhoneNumbers)
-  }
+    const updatedPhoneNumbers = [...phoneNumbers, newPhoneNumber];
+    setPhoneNumbers(updatedPhoneNumbers);
+    form.setValue("phoneNumbers", updatedPhoneNumbers);
+  };
 
   const deleteAddress = (id: string) => {
-    const updatedAddresses = addresses.filter((address) => address.id !== id)
-    setAddresses(updatedAddresses)
-    form.setValue("addresses", updatedAddresses)
+    const updatedAddresses = addresses.filter((address) => address.id !== id);
+    setAddresses(updatedAddresses);
+    form.setValue("addresses", updatedAddresses);
     if (selectedAddressId === id) {
-      setSelectedAddressId(null)
+      setSelectedAddressId(null);
     }
-  }
+  };
 
   const deletePhoneNumber = (id: string) => {
-    const updatedPhoneNumbers = phoneNumbers.filter((phoneNumber) => phoneNumber.id !== id)
-    setPhoneNumbers(updatedPhoneNumbers)
-    form.setValue("phoneNumbers", updatedPhoneNumbers)
+    const updatedPhoneNumbers = phoneNumbers.filter(
+      (phoneNumber) => phoneNumber.id !== id
+    );
+    setPhoneNumbers(updatedPhoneNumbers);
+    form.setValue("phoneNumbers", updatedPhoneNumbers);
     if (selectedPhoneNumberId === id) {
-      setSelectedPhoneNumberId(null)
+      setSelectedPhoneNumberId(null);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -139,7 +167,9 @@ export function FinalForm() {
                             key={phoneNumber.id}
                             id={phoneNumber.id}
                             content={phoneNumber.value}
-                            isSelected={selectedPhoneNumberId === phoneNumber.id}
+                            isSelected={
+                              selectedPhoneNumberId === phoneNumber.id
+                            }
                             onSelect={(id) => setSelectedPhoneNumberId(id)}
                             onDelete={deletePhoneNumber}
                           />
@@ -216,6 +246,5 @@ export function FinalForm() {
         </motion.div>
       </form>
     </Form>
-  )
+  );
 }
-

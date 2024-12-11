@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
+import LocationAutocomplete from "./map-auto-complete";
 
 interface AddItemDialogProps {
   title: string;
@@ -19,19 +20,34 @@ interface AddItemDialogProps {
     address: string;
     city: string;
     state: string;
+    coordinates: { lat: number; lng: number };
   }) => void;
   fields: { name: string; label: string }[];
 }
 
-export function AddItemDialogAddress({ title, onAdd, fields }: AddItemDialogProps) {
+export function AddItemDialogAddress({
+  title,
+  onAdd,
+  fields,
+}: AddItemDialogProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<Record<string, string>>({});
+
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number }>({
+    lat: -1,
+    lng: -1,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { address, city, state } = formData;
 
-    if (!address || !city || !state) {
+    if (
+      !address ||
+      !city ||
+      !state ||
+      JSON.stringify(coordinates) === JSON.stringify({ lat: -1, lng: -1 })
+    ) {
       return;
     }
 
@@ -40,6 +56,7 @@ export function AddItemDialogAddress({ title, onAdd, fields }: AddItemDialogProp
       address,
       city,
       state,
+      coordinates,
     });
 
     setFormData({});
@@ -53,34 +70,46 @@ export function AddItemDialogAddress({ title, onAdd, fields }: AddItemDialogProp
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] p-2">
         <div className="bg-white/30 rounded-lg shadow-lg p-4">
-        <DialogClose><X className=" absolute right-7 top-7 h-4 w-4" /></DialogClose>
-        
-        <DialogHeader>
-          <DialogTitle>Add New {title}</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-          {fields.map((field) => (
+          <DialogClose>
+            <X className=" absolute right-7 top-7 h-4 w-4" />
+          </DialogClose>
+
+          <DialogHeader>
+            <DialogTitle>Add New {title}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             <div
-              key={field.name}
-              className="grid grid-cols-4 items-center gap-4"
+              key={"Location"}
+              className="flex items-center gap-4 justify-center"
             >
-              <Label htmlFor={field.name} className="text-right">
-                {field.label}
+              <Label htmlFor={"Loation"} className="text-right">
+                Location
               </Label>
-              <Input
-                id={field.name}
-                value={formData[field.name] || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, [field.name]: e.target.value })
-                }
-                containerClassName="col-span-3"
-              />
+              <LocationAutocomplete setCoordinates={setCoordinates} />
             </div>
-          ))}
-          <Button type="submit" className="ml-auto">
-            Add {title}
-          </Button>
-        </form>
+
+            {fields.map((field) => (
+              <div
+                key={field.name}
+                className="grid grid-cols-4 items-center gap-4"
+              >
+                <Label htmlFor={field.name} className="text-right">
+                  {field.label}
+                </Label>
+                <Input
+                  id={field.name}
+                  value={formData[field.name] || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, [field.name]: e.target.value })
+                  }
+                  containerClassName="col-span-3"
+                />
+              </div>
+            ))}
+            <Button type="submit" className="ml-auto">
+              Add {title}
+            </Button>
+          </form>
         </div>
       </DialogContent>
     </Dialog>

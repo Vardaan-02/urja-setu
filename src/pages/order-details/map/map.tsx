@@ -4,12 +4,10 @@ import {
   useMapsLibrary,
   useMap,
 } from "@vis.gl/react-google-maps";
-// import { GoogleMapsAPIKey, MapId } from "../../../../APIKey";
+import { GoogleMapAPIKey, MapId } from "../../../../APIKey";
 import { useEffect, useState } from "react";
 
 export default function MapComponent() {
-  const GoogleMapsAPIKey = "";
-  const MapId = "";
   const [currentPosition, setCurrentPosition] = useState<{
     lat: number;
     lng: number;
@@ -39,7 +37,7 @@ export default function MapComponent() {
 
   return (
     <div className="h-[400px]">
-      <APIProvider apiKey={GoogleMapsAPIKey}>
+      <APIProvider apiKey={GoogleMapAPIKey}>
         <Map defaultCenter={currentPosition} defaultZoom={17} mapId={MapId}>
           <Directions origin={currentPosition} />
         </Map>
