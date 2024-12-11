@@ -3,10 +3,46 @@ import { AnimatePresence } from "framer-motion";
 import DateSeparator from "./date-seprator";
 import MessageBubble from "./message-bubble";
 import InputField from "./input-field";
+import { useParams } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
+import { createChat } from "@/api/chat/createChat";
+import { useDispatch } from "react-redux";
+import { sendMessage } from "@/api/chat/sendMessage";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import { listenForMessages } from "@/api/chat/listenForMessage";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState(mockMessages);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  const {id} = useParams();
+  const auth = useIsAuthorized();
+  if(!auth.auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+  // console.log(id);
+  const order = useAppSelector(state => state.order.order);
+  const chatOrder = order.find((o) => o.id === id);
+  // console.log(chatOrder);
+  const chatID = chatOrder?.chatId;
+  console.log(chatID);
+  
+  useEffect(() => {
+    if (chatID == null) {
+      createChat(
+        chatOrder?.order?.deliveryPerson?.id,
+        chatOrder?.order?.seller?.id,
+        chatOrder?.id,
+        dispatch
+      );
+    } 
+    else{
+      const unsubscribe = listenForMessages(chatID, setMessages);
+      return () => unsubscribe();
+    }
+  }, [chatID, chatOrder, dispatch]);
+  
 
   useEffect(() => {
     const container = chatContainerRef.current;
@@ -16,14 +52,15 @@ export default function ChatInterface() {
   }, [messages]);
 
   const addMessage = (text: string) => {
-    const newMessage = {
-      id: messages.length + 1,
-      sender: "You",
-      text,
-      time: new Date().toISOString(),
-      isSent: true,
-    };
-    setMessages([...messages, newMessage]);
+    // const newMessage = {
+    //   id: messages.length + 1,
+    //   sender: "You",
+    //   text,
+    //   time: new Date().toISOString(),
+    //   read: false,
+    // };
+    sendMessage(chatID, auth.auth.uid, text, "text");
+    // setMessages([...messages, newMessage]);
   };
 
   return (

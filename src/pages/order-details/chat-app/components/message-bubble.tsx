@@ -1,11 +1,13 @@
+import { Timestamp } from "@firebase/firestore";
 import { motion } from "framer-motion";
 
 interface Message {
   id: number;
-  sender: string;
-  text: string;
-  time: string;
-  isSent: boolean;
+  senderId: string;
+  content: string;
+  timestamp: Timestamp | string;
+  read: boolean;
+  messageType: string
 }
 
 interface MessageBubbleProps {
@@ -21,7 +23,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
   return (
     <motion.div
       className={`flex ${
-        message.isSent ? "justify-end" : "justify-start"
+        message.read ? "justify-end" : "justify-start"
       } mb-4`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
@@ -30,16 +32,16 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
     >
       <div
         className={`flex flex-col ${
-          message.isSent ? "items-end" : "items-start"
+          message.read ? "items-end" : "items-start"
         }`}
       >
         <div className="flex items-center mb-1">
           <div className="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>
-          <span className="text-sm font-semibold">{message.sender}</span>
+          <span className="text-sm font-semibold">{message.senderId}</span>
         </div>
         <motion.div
           className={`max-w-[80%] p-3 rounded-2xl shadow-md ${
-            message.isSent
+            message.read
               ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
               : "bg-gradient-to-r from-gray-100 to-gray-200"
           }`}
@@ -47,10 +49,10 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           whileHover="hover"
           whileTap="tap"
         >
-          <p className="text-sm">{message.text}</p>
+          <p className="text-sm">{message.content}</p>
         </motion.div>
         <span className="text-xs text-gray-500 mt-1">
-          {new Date(message.time).toLocaleTimeString([], {
+          {new Date(message.read).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })}

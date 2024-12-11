@@ -14,7 +14,7 @@ export const createChat = async (deliveryPersonId: string, userId: string, order
     const orderDocRef = doc(db, 'orders', orderId);
     
     await updateDoc(orderDocRef, {
-      'order.chatId': id,
+      'chatId': id,
     });
     
     return;
