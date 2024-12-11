@@ -8,20 +8,20 @@ export const getRoleDetails = async (id: string, dispatch: any) => {
         const userRef = doc(db, "users", id);
         const userDoc = await getDoc(userRef);
         const userData : DocumentData | undefined = userDoc.data();
-        // console.log("Hello, I'm under the water!!")
         if(userDoc.exists() && userData){
-            // console.log("Hello, I'm above the water!")
             const role = userData.role;
             let updates = {};
-            if(role == "DelieveryPerson"){
+            console.log(role);
+            
+            if(role == "DeliveryPerson"){
                 updates = {
                     organizationId: userData.organisationId,
                     rating: userData.rating,
-                    assigned_work: userData.assigned_work,
+                    assignedWork: userData.assignedWork,
                     address: userData.address,
                     phone: userData.phone,
                     code: userData.code
-                }
+                }   
             }
             else if(role == "Organization"){
                 updates = {

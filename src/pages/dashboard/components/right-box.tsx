@@ -6,10 +6,9 @@ import { WasteChart } from "./right-box-components/waste-chart";
 import { SellGarbageDeliveryBoy } from "./delivery-boy-components/sell-garbage";
 import { SellGarbageCompany } from "./company-components/purchase-garbage";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
-import { fetchOrdersBySellerId } from "@/api/orders/fetchOrdersBySellerId";
+import { fetchOrdersById } from "@/api/orders/fetchOrdersById";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
-import { orderWithId } from "@/redux/orderSlice";
 import { useEffect } from "react";
 
 export function RightBox() {
@@ -19,7 +18,7 @@ export function RightBox() {
   useEffect(() => {
     if(auth?.auth?.uid){    
       console.log(auth);    
-      fetchOrdersBySellerId(auth.auth.uid, dispatch);
+      fetchOrdersById(auth.auth.uid, dispatch);
     }
   }, [])
 

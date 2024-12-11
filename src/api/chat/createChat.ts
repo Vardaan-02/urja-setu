@@ -17,7 +17,7 @@ export const createChat = async (deliveryPersonId: string, userId: string, order
       'chatId': id,
     });
     
-    return;
+    return id;
   }
   catch(error){
     console.error('Error creating chat: ', error);
