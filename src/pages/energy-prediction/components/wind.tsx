@@ -4,6 +4,8 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import axios from "axios"
 
 const formSchema = z.object({
   location: z.string().min(2, {
@@ -25,10 +27,46 @@ export default function WindForm() {
       turbineSpecs: 0,
       turbineEfficiency: 0,
     },
-  })
-
+  });
+  const API_KEY = import.meta.env.API_KEY;
+  const [arr, setArr] = useState<Array<string>>([]);
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const location = values.location;
+    const startTime = values.startTime;
+    const endTime = values.endTime;
+    const turbineSpecs = values.turbineSpecs;
+    const turbineEfficiency = values.turbineEfficiency;
+    const prompt = `The city is ${location}. The start time is ${startTime} and the end time is ${endTime}. the turbine efficiency is ${turbineEfficiency} and the turbine specs is ${turbineSpecs}. Give answers for latitude, longitude and energy generated with proper units separated by *.`;
+    const MLModel = async () => {
+      try {
+        const response = await axios({
+          url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
+          method: "post",
+          data: {
+            contents: [
+              {
+                parts: [
+                  {
+                    text: prompt,
+                  },
+                ],
+              },
+            ],
+          },
+        });
+        const aiResponse =
+          response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+        const responseArr = aiResponse.split("*");
+        setArr(responseArr);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    MLModel();
+    console.log("latitude", arr[0]);
+    console.log("longitude", arr[1]);
+    console.log("energy", arr[2]);
+    console.log("unit", arr[3]);
   }
 
   return (
