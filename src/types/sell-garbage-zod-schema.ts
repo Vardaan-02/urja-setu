@@ -24,6 +24,7 @@ export const formSchema = z.object({
     )
     .min(1, "At least one phone number is required"),
   weight: z.number().positive("Weight must be a positive number"),
+  itemName: z.string().min(1, "Required"),
   image: z.instanceof(File, { message: "Please upload an image" }),
 });
 

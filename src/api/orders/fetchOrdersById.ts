@@ -12,7 +12,8 @@ export const fetchOrdersById = async (userId: string, dispatch: any): Promise<vo
         const data = doc.data().order;
         return {
           id: doc.id,
-          chatId: null,
+          chatId: data.chatId ?? "",
+          status: data.status ?? "pending",
           order: {
             seller: {
               id: data.seller?.id ?? "",

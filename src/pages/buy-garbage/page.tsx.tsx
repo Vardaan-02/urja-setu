@@ -4,23 +4,60 @@ import NavBar from "@/components/nav-bar";
 import AddProduct from "./components/add-product";
 import AddDriver from "./components/add-driver";
 import { BuyGarbageCard } from "./components/buy-garbage-card";
+import { fetchPendingOrders } from "@/api/orders/fetchPendingOrders";
+import { useEffect, useState } from "react";
+import { sellGarbage } from "@/types/order";
 
-const orderData = {
-  seller: {
-    name: "John Doe",
-    image: "/placeholder.svg?height=80&width=80",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main St, Anytown, AN 12345, Country",
-  },
-  item: {
-    name: "Vintage Camera",
-    category: "Electronics",
-    weight: 1.2,
-    image: "/placeholder.svg?height=96&width=96",
-  },
-}
+
 
 export default function BuyGarbage() {
+  
+  const [orderData, setOrderData] = useState<sellGarbage>({
+    chatId: "",
+    order: {
+      seller: {
+        id: "",
+        name: "",
+        image: "",
+        phone: "",
+        address: "",
+      },
+      company: {
+        id: "",
+        name: "",
+        image: "",
+        phone: "",
+        address: "",
+      },
+      itemName: "",
+      status: "",
+      image: "",
+      weight: "",
+      deliveryPerson: {
+        id: "",
+        name: "",
+        photo: "",
+        contact: "",
+        rating: 0,
+      },
+      pickupTime: {
+        start: "",
+        end: "",
+      },
+    },
+  });
+  const pendingOrders = async () => {
+    const orders = await fetchPendingOrders();
+    return orders;
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const orders = await pendingOrders();
+      setOrderData(orders);
+      console.log(orders);
+    };
+    fetchData();
+  }, [])
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="mx-auto">

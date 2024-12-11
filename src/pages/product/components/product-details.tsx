@@ -44,12 +44,13 @@ export default function ProductDetails({ product, isLiked, onLikeToggle }: Produ
       </div>
       <div className="flex items-baseline space-x-2">
         {product.discount ? (<>
-          <span className="text-3xl font-bold">${(product.price - (product.price * (product.discount / 100))).toFixed(2)}</span>
+          <span className="text-3xl font-bold">
+            {(product.price - (product.price * (product.discount / 100))).toFixed(0)}</span>
         </>) : (<>
           <span className="text-3xl font-bold">${product.price}</span>
         </>)}
-        <span className="text-lg text-muted-foreground line-through">${product.price.toFixed(2)}</span>
-        {product.discount && <Badge variant="success">{(product.discount).toFixed(2)}% OFF</Badge>}
+        <span className="text-lg text-muted-foreground line-through">${product.price.toFixed(0)}</span>
+        {product.discount && <Badge variant="success">{(product.discount).toFixed(0)}% OFF</Badge>}
       </div>
       <p className="text-black">{product.description}</p>
       <div className='text-gray-800'>

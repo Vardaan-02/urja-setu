@@ -8,8 +8,11 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
         console.log(userId);
         const productsCollectionRef = collection(db, "products");
         const productsSnapshot = await getDocs(productsCollectionRef);
+        
         const products = await Promise.all(
             productsSnapshot.docs.map(async (item) => {
+                console.log(item.data());
+                
                 const productDocRef = doc(collection(db, "products"), item.id);
                 const productSnapshot = await getDoc(productDocRef);
 
@@ -19,12 +22,13 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
                 }
 
                 const productData = productSnapshot.data();
+                
                 const organizationDocRef = doc(
                     collection(db, "users"),
                     productData.seller
                 );
                 const organizationSnapshot = await getDoc(organizationDocRef);
-
+                
                 const organizationName = organizationSnapshot.exists()
                     ? organizationSnapshot.data().name
                     : "Urja Setu";
