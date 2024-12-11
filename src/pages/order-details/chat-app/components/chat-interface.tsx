@@ -79,15 +79,19 @@ export default function ChatInterface() {
     sendMessage(chatID ?? "", auth.auth.uid ?? "", text, "text");
   };
 
-const convertTimestampToDate = (timestamp: Timestamp) => {
+  const convertTimestampToDate = (timestamp?: Timestamp): string => {
+    if (!timestamp) return ""; 
+    
     if (timestamp?.toDate) {
-      return timestamp.toDate().toLocaleString();
+      return timestamp.toDate().toISOString().split('T')[0]; 
     } else if (timestamp?.seconds) {
       const date = new Date(timestamp.seconds * 1000);
-      return date.toLocaleString();
+      return date.toISOString().split('T')[0];
     }
-    return "Invalid timestamp";
-};
+  
+    return ""; 
+  };
+  
 
   return (
     <div className=" w-full max-w-4xl h-[90vh] bg-white/30 rounded-lg shadow-xl overflow-hidden flex flex-col">
@@ -96,18 +100,17 @@ const convertTimestampToDate = (timestamp: Timestamp) => {
         className="flex-1 overflow-y-scroll no-scrollbar p-4 space-y-4 "
       >
         <AnimatePresence>
-          {messages && messages.reduce((acc: JSX.Element[], message: Message, index) => {
-            // const currentDate = new Date().toDateString();
+
+          
+        {messages &&
+          messages.reduce((acc: JSX.Element[], message: Message, index) => {
             const currentDate = convertTimestampToDate(message.timestamp); 
             const prevDate =
-              index > 0
-                // ? new Date(messages[index - 1].time).toDateString()
-                ? convertTimestampToDate(messages[index - 1].timestamp)
-                : null;
+              index > 0 ? convertTimestampToDate(messages[index - 1].timestamp) : null;
 
-            if (currentDate !== prevDate) {
+            if (currentDate && currentDate !== prevDate) { 
               acc.push(
-                <DateSeparator key={`date-${message.senderId}`} date={currentDate} />
+                <DateSeparator key={`date-${currentDate}`} date={currentDate} />
               );
             }
 
@@ -120,7 +123,10 @@ const convertTimestampToDate = (timestamp: Timestamp) => {
             );
 
             return acc;
-          }, [])}
+          }, [])
+        }
+
+
         </AnimatePresence>
       </div>
       <InputField onSendMessage={addMessage} />

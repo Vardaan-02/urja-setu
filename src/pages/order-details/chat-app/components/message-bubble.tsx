@@ -17,15 +17,22 @@ interface MessageBubbleProps {
   authId: string | null,
 }
 
-const convertTimestampToDate = (timestamp: Timestamp) => {
+const convertTimestampToTime = (timestamp: Timestamp): string => {
   if (timestamp?.toDate) {
-    return timestamp.toDate().toLocaleString();
+    return timestamp.toDate().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   } else if (timestamp?.seconds) {
     const date = new Date(timestamp.seconds * 1000);
-    return date.toLocaleString();
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
-  return "Invalid timestamp";
+  return "";
 };
+
 
 export default function MessageBubble({ message, authId }: MessageBubbleProps) {
   const bubbleVariants = {
@@ -36,7 +43,6 @@ export default function MessageBubble({ message, authId }: MessageBubbleProps) {
   const {id} = useParams();
   const order = useAppSelector(state => state.order.order);
   const chatOrder = order.find((o) => o.id === id);
-  // console.log(authId);
   
   return (
     <motion.div
@@ -74,7 +80,7 @@ export default function MessageBubble({ message, authId }: MessageBubbleProps) {
             hour: "2-digit",
             minute: "2-digit",
           })} */}
-          {convertTimestampToDate(message.timestamp)}
+          {convertTimestampToTime(message.timestamp)}
         </span>
       </div>
     </motion.div>
