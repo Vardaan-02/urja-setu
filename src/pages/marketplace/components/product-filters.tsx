@@ -44,15 +44,7 @@ export default function ProductFilters({priceRange, setPriceRange}: productFilte
             <span>${priceRange[1]}</span>
           </div>
         </div>
-        {/* <DropdownMenuSeparator />
-        <DropdownMenuLabel>Condition</DropdownMenuLabel>
-        <DropdownMenuCheckboxItem checked>Like New</DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked>Gently Used</DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem>Needs Repair</DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>Availability</DropdownMenuLabel>
-        <DropdownMenuCheckboxItem checked>Ready for Pickup</DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked>Ships Now</DropdownMenuCheckboxItem> */}
+        
       </DropdownMenuContent>
     </DropdownMenu>
   )

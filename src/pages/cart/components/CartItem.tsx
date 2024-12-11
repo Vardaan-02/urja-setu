@@ -40,16 +40,44 @@ const CartItem = memo(({ item, onRemove, onIncrease, onDecrease }: CartItemProps
           </Button>
         </div>
         <div className="flex items-center mt-2">
-          <span className="text-2xl font-bold text-black">
-            <div className='flex justify-center items-center gap-1'>
-            <img
-                        src="/images/urjacoins2.png"
-                        alt=""
-                        className="h-5 w-5"
-                      />
-            {item.price.toFixed(2)}
-            </div>
-          </span>
+          {
+            item.discount ? <>
+              <span className="text-2xl font-bold text-black">
+                <div className='flex justify-center items-center gap-3'>
+                <img
+                            src="/images/urjacoins2.png"
+                            alt=""
+                            className="h-5 w-5"
+                          />
+                {(
+                  item.price -
+                  item.price * (item.discount / 100)
+                ).toFixed(2)}
+
+                <span className="text-lg text-muted-foreground line-through">
+                        <div className="flex items-center gap-1">
+                                <img src="/images/urjacoins2.png" alt="" className="h-3 w-3" />
+                                {item.price.toFixed(2)}
+                              </div>
+                          
+                        </span>
+              <Badge variant="success">{item.discount.toFixed(2)}% OFF</Badge>
+                </div>
+              </span>
+            </> : <>
+            <span className="text-2xl font-bold text-black">
+              <div className='flex justify-center items-center gap-1'>
+              <img
+                          src="/images/urjacoins2.png"
+                          alt=""
+                          className="h-5 w-5"
+                        />
+              {item.price.toFixed(2)}
+              </div>
+            </span>
+            </>
+          }
+          
         </div>
         <div className="flex items-center mt-2">
           <span className="text-sm text-gray-600">Sold by: {item.seller}</span>
