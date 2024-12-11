@@ -11,6 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
+import { addPhoneNumber } from "@/api/user/addPhoneNumber";
+import { useAppSelector } from "@/redux/hooks";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 
 interface AddItemDialogProps {
   title: string;
@@ -26,11 +29,18 @@ export function AddItemDialogPhone({
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<Record<string, string>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const auth = useIsAuthorized();
+  if(!auth.auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const value = formData.value; // Adjust this to match the actual key for the value field
-
+    const value = formData.value;
+    console.log("phone");
+    
     if (!value) {
       alert("Please fill out the required field.");
       return;
@@ -39,6 +49,7 @@ export function AddItemDialogPhone({
     onAdd({ id: Date.now().toString(), value });
     setFormData({});
     setOpen(false);
+    await addPhoneNumber(auth.auth.uid ?? "", value);
   };
 
   return (

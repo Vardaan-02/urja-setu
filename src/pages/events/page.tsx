@@ -31,6 +31,8 @@ export default function Events() {
         const uniqueEvents = Array.from(
           new Map(fetchedEvents.map((event) => [event.id, event])).values()
         );
+        console.log(uniqueEvents);
+        
         setRegisteredEvents(uniqueEvents);
       };
 

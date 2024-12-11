@@ -4,14 +4,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Order } from "@/types/order";
+import { Order, sellGarbage } from "@/types/order";
 import AssignDriver from "./assign-driver";
 
-export function BuyGarbageCard({ order }: Order) {
+export function BuyGarbageCard({ order }: sellGarbage) {
   const [isHovered, setIsHovered] = useState(false);
-
+  console.log(order);
+  
   if (!order.seller) return null;
-  if (!order.item) return null;
+  if (!order.itemName) return null;
 
   return (
     <motion.div
@@ -51,7 +52,7 @@ export function BuyGarbageCard({ order }: Order) {
                 </motion.p>
                 <ScrollArea className="h-16 w-full max-w-[200px] mt-2">
                   <p className="text-sm text-gray-800">
-                    {order.seller.address}
+                    {/* {order.seller.address} */}
                   </p>
                 </ScrollArea>
               </div>
@@ -68,16 +69,16 @@ export function BuyGarbageCard({ order }: Order) {
                     src={
                       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1aZ47or6YGVPmIIp_MhagLngi7WWAB4rl_IyonRM6Hhb3WFMs0-ukeJGWSJsFSBCA6o8&usqp=CAU"
                     }
-                    alt={order.item.name}
+                    alt={order.itemName}
                   />
                 </motion.div>
                 <div>
-                  <h3 className="text-xl font-semibold">{order.item.name}</h3>
+                  <h3 className="text-xl font-semibold">{order.itemName}</h3>
                   <Badge variant="secondary" className="mt-1">
-                    {order.item.category}
+                    {/* {order.item.category} */}
                   </Badge>
                   <p className="text-sm text-gray-800 mt-2">
-                    Weight: {order.item.weight}
+                    Weight: {order.weight}
                   </p>
                 </div>
               </div>

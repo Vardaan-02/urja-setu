@@ -18,6 +18,10 @@ import { formSchema, FormValues } from "../../../types/sell-garbage-zod-schema";
 import { AddItemDialogAddress } from "./add-item-dialog-address";
 import { AddItemDialogPhone } from "./add-item-dialog-phone";
 import { Label } from "@/components/ui/label";
+import { removePhoneNumber } from "@/api/user/removePhoneNumber";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import { removeAddress } from "@/api/user/removeAddress";
+import { addOrder } from "@/api/orders/addOrder";
 
 export function FinalForm() {
   const [addresses, setAddresses] = useState<
@@ -39,6 +43,13 @@ export function FinalForm() {
     string | null
   >(null);
 
+  const auth = useIsAuthorized();
+  if(!auth.auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,8 +60,16 @@ export function FinalForm() {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log(data);
+    const seller = {
+      id: auth.auth.uid ?? "",
+      name: auth.auth.name ?? "",
+      image: auth.auth.photoURL ?? "",
+      phone: data.phoneNumbers ?? "",
+      address: data.addresses ?? ""
+    }
+    await addOrder(seller, data.itemName, data.weight, data.image);
     // Handle form submission
   };
 
@@ -80,19 +99,43 @@ export function FinalForm() {
     form.setValue("phoneNumbers", updatedPhoneNumbers);
   };
 
-  const deleteAddress = (id: string) => {
-    const updatedAddresses = addresses.filter((address) => address.id !== id);
+  const deleteAddress = async (id: string) => {
+    let delAddress = {
+      address: "",
+      state: "",
+      city: "",
+      coordinates: {
+        lat: -1,
+        lng: -1
+      }
+    };
+    const updatedAddresses = addresses.filter((address) => {address.id !== id;
+      if(address.id == id) delAddress = address;
+    });
     setAddresses(updatedAddresses);
     form.setValue("addresses", updatedAddresses);
     if (selectedAddressId === id) {
       setSelectedAddressId(null);
     }
+    const remAddress = {
+      address: delAddress.address,
+      state: delAddress.state,
+      city: delAddress.city,
+      coordinates: delAddress.coordinates
+    }
+    await removeAddress(auth.auth.uid ?? "", remAddress);
+    
+    
   };
 
-  const deletePhoneNumber = (id: string) => {
+  const deletePhoneNumber = async (id: string) => {
+    let phone = "";
     const updatedPhoneNumbers = phoneNumbers.filter(
-      (phoneNumber) => phoneNumber.id !== id
+      (phoneNumber) => {phoneNumber.id !== id
+        if(phoneNumber.id == id) phone = phoneNumber.value;
+        }
     );
+    await removePhoneNumber(auth.auth.uid ?? "", phone);
     setPhoneNumbers(updatedPhoneNumbers);
     form.setValue("phoneNumbers", updatedPhoneNumbers);
     if (selectedPhoneNumberId === id) {
@@ -205,6 +248,29 @@ export function FinalForm() {
                     type="number"
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <FormField
+            control={form.control}
+            name="itemName"
+            render={({ field }) => (
+              <FormItem>
+                <Label>Item Name</Label>
+                <FormControl>
+                  <Input
+                    type="string"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
