@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useIsAuthorized } from '@/hooks/useIsAuthorized';
 import { fetchCart } from '@/api/cart/fetchCart';
 import { useAppSelector } from '@/redux/hooks';
+import { removeFromCart } from '@/api/cart/removeFromCart';
 
 interface Product {
   id: string;
@@ -25,12 +26,14 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
   function handleAddToCart() {
     if (!isAdded) {
       if (auth.uid) {
-        console.log('Before adding to cart');
-        addToCart(auth.uid, product, 1, dispatch);
         console.log('Added to cart');
+        addToCart(auth.uid, product, 1, dispatch);
       }
     } else {
-      console.log('Remove from cart');
+      if (auth.uid) {
+        console.log('Remove from cart');
+        removeFromCart(auth.uid, product, 1, dispatch);
+      }
     }
   }
 
