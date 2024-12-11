@@ -4,7 +4,8 @@ import {
   useMapsLibrary,
   useMap,
 } from "@vis.gl/react-google-maps";
-import { GoogleMapAPIKey, MapId } from "../../../../APIKey";
+// import { GoogleMapAPIKey, MapId } from "../../../../APIKey";
+import { GoogleMapAPIKey, MapId } from "@/APIKey";
 import { useEffect, useState } from "react";
 
 export default function MapComponent() {
