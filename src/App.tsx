@@ -6,7 +6,6 @@ import Login from "./pages/login";
 import About from "./pages/about";
 import Dashboard from "./pages/dashboard/page";
 import OrderDetails from "./pages/order-details/page";
-
 import Cart from "./pages/cart/cart";
 import ParentProductPage from "./pages/product/page";
 import BuyGarbage from "./pages/buy-garbage/page.tsx";
