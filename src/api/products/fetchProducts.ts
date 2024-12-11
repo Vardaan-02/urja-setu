@@ -5,7 +5,6 @@ import { setProducts } from "@/redux/productSlice";
 
 export const fetchProducts = async (userId: string, dispatch: any) => {
     try {
-        console.log(userId);
         const productsCollectionRef = collection(db, "products");
         const productsSnapshot = await getDocs(productsCollectionRef);
         
@@ -15,12 +14,12 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
                 
                 const productDocRef = doc(collection(db, "products"), item.id);
                 const productSnapshot = await getDoc(productDocRef);
-
+                
                 if (!productSnapshot.exists()) {
                     console.log(`Product with ID ${item.id} does not exist.`);
                     return null;
                 }
-
+                
                 const productData = productSnapshot.data();
                 
                 const organizationDocRef = doc(
@@ -40,6 +39,7 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
                 } as Product;
             })
         );
+        // console.log(userId);
         const validProducts = products.filter((item): item is Product => item !== null);
         let prods: Product[] = [];
         
@@ -70,6 +70,7 @@ export const fetchProducts = async (userId: string, dispatch: any) => {
 
         console.log(prods);
         dispatch(setProducts(prods))
+        console.log(userId);
         
     }
     catch(error){
