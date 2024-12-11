@@ -18,6 +18,7 @@ const persistedCartReducer = persistReducer(persistConfig, cartReducer)
 const persistedEventReducer = persistReducer(persistConfig, eventReducer)
 const persistedOrderReducer = persistReducer(persistConfig, orderReducer)
 
+
 const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,

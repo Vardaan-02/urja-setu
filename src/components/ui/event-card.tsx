@@ -1,6 +1,7 @@
 import { registerEvent } from "@/api/events/registerEvent";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { Event } from "@/types/event";
+import { Building2, Calendar, Heart, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -9,7 +10,7 @@ interface EventCardProps {
   event: Event;
   onClick: () => void;
   deleteEvent: () => void;
-  updateEvent: (event: Event) => void; 
+  updateEvent: (event: Event) => void;
 }
 
 export function EventCard({
@@ -23,7 +24,7 @@ export function EventCard({
   const { auth } = useIsAuthorized();
   const userId = auth.uid!;
   let orgName;
-  if(auth.role === "Organization") {
+  if (auth.role === "Organization") {
     orgName = auth.name;
   }
   const registeredEventsArray = auth.details.eventsId;
@@ -39,7 +40,7 @@ export function EventCard({
       : event.date.toDate().toLocaleDateString();
 
   const handleRegisterToggle = () => {
-    if(!isRegistered) registerEvent(userId, id, dispatch);
+    if (!isRegistered) registerEvent(userId, id, dispatch);
     setRegistered(true);
   };
 
