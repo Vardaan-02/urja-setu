@@ -1,5 +1,7 @@
+import { fetchEvents } from "@/api/events/fetchEvents";
 import { CarouselItem, CustomSlider } from "@/components/ui/customSlider";
 import { useAppSelector } from "@/redux/hooks";
+import { useDispatch } from "react-redux";
 
 const carouselItems: CarouselItem[] = [
   {
@@ -25,11 +27,14 @@ const carouselItems: CarouselItem[] = [
 ];
 
 export function Events() {
-
+  const dispatch = useDispatch();
   const events = useAppSelector(state => state.event.events);
+  if(!events.length){
+    fetchEvents(dispatch);
+  }
   const getRandomEvents = (events: any[], count: number) => {
     const shuffled = [...events].sort(() => 0.5 - Math.random()); 
-    return shuffled.slice(0, Math.max(events.length, 4));
+    return shuffled.slice(0, Math.max(events.length, count));
   };
   const randomEvents = getRandomEvents(events, 4);
   const eventDetails = randomEvents.map((event) => ({

@@ -22,6 +22,7 @@ import {
 export interface Option {
   value: string;
   label: string;
+  driver: {};
 }
 
 interface ComboboxProps {

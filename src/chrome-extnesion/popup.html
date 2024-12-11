@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sell Garbage</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>Sell Your Garbage</h1>
+  <form id="garbageForm">
+    <label for="type">Garbage Type:</label>
+    <input type="text" id="type" name="type" placeholder="Plastic, Metal, etc." required />
+
+    <label for="quantity">Quantity (in kg):</label>
+    <input type="number" id="quantity" name="quantity" required />
+
+    <label for="price">Price <span>
+        <img src="urjacoins2." alt="">
+    </span> </label>
+    <input type="number" id="price" name="price" required />
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="response" style="margin-top: 10px;"></p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@ export const saveOrganization = async (id: string): Promise<void> => {
     const orgRef = doc(db, "users", id);
 
     let defaultData: any = {
-      address: "NA",
+      address: "Salem",
       events: [],
       followers: [],
       phone: "",

@@ -67,7 +67,7 @@ export default function ProductGrid({
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-green-50 p-6 rounded-2xl shadow-md">
         {currentProducts && currentProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product}  />
         ))}
       </div>
       {totalPages && totalPages > 1 && (
