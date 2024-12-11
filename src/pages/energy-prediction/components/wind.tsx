@@ -8,20 +8,20 @@ import { useState } from "react"
 import axios from "axios"
 
 const formSchema = z.object({
-  location: z.string().min(2, {
-    message: "Location must be at least 2 characters.",
-  }),
+  lat: z.number(),
+  lng: z.number(),
   startTime: z.string(),
   endTime: z.string(),
   turbineSpecs: z.number().positive(),
   turbineEfficiency: z.number().min(0).max(100),
-})
+});
 
 export default function WindForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: "",
+      lat: 0,
+      lng: 0,
       startTime: "",
       endTime: "",
       turbineSpecs: 0,
@@ -71,23 +71,39 @@ export default function WindForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter location" {...field} />
-              </FormControl>
-              <FormDescription>
-                The location where the wind turbine is installed.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="flex w-full">
+          <FormField
+            control={form.control}
+            name="lat"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Lantitude</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter location" {...field} />
+                </FormControl>
+                <FormDescription>
+                  The location where the wind turbine is installed.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lng"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Longitude</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter location" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="startTime"
@@ -127,7 +143,13 @@ export default function WindForm() {
             <FormItem>
               <FormLabel>Wind Turbine Specs (MWh)</FormLabel>
               <FormControl>
-                <Input type="number" min="0" step="0.1" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 The specifications of the wind turbine in megawatt-hours.
@@ -143,7 +165,14 @@ export default function WindForm() {
             <FormItem>
               <FormLabel>Efficiency of Turbine (%)</FormLabel>
               <FormControl>
-                <Input type="number" min="0" max="100" step="0.1" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 The efficiency of the wind turbine (0-100%).
@@ -155,6 +184,5 @@ export default function WindForm() {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  )
+  );
 }
-
