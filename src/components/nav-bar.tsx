@@ -23,7 +23,7 @@ const tabs = [
   { id: "", label: "Home" },
   { id: "dashboard", label: "Dashboard" },
   { id: "events", label: "Events" },
-  { id: "marketplace", label: "marketplace" },
+  { id: "marketplace", label: "Marketplace" },
   { id: "about", label: "About Us" },
 
 ];

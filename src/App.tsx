@@ -10,6 +10,7 @@ import OrderDetails from "./pages/order-details/page";
 import Cart from "./pages/cart/cart";
 import ParentProductPage from "./pages/product/page";
 import BuyGarbage from "./pages/buy-garbage/page.tsx";
+import EnergyPrediction from "./pages/energy-prediction/page.tsx";
 export default function App() {
   return (
     <>
@@ -31,10 +32,10 @@ export default function App() {
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="role" element={<Role/>} /> */}
         <Route path="/order-details/:id" element={<OrderDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/buy-garbage" element={<BuyGarbage />} />
+        <Route path="/energy-prediction" element={<EnergyPrediction />} />
       </Routes>
     </>
   );
