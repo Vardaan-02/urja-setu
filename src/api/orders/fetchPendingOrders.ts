@@ -2,7 +2,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { sellGarbage } from "@/types/order";
 
-interface sellWithId extends sellGarbage{
+export interface sellWithId extends sellGarbage{
     id: string | null;
 }
 

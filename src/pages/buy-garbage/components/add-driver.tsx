@@ -1,9 +1,33 @@
+import { addDeliveryPerson } from "@/api/organization/addDeliveryPerson";
 import { Input } from "@/components/ui/input";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { Label } from "@radix-ui/react-label";
 import { motion } from "framer-motion";
 import { PlusCircle } from "lucide-react";
+import { useState } from "react";
 
 export default function AddDriver() {
+
+  const { auth } = useIsAuthorized();
+  const [driverCode, setDriverCode] = useState("");
+
+  if(!auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await addDeliveryPerson(driverCode, auth.uid ?? "");
+      console.log("Driver added successfully");
+      setDriverCode("");
+    }
+    catch(error){
+      console.error("Error adding driver:", error);
+    }
+  };
+
   return (
     <motion.div
       className="bg-green-50 p-2 rounded-lg shadow-lg"
@@ -15,7 +39,7 @@ export default function AddDriver() {
         <h2 className="text-xl font-semibold mb-4 flex items-center">
         <PlusCircle className="mr-2" /> Add Driver
         </h2>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <Label
               htmlFor="driver-code"
@@ -28,6 +52,7 @@ export default function AddDriver() {
               id="driver-code"
               className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter driver code"
+              onChange={(e) => setDriverCode(e.target.value)} 
             />
           </div>
           <motion.button

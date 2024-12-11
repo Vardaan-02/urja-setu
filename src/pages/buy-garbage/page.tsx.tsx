@@ -4,15 +4,14 @@ import NavBar from "@/components/nav-bar";
 import AddProduct from "./components/add-product";
 import AddDriver from "./components/add-driver";
 import { BuyGarbageCard } from "./components/buy-garbage-card";
-import { fetchPendingOrders } from "@/api/orders/fetchPendingOrders";
+import { fetchPendingOrders, sellWithId } from "@/api/orders/fetchPendingOrders";
 import { useEffect, useState } from "react";
-import { sellGarbage } from "@/types/order";
 
 
 
 export default function BuyGarbage() {
   
-  const [orderData, setOrderData] = useState<sellGarbage>({
+  const [orderData, setOrderData] = useState<sellWithId[]>([{
     chatId: "",
     order: {
       seller: {
@@ -45,7 +44,7 @@ export default function BuyGarbage() {
         end: "",
       },
     },
-  });
+  }]);
   const pendingOrders = async () => {
     const orders = await fetchPendingOrders();
     return orders;
@@ -73,8 +72,8 @@ export default function BuyGarbage() {
             <Trash2 className="mr-2"/> Buy garbage
             </h2>
             <div className="grid grid-cols-1 gap-6">
-              {[1, 2, 3, 4].map((value) => (
-                <BuyGarbageCard key={value} order={orderData} />
+              {orderData.map((value) => (
+                <BuyGarbageCard key={value.id} order={value} />
               ))}
             </div>
           </motion.div>

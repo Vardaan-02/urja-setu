@@ -19,6 +19,7 @@ export const assignOrder = async (
       "order.company": companyDetails,
       "order.deliveryPerson": deliveryPersonDetails,
       "order.pickupTime": pickupTime,
+      "order.status": "assigned"
     });
 
     await updateDoc(deliveryPersonDocRef, {
