@@ -16,23 +16,26 @@ import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import handleGoogleSignIn from "@/api/auth/google_auth";
 import { useDispatch } from "react-redux";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { resetAuth } from "@/redux/authSlice";
+import { Link } from "react-router-dom";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const tabs = [
-  { id: "home", label: "Home" },
-  { id: "projects", label: "Projects" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
+  { id: "", label: "Home" },
+  { id: "dashboard", label: "Dashboard" },
+  { id: "events", label: "Events" },
+  { id: "marketplace", label: "marketplace" },
+  { id: "about", label: "About Us" },
+
 ];
 
 export default function NavBar() {
-  const [activeTab, setActiveTab] = useState("home");
-  const { isLogin, auth, setIsLogin } = useIsAuthorized();
+  const {value:activeTab, setItem:setActiveTab} = useLocalStorage("tab","home");
+  const { isLogin, auth } = useIsAuthorized();
   const dispatch = useDispatch();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const handleLogin = async (role: string | null) => {
     await handleGoogleSignIn(dispatch, role);
-    setLoginModalOpen(false);
+    setLoginModalOpen();
     setIsPopupVisible(false);
   };
 
@@ -41,20 +44,6 @@ export default function NavBar() {
   const togglePopup = () => {
     setIsPopupVisible((prevState) => !prevState);
   };
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      popupRef.current &&
-      !popupRef.current.contains(event.target as Node) &&
-      avatarRef.current &&
-      !avatarRef.current.contains(event.target as Node)
-    ) {
-      setIsPopupVisible(false);
-    }
-  };
-    const handleLogout = () => {
-      setIsLogin(false);
-      dispatch(resetAuth());
-    };
 
   return (
     <nav className="sticky top-0 z-40 w-full">
@@ -71,33 +60,35 @@ export default function NavBar() {
 
           <div className="hidden md:flex items-center">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="">
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto md:h-14 items-stretch  p-1">
+              <TabsList className="flex items-center h-auto md:h-14  p-1">
                 {tabs.map((tab) => (
-                  <TabsTrigger
-                    key={tab.id}
-                    value={tab.id}
-                    className={cn(
-                      "relative px-3 py-1.5 text-sm font-medium transition-all w-full md:w-36 shadow-md bg-white/30",
-                      "focus-visible:ring-2 focus-visible:ring-opacity-50",
-                      "data-[state=active]:text-white",
-                      "data-[state=active]:shadow-none"
-                    )}
-                  >
-                    {activeTab === tab.id && (
-                      <motion.span
-                        layoutId="bubble"
-                        className="absolute inset-0 z-10 bg-white/30 bg-opacity-20 rounded-full border border-white/30 border-opacity-30 shadow-lg"
-                        transition={{
-                          type: "spring",
-                          bounce: 0.2,
-                          duration: 0.6,
-                        }}
-                      />
-                    )}
-                    <span className="relative z-20 mix-blend-difference">
-                      {tab.label}
-                    </span>
-                  </TabsTrigger>
+                  <Link to={`/${tab.id}`} key={tab.id} className="">
+                    <TabsTrigger
+                      
+                      value={tab.id}
+                      className={cn(
+                        "relative px-4 py-2 text-sm font-medium transition-all  shadow-md bg-white/30",
+                        "focus-visible:ring-2 focus-visible:ring-opacity-50",
+                        "data-[state=active]:text-white",
+                        "data-[state=active]:shadow-none"
+                      )}
+                    >
+                      {activeTab === tab.id && (
+                        <motion.span
+                          layoutId="bubble"
+                          className="absolute inset-0 z-10 bg-white/30 bg-opacity-20 rounded-full border border-white/30 border-opacity-30 shadow-lg"
+                          transition={{
+                            type: "spring",
+                            bounce: 0.2,
+                            duration: 0.6,
+                          }}
+                        />
+                      )}
+                      <span className="relative z-20 mix-blend-difference">
+                        {tab.label}
+                      </span>
+                    </TabsTrigger>
+                  </Link>
                 ))}
               </TabsList>
             </Tabs>
@@ -116,9 +107,7 @@ export default function NavBar() {
             ) : null}
             <div className="relative flex items-center">
               {!isLogin ? (
-                <>
-                 
-                </>
+                <></>
               ) : (
                 <div className="relative flex items-center">
                   {isLogin && auth.details.wallet && (
@@ -137,7 +126,10 @@ export default function NavBar() {
                     onClick={togglePopup}
                   >
                     <Avatar className="h-4 flex items-center">
-                      <AvatarImage src={auth.photoURL || ""} className="h-6 rounded-full"/>
+                      <AvatarImage
+                        src={auth.photoURL || ""}
+                        className="h-6 rounded-full"
+                      />
                       <AvatarFallback>
                         {auth.name && auth.name[0]}
                       </AvatarFallback>
@@ -151,7 +143,7 @@ export default function NavBar() {
                     >
                       <button
                         className="text-gray-900 w-full text-left"
-                        onClick={handleLogout}
+                        // onClick={handleLogout}
                       >
                         Logout
                       </button>
@@ -198,6 +190,6 @@ export default function NavBar() {
   );
 }
 
-function setLoginModalOpen(arg0: boolean) {
+function setLoginModalOpen() {
   throw new Error("Function not implemented.");
 }

@@ -1,6 +1,7 @@
 import { registerEvent } from "@/api/events/registerEvent";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { Event } from "@/types/event";
+import { Building2, Calendar, Heart, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -9,7 +10,7 @@ interface EventCardProps {
   event: Event;
   onClick: () => void;
   deleteEvent: () => void;
-  updateEvent: (event: Event) => void; 
+  updateEvent: (event: Event) => void;
 }
 
 export function EventCard({
@@ -23,7 +24,7 @@ export function EventCard({
   const { auth } = useIsAuthorized();
   const userId = auth.uid!;
   let orgName;
-  if(auth.role === "Organization") {
+  if (auth.role === "Organization") {
     orgName = auth.name;
   }
   const registeredEventsArray = auth.details.eventsId;
@@ -39,12 +40,12 @@ export function EventCard({
       : event.date.toDate().toLocaleDateString();
 
   const handleRegisterToggle = () => {
-    if(!isRegistered) registerEvent(userId, id, dispatch);
+    if (!isRegistered) registerEvent(userId, id, dispatch);
     setRegistered(true);
   };
 
   return (
-    <div className="bg-green-100 p-3 rounded-lg mb-3">
+    <div className="bg-white/30 p-3 rounded-lg mb-3">
       <div className="lg:flex bg-white/50 p-5 rounded-lg shadow-md items-center w-full relative">
         {event.companyName === orgName && (
           <>
@@ -105,18 +106,19 @@ export function EventCard({
               className="h-48 object-cover lg:mr-3 mb-21 rounded-md w-full"
             />
           </div>
-          <div className="bottom-0 shadow-sm border border-green-100 rounded-md mr-3 p-2">
-            <p className="text-[15px] space-y-2 font-semibold">
-              🏢: {event.companyName}
+          <div className="bottom-0 shadow-sm rounded-md mr-3 p-2 flex flex-col gap-4">
+            <p className="text-sm space-y-2 flex items-center">
+              <Building2 className="h-4 w-4" /> : {event.companyName}
             </p>
-            <p className="text-[15px] space-y-2 font-semibold flex items-center">
-              🗓️: {eventDate}
+            <p className="text-sm space-y-2 flex items-center">
+              <Calendar className="h-4 w-4" /> : {eventDate}
             </p>
-            <p className="text-[15px] space-y-2 font-semibold">
-              📍: {event.location}
+            <p className="text-sm space-y-2 flex items-centerlex items-center">
+              <MapPin className="h-4 w-4" /> : {event.location}
             </p>
-            <p className="text-[15px] space-y-2 font-semibold">
-              💚: {event.registered ? event.registered + "x" : 0} participants
+            <p className="text-sm space-y-2 flex items-center">
+              <Heart className="h-4 w-4" /> :
+              {event.registered ? event.registered + "x" : 0} participants
             </p>
           </div>
         </div>
@@ -138,7 +140,7 @@ export function EventCard({
             <div className="w-full flex p-2">
               <button
                 className={`flex justify-center px-3 py-2 rounded-lg w-full text-center ${
-                    registered ? "bg-red-300" : "bg-green-300"
+                  registered ? "bg-red-300" : "bg-green-300"
                 }`}
                 onClick={handleRegisterToggle}
               >
