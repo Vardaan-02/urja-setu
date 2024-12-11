@@ -1,16 +1,104 @@
+import { registerEvent } from "@/api/events/registerEvent";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { Event } from "@/types/event";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 interface EventCardProps {
+  id: string;
   event: Event;
   onClick: () => void;
+  deleteEvent: () => void;
+  updateEvent: (event: Event) => void; 
 }
-export function EventCard({ event, onClick }: EventCardProps) {
-  const [registered, setRegistered] = useState(false);
+
+export function EventCard({
+  id,
+  event,
+  onClick,
+  deleteEvent,
+  updateEvent,
+}: EventCardProps) {
+  const dispatch = useDispatch();
+  const { auth } = useIsAuthorized();
+  const userId = auth.uid!;
+  let orgName;
+  if(auth.role === "Organization") {
+    orgName = auth.name;
+  }
+  const registeredEventsArray = auth.details.eventsId;
+  const isRegistered = registeredEventsArray?.includes(event);
+  const [registered, setRegistered] = useState(isRegistered);
+  useEffect(() => {
+    setRegistered(isRegistered);
+  }, [isRegistered]);
+
+  const eventDate =
+    typeof event.date === "string"
+      ? new Date(event.date).toLocaleDateString()
+      : event.date.toDate().toLocaleDateString();
+
+  const handleRegisterToggle = () => {
+    if(!isRegistered) registerEvent(userId, id, dispatch);
+    setRegistered(true);
+  };
+
   return (
     <div className="bg-green-100 p-3 rounded-lg mb-3">
-      <div className="lg:flex bg-white/50 p-4 rounded-lg shadow-md items-center w-full">
+      <div className="lg:flex bg-white/50 p-5 rounded-lg shadow-md items-center w-full relative">
+        {event.companyName === orgName && (
+          <>
+            <button
+              className="absolute top-2 right-2 text-black hover:text-red-800"
+              onClick={deleteEvent}
+              aria-label="Delete Event"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <button
+              className="absolute top-2 right-10 text-black hover:text-blue-800"
+              onClick={() => updateEvent(event)}
+              aria-label="Update Event"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487c-.895-.894-2.07-1.386-3.294-1.386-1.225 0-2.4.492-3.294 1.386L4.993 9.768c-.39.39-.674.879-.824 1.41l-1.137 4.097a1.094 1.094 0 001.342 1.342l4.096-1.137c.531-.15 1.02-.434 1.41-.824l5.281-5.281c.895-.894 1.387-2.07 1.387-3.294 0-1.225-.492-2.4-1.387-3.294z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 19.5h-6"
+                />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Event Details */}
         <div className="w-[50%] ml-3 space-y-4 lg:block md:flex sm:flex md:justify-between">
-          <div className="w-full flex items-center justify-center top-0 ">
+          <div className="w-full flex items-center justify-center top-0">
             <img
               src={event.image}
               alt={event.title}
@@ -22,14 +110,13 @@ export function EventCard({ event, onClick }: EventCardProps) {
               🏢: {event.companyName}
             </p>
             <p className="text-[15px] space-y-2 font-semibold flex items-center">
-              🗓️: {event.date.toString()}
+              🗓️: {eventDate}
             </p>
             <p className="text-[15px] space-y-2 font-semibold">
               📍: {event.location}
             </p>
             <p className="text-[15px] space-y-2 font-semibold">
-              💚:{" "}
-              {event.registered ? event.registered + "x" : 0} participants{" "}
+              💚: {event.registered ? event.registered + "x" : 0} participants
             </p>
           </div>
         </div>
@@ -44,16 +131,18 @@ export function EventCard({ event, onClick }: EventCardProps) {
                 Potential reward coins: {event.potentialEarnings ?? "NA"}
               </p>
               <p className="text-gray-600 mb-2 text-[16px]" onClick={onClick}>
-                {(event.fullDescription + event.fullDescription).slice(0, 400)}
+                {(event.fullDescription + event.fullDescription).slice(0, 400)}{" "}
                 ...Read More
               </p>
             </div>
             <div className="w-full flex p-2">
               <button
-                className="flex justify-center bg-green-300 px-3 py-2 rounded-lg w-full text-center"
-                onClick={() => setRegistered(!registered)}
+                className={`flex justify-center px-3 py-2 rounded-lg w-full text-center ${
+                    registered ? "bg-red-300" : "bg-green-300"
+                }`}
+                onClick={handleRegisterToggle}
               >
-                {registered ? "Unregister" : "Register Now"}
+                {registered ? "Registered" : "Register Now"}
               </button>
             </div>
           </div>
@@ -62,4 +151,3 @@ export function EventCard({ event, onClick }: EventCardProps) {
     </div>
   );
 }
-

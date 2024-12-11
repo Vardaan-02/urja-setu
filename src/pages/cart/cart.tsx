@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '@/redux/hooks';
-import { useIsAuthorized } from '@/hooks/useIsAuthorized';
-import { fetchCart } from '@/api/cart/fetchCart';
-import { addToCart } from '@/api/cart/addToCart';
-import { removeFromCart } from '@/api/cart/removeFromCart';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import NavBar from '@/components/nav-bar';
-import CartItem from './components/CartItem';
-import OrderSummary from './components/OrderSummary';
-import { cartProduct, ShippingOption } from '@/types/product';
+import { useState, useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/redux/hooks";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import { fetchCart } from "@/api/cart/fetchCart";
+import { addToCart } from "@/api/cart/addToCart";
+import { removeFromCart } from "@/api/cart/removeFromCart";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import NavBar from "@/components/nav-bar";
+import CartItem from "./components/CartItem";
+import OrderSummary from "./components/OrderSummary";
+import { cartProduct, ShippingOption } from "@/types/product";
 
 const shippingOptions: ShippingOption[] = [
-  { id: 'standard', name: 'Standard Shipping', price: 5.99 },
-  { id: 'express', name: 'Express Shipping', price: 14.99 },
-  { id: 'overnight', name: 'Overnight Shipping', price: 29.99 },
+  { id: "standard", name: "Standard Shipping", price: 5.99 },
+  { id: "express", name: "Express Shipping", price: 14.99 },
+  { id: "overnight", name: "Overnight Shipping", price: 29.99 },
 ];
 
 export default function Cart() {
@@ -30,7 +30,7 @@ export default function Cart() {
   const [tax, setTax] = useState<number>(0);
   const [shipping, setShipping] = useState<number>(shippingOptions[0].price);
   const [total, setTotal] = useState<number>(0);
-  const [couponCode, setCouponCode] = useState<string>('');
+  const [couponCode, setCouponCode] = useState<string>("");
   const [discount, setDiscount] = useState<number>(0);
 
   useEffect(() => {
@@ -47,7 +47,10 @@ export default function Cart() {
 
   useEffect(() => {
     if (cartItems) {
-      const newSubtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const newSubtotal = cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
       const newTax = newSubtotal * 0.08; // Assuming 8% tax rate
       const newTotal = newSubtotal + newTax + shipping - discount;
 
@@ -57,37 +60,50 @@ export default function Cart() {
     }
   }, [cartItems, shipping, discount]);
 
-  const addQuantity = useCallback((id: string, newQuantity: number) => {
-    if(auth.uid){
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
-        )
-      );
-      addToCart(auth.uid, id, 1, dispatch);
-    }
-  }, [auth.uid, dispatch]);
+  const addQuantity = useCallback(
+    (id: string, newQuantity: number) => {
+      if (auth.uid) {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === id
+              ? { ...item, quantity: Math.max(1, newQuantity) }
+              : item
+          )
+        );
+        addToCart(auth.uid, id, 1, dispatch);
+      }
+    },
+    [auth.uid, dispatch]
+  );
 
-  const subQuantity = useCallback((id: string, newQuantity: number) => {
-    if(auth.uid){
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
-        )
-      );
-      removeFromCart(auth.uid, id, 1, dispatch)
-    }
-  }, [auth.uid, dispatch]);
+  const subQuantity = useCallback(
+    (id: string, newQuantity: number) => {
+      if (auth.uid) {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === id
+              ? { ...item, quantity: Math.max(1, newQuantity) }
+              : item
+          )
+        );
+        removeFromCart(auth.uid, id, 1, dispatch);
+      }
+    },
+    [auth.uid, dispatch]
+  );
 
-  const removeItem = useCallback((id: string) => {
-    if(auth.uid){
-      setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-      removeFromCart(auth.uid, id, 1e9, dispatch)
-    }
-  }, [auth.uid, dispatch]);
+  const removeItem = useCallback(
+    (id: string) => {
+      if (auth.uid) {
+        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        removeFromCart(auth.uid, id, 1e9, dispatch);
+      }
+    },
+    [auth.uid, dispatch]
+  );
 
   const applyCoupon = useCallback(() => {
-    if (couponCode.toLowerCase() === 'save10') {
+    if (couponCode.toLowerCase() === "save10") {
       setDiscount(subtotal * 0.1);
     }
   }, [couponCode, subtotal]);
@@ -117,7 +133,9 @@ export default function Cart() {
                       onIncrease={addQuantity}
                       onDecrease={subQuantity}
                     />
-                    {index < cartItems.length - 1 && <Separator className="my-6" />}
+                    {index < cartItems.length - 1 && (
+                      <Separator className="my-6" />
+                    )}
                   </div>
                 ))}
               </CardContent>
@@ -142,4 +160,3 @@ export default function Cart() {
     </div>
   );
 }
-

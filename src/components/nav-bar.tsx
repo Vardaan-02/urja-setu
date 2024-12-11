@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,6 +12,11 @@ import {
 } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
 import Notifications from "./notifications";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
+import handleGoogleSignIn from "@/api/auth/google_auth";
+import { useDispatch } from "react-redux";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { resetAuth } from "@/redux/authSlice";
 
 const tabs = [
   { id: "home", label: "Home" },
@@ -23,6 +27,34 @@ const tabs = [
 
 export default function NavBar() {
   const [activeTab, setActiveTab] = useState("home");
+  const { isLogin, auth, setIsLogin } = useIsAuthorized();
+  const dispatch = useDispatch();
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const handleLogin = async (role: string | null) => {
+    await handleGoogleSignIn(dispatch, role);
+    setLoginModalOpen(false);
+    setIsPopupVisible(false);
+  };
+
+  const popupRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const togglePopup = () => {
+    setIsPopupVisible((prevState) => !prevState);
+  };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      popupRef.current &&
+      !popupRef.current.contains(event.target as Node) &&
+      avatarRef.current &&
+      !avatarRef.current.contains(event.target as Node)
+    ) {
+      setIsPopupVisible(false);
+    }
+  };
+    const handleLogout = () => {
+      setIsLogin(false);
+      dispatch(resetAuth());
+    };
 
   return (
     <nav className="sticky top-0 z-40 w-full">
@@ -74,18 +106,61 @@ export default function NavBar() {
           <div className="flex items-center gap-4 md:w-auto">
             <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8" />
             <Notifications />
-            {/* <div className="flex justify-center items-center gap-2">
-            {" "}
-            <Avatar>
-              {" "}
-              <AvatarImage src="profile.jpg" />{" "}
-              <AvatarFallback>Vardaan</AvatarFallback>{" "}
-            </Avatar>{" "}
-            <p className="font-semibold text-xl">Vardaan</p>{" "}
-          </div> */}
-            <Button className="hidden md:flex font-bold px-4 md:px-8 py-2 md:py-5 text-md md:w-auto">
-              Login
-            </Button>
+            {!isLogin ? (
+              <Button
+                className="hidden md:flex font-bold px-4 md:px-8 py-2 md:py-5 text-md md:w-auto"
+                onClick={() => handleLogin("user")}
+              >
+                Login
+              </Button>
+            ) : null}
+            <div className="relative flex items-center">
+              {!isLogin ? (
+                <>
+                 
+                </>
+              ) : (
+                <div className="relative flex items-center">
+                  {isLogin && auth.details.wallet && (
+                    <div className="flex shadow-md p-2 rounded-xl mr-2 items-center h-12 bg-black/5 hover:bg-black/10 transition">
+                      <p className="mr-2">{auth.details.wallet} </p>
+                      <img
+                        src="/images/urjacoins2.png"
+                        alt=""
+                        className="h-5 w-5"
+                      />
+                    </div>
+                  )}
+                  <div
+                    ref={avatarRef}
+                    className="flex items-center space-x-3 cursor-pointer px-4 py-2 rounded-xl  bg-black/5 hover:bg-black/10 transition h"
+                    onClick={togglePopup}
+                  >
+                    <Avatar className="h-4 flex items-center">
+                      <AvatarImage src={auth.photoURL || ""} className="h-6 rounded-full"/>
+                      <AvatarFallback>
+                        {auth.name && auth.name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{auth.name}</span>
+                  </div>
+                  {isPopupVisible && (
+                    <div
+                      ref={popupRef}
+                      className="absolute top-full mt-2 right-10 bg-white shadow-lg rounded-md py-2 px-4"
+                    >
+                      <button
+                        className="text-gray-900 w-full text-left"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -121,4 +196,8 @@ export default function NavBar() {
       </div>
     </nav>
   );
+}
+
+function setLoginModalOpen(arg0: boolean) {
+  throw new Error("Function not implemented.");
 }

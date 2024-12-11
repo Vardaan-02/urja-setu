@@ -1,5 +1,5 @@
 import { CarouselItem, CustomSlider } from "@/components/ui/customSlider";
-import { Divide } from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
 
 const carouselItems: CarouselItem[] = [
   {
@@ -25,10 +25,23 @@ const carouselItems: CarouselItem[] = [
 ];
 
 export function Events() {
+
+  const events = useAppSelector(state => state.event.events);
+  const getRandomEvents = (events: any[], count: number) => {
+    const shuffled = [...events].sort(() => 0.5 - Math.random()); 
+    return shuffled.slice(0, Math.max(events.length, 4));
+  };
+  const randomEvents = getRandomEvents(events, 4);
+  const eventDetails = randomEvents.map((event) => ({
+    title: event.title || "Untitled Event",
+    description: event.shortDescription || "",
+    image: event.image || "",
+  }));
+
   return (
   <>
   <div className="relative mx-auto bg-white/30 backdrop-blur-lg border border-white/20 shadow-xl rounded-lg overflow-hidden">
-    <CustomSlider carouselItems={carouselItems}/>
+    <CustomSlider carouselItems={eventDetails}/>
   </div>
   </>
   );

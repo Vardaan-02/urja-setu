@@ -1,34 +1,51 @@
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { Box } from "../../../components/box";
 import RedeemStoreCompany from "./company-components/redeem-store";
 import RedeemStoreDevileryBoy from "./delivery-boy-components/redeem-store";
 import { Calendar } from "./left-box-components/calender";import { Goals } from "./left-box-components/goals";
 import { UserCard } from "./left-box-components/user-card";
 import RedeemStoreUser from "./user-components/redeem-store";
+import { fetchRegisteredEvents } from "@/api/events/fetchRegisteredEvents";
+import { Event } from "@/types/event";
+import { useState } from "react";
 
 export function LeftBox() {
   // User
+  const [eventDates, setDates] = useState<Event[]>([]);
+  const auth = useIsAuthorized();
+  if(!auth.isLogin){
+      console.log("Unauthorized");
+      return;
+  }
+
+const fetchDates = async () => {
+  try {
+    const events = await fetchRegisteredEvents(auth.auth.details.eventsId);
+    setDates(events);
+  }
+  catch (error) {
+      console.error("Error fetching events:", error);
+  }
+};
+  
+if (eventDates.length === 0) {
+    fetchDates();
+}
+  
+
   const user = {
-    name: "Vardaan-02",
-    address: "Rana Complex",
-    avatarUrl: "profile.jpg",
+    name: auth.auth.name?? "User",
+    address: auth.auth.details.address ?? "NA",
+    avatarUrl: auth.auth.photoURL ?? "NA",
   };
-
-  // Example marked dates
-  const markedDates = [
-    {
-      date: new Date(2024, 11, 15),
+  
+  const markedDates = eventDates.map((event) => {
+    const eventDate = event.date.toDate();
+    return {
+      date: eventDate,
       type: "type3",
-    },
-    {
-      date: new Date(2024, 11, 24),
-      type: "type2",
-    },
-    {
-      date: new Date(2024, 11, 20),
-      type: "type3",
-    },
-  ];
-
+    };
+  });
   const type = ['one','two'];
 
   return (

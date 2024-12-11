@@ -1,4 +1,4 @@
-import { Event } from "@/utils/events";
+import { Event } from "@/types/event";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,10 @@ interface EventModalProps {
 
 export function EventModal({ event, isOpen, onClose }: EventModalProps) {
   if (!event) return null;
+  const eventDate =
+    typeof event.date === "string"
+      ? new Date(event.date).toLocaleDateString()
+      : event.date.toDate().toLocaleDateString();
 
   return (
     <div className="">
@@ -47,7 +51,7 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
                 <p className="flex text-sm font-semibold">
                   {event.registered} participants
                 </p>
-                <p className="flex text-sm font-semibold">{event.date}</p>
+                <p className="flex text-sm font-semibold">{eventDate}</p>
                 <p className="flex text-sm font-semibold">{event.time}</p>
               </div>
             </div>
