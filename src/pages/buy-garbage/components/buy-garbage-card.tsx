@@ -107,7 +107,7 @@ export function BuyGarbageCard({ order }: sellWithId) {
               </div>
             </div>
             <div className="h-[140px] flex items-center mr-8">
-              <AssignDriver id={order.id} />
+              <AssignDriver id={order.id} sellerId={order.order.seller.id} />
             </div>
           </CardContent>
         </motion.div>

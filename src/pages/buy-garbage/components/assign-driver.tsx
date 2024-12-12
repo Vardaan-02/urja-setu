@@ -31,7 +31,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function AssignDriver({id}:string) {
+export default function AssignDriver({id, sellerId}:{id: string, sellerId: string}) {
 
   const [drivers, setDrivers] = useState<Array<any>>([]);
   const {auth} = useIsAuthorized();
@@ -76,7 +76,7 @@ export default function AssignDriver({id}:string) {
     start: "9:00AM",
     end: "12:00PM"
   }
-  await assignOrder(id, company, driverData, pickupTime)
+  await assignOrder(id, company, driverData, pickupTime, sellerId)
 };
 
   return (
