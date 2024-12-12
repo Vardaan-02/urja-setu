@@ -9,7 +9,7 @@ import { sellWithId } from "@/api/orders/fetchPendingOrders";
 
 export function BuyGarbageCard({ order }: sellWithId) {
   const [isHovered, setIsHovered] = useState(false);
-  // console.log(order);
+  console.log(order);
   
   // console.log(order?.order);
   
