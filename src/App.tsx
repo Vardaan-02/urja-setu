@@ -8,8 +8,9 @@ import Dashboard from "./pages/dashboard/page";
 import OrderDetails from "./pages/order-details/page";
 import Cart from "./pages/cart/cart";
 import ParentProductPage from "./pages/product/page";
-import BuyGarbage from "./pages/buy-garbage/page.tsx";
 import EnergyPrediction from "./pages/energy-prediction/page.tsx";
+import BuyGarbage from "./pages/buy-garbage/page.tsx";
+import ImageModel from "./pages/image-model/page.tsx";
 import Data from "./pages/data.tsx";
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/data" element={<Data />} />
         <Route path="/buy-garbage" element={<BuyGarbage />} />
         <Route path="/energy-prediction" element={<EnergyPrediction />} />
+        <Route path="/image-model" element={<ImageModel />} />
       </Routes>
     </>
   );

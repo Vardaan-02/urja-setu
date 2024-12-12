@@ -54,9 +54,9 @@ const handleGoogleSignIn = async (dispatch: any, role: string | null) => {
     //   email: user.email,
     //   photoURL: user.photoURL,
     // });
-    if(role == null){
-      role = "User";
-    }
+    // if(role == null){
+    //   role = "User";
+    // }
     if(role){
       await saveDummyUser({
         uid: user.uid,
@@ -70,7 +70,7 @@ const handleGoogleSignIn = async (dispatch: any, role: string | null) => {
         const userRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userRef);
         const userData : DocumentData | undefined = userDoc.data();
-        if(userData) role = userData.role;
+        if(userData) role = userData.role;        
     }
     
     dispatch(setAuthData({
