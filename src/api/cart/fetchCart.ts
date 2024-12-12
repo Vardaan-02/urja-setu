@@ -99,6 +99,13 @@ export const fetchCart = async (userId: string, dispatch: any) => {
                 }
 
                 const productData = productSnapshot.data();
+
+                const reviews = productData.reviews || [];
+                const avgRating =
+                    reviews.length > 0
+                        ? reviews.reduce((sum: number, review: { rating: number }) => sum + review.rating, 0) / reviews.length
+                        : 0;
+                productData.rating = avgRating;
                 const organizationDocRef = doc(
                     collection(db, "users"),
                     productData.seller

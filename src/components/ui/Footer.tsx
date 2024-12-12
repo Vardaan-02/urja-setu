@@ -1,6 +1,21 @@
+import { addFeedback } from "../../api/feedback/fedback";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { CalendarDaysIcon, HandRaisedIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 export default function Footer() {
+  const auth = useIsAuthorized();
+  let username: string;
+  let userId: string;
+  let photoURL: string;
+  if (auth.auth.name) username = auth.auth.name;
+  else username = "";
+  if(auth.auth.photoURL) photoURL = auth.auth.photoURL;
+  else photoURL = "";
+  if (auth.auth.uid) userId = auth.auth.uid;
+  else userId = "";
+  const [inputText, setInputText] = useState<string>("");
+
   return (
     <>
       <div className="relative isolate overflow-hidden py-16 sm:py-24 lg:py-32 border-t-1 border">
@@ -20,17 +35,21 @@ export default function Footer() {
                   Feedback
                 </label>
                 <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  required
+                  id="input"
+                  name="input"
                   placeholder="Enter feedback"
-                  autoComplete="email"
+                  value={inputText}
                   className="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base  outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 border border-black"
+                  onChange={e => setInputText(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="flex-none rounded-md bg-[#94C973] px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-[#2F5233] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5233] transition duration-200"
+                  className="flex-none rounded-md bg-[#94C973] px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-[#2F5233] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5233] transition duration-200" onClick={() => {
+                    if(!userId || !username) alert("You must login to give feedback");
+                    else {
+                      addFeedback(inputText, photoURL, username);
+                      setInputText("");
+                    }}}
                 >
                   Send
                 </button>

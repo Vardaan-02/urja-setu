@@ -18,6 +18,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { addProduct } from "@/api/products/addProduct";
+import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 
 const options = [
   { label: "Electronics", value: "Electronics" },
@@ -28,7 +30,6 @@ const options = [
 ];
 
 export default function AddProduct() {
-  // Define Zod schema
   const formSchema = z.object({
     productName: z
       .string()
@@ -49,6 +50,12 @@ export default function AddProduct() {
     files: z.array(z.instanceof(File)).optional(),
   });
 
+  const {auth} = useIsAuthorized();
+  if(!auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,8 +75,21 @@ export default function AddProduct() {
   const [price, setPrice] = useState<number>(0);
   const [files, setFiles] = useState<File[]>([]);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Form Data:", values);
+    const prod = {
+      title: values.productName,
+      price: values.price,
+      condition: values.condition,
+      rating: 0,
+      images: values.files,
+      category: values.category,
+      description: values.productDescription,
+      features: values.features,
+      // reviews: [],
+      discount: values.discount
+    }
+    await addProduct(prod, auth.uid);
   };
 
   const handleFileUpload = (uploadedFiles: File[]) => {
@@ -247,7 +267,7 @@ export default function AddProduct() {
                 <FormItem>
                   <Label htmlFor="discount">Discount</Label>
                   <FormControl>
-                    <Input {...field} id="discount" placeholder="e.g., 10" />
+                    <Input {...field} type="number"  id="discount" placeholder="e.g., 10" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

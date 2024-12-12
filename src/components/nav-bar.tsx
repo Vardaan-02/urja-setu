@@ -112,7 +112,7 @@ export default function NavBar() {
                 <div className="relative flex items-center">
                   {isLogin && auth.details.wallet && (
                     <div className="flex shadow-md p-2 rounded-xl mr-2 items-center h-12 bg-black/5 hover:bg-black/10 transition">
-                      <p className="mr-2">{auth.details.wallet} </p>
+                      <p className="mr-2">{auth.details.wallet.toFixed(2)} </p>
                       <img
                         src="/images/urjacoins2.png"
                         alt=""

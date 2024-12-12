@@ -14,7 +14,7 @@ export const addAddress = async (userId: string, newAddress: {
         const userDocRef = doc(db, "users", userId);
 
         await updateDoc(userDocRef, {
-            addresses: arrayUnion(newAddress),
+            address: arrayUnion(newAddress),
         });
 
         console.log("Address added successfully!");

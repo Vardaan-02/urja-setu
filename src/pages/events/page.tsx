@@ -25,9 +25,7 @@ export default function Events() {
       console.log(auth.auth.details.eventsId);
 
       const loadRegisteredEvents = async () => {
-        const fetchedEvents = await fetchRegisteredEvents(
-          auth.auth.details.eventsId
-        );
+        const fetchedEvents = await fetchRegisteredEvents(auth.auth.uid);
         const uniqueEvents = Array.from(
           new Map(fetchedEvents.map((event) => [event.id, event])).values()
         );
