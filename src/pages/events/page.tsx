@@ -115,7 +115,7 @@ export default function Events() {
             </div>
             {activeTab === "registered" ? (
               registeredEvents.length > 0 ? (
-                <div className="flex flex-col gap-12 bg-red-500">
+                <div className="flex flex-col gap-12">
                   {filteredEvents(registeredEvents).map((event) => (
                     <EventCard
                       id={event.id}

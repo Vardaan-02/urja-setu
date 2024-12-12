@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,14 +9,13 @@ import { sellWithId } from "@/api/orders/fetchPendingOrders";
 
 export function BuyGarbageCard({ order }: sellWithId) {
   const [isHovered, setIsHovered] = useState(false);
-  console.log(order);
-  
-  // console.log(order?.order);
-  
+
   if (Object.keys(order.order.seller).length === 0) return null;
   if (Object.keys(order.order.seller.name).length === 0) return null;
   if (Object.keys(order.order.seller.phone).length === 0) return null;
   if (Object.keys(order.order.itemName).length === 0) return null;
+
+  console.log(order.order.category);
 
   return (
     <motion.div
@@ -40,14 +39,19 @@ export function BuyGarbageCard({ order }: sellWithId) {
                   className="justify-center items-center h-full"
                 >
                   <Avatar className="w-20 h-20 flex justify-center items-center">
-                    <AvatarImage src={order.order.seller.image} alt={order.id} />
+                    <AvatarImage
+                      src={order.order.seller.image}
+                      alt={order.id}
+                    />
                     <AvatarFallback>{order.order.seller.name}</AvatarFallback>
                   </Avatar>
                 </motion.div>
               </div>
 
               <div className="text-center sm:text-left flex flex-col justify-center mt-3">
-                <h2 className="text-2xl font-bold">{order.order.seller.name}</h2>
+                <h2 className="text-2xl font-bold">
+                  {order.order.seller.name}
+                </h2>
                 <motion.p
                   className="text-sm text-gray-800 mt-1"
                   animate={{ opacity: isHovered ? 1 : 0.7 }}
@@ -56,7 +60,8 @@ export function BuyGarbageCard({ order }: sellWithId) {
                 </motion.p>
                 <ScrollArea className="h-16 w-full max-w-[200px] mt-2">
                   <p className="text-sm text-gray-800">
-                    {order.order.seller.address.city}, {order.order.seller.address.state}
+                    {order.order.seller.address.city},{" "}
+                    {order.order.seller.address.state}
                   </p>
                 </ScrollArea>
               </div>
@@ -78,10 +83,23 @@ export function BuyGarbageCard({ order }: sellWithId) {
                   />
                 </motion.div>
                 <div>
-                  <h3 className="text-xl font-semibold">{order.order.itemName}</h3>
-                  <Badge variant="secondary" className="mt-1">
-                    Urja Setu
-                  </Badge>
+                  <h3 className="text-xl font-semibold">
+                    {order.order.itemName}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {order.order.category
+                      .filter((_: any, index: number) => {
+                        return index < 3;
+                      })
+                      .map((item) => {
+                        return (
+                          <Badge variant="secondary" className="mt-1">
+                            {item}
+                          </Badge>
+                        );
+                      })}
+                  </div>
+
                   <p className="text-sm text-gray-800 mt-2">
                     Weight: {order.order.weight}kg
                   </p>

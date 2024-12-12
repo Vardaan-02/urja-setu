@@ -16,8 +16,9 @@ import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import handleGoogleSignIn from "@/api/auth/google_auth";
 import { useDispatch } from "react-redux";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { resetAuth } from "@/redux/authSlice";
 
 const tabs = [
   { id: "", label: "Home" },
@@ -33,7 +34,6 @@ export default function NavBar() {
     "tab",
     "home"
   );
-  const { isLogin, auth } = useIsAuthorized();
   const dispatch = useDispatch();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const handleLogin = async (role: string | null) => {
@@ -41,11 +41,19 @@ export default function NavBar() {
     setLoginModalOpen();
     setIsPopupVisible(false);
   };
+  const navigate = useNavigate();
+  const { isLogin, auth, setIsLogin } = useIsAuthorized();
 
   const popupRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const togglePopup = () => {
     setIsPopupVisible((prevState) => !prevState);
+  };
+
+  const handleLogout = () => {
+    setIsLogin(false);
+    dispatch(resetAuth());
+    navigate("/")
   };
 
   return (
@@ -152,7 +160,7 @@ export default function NavBar() {
                     >
                       <button
                         className="text-gray-900 w-full text-left"
-                        // onClick={handleLogout}
+                        onClick={handleLogout}
                       >
                         Logout
                       </button>

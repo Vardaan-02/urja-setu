@@ -27,7 +27,7 @@ export function UserCard({ user }: { user: UserCardProps }) {
         </Avatar>
         <div>
           <h2 className="text-xl font-bold">{user.name}</h2>
-          <p className="">{user.address}</p>
+          <p className="">{user.address[0].city}</p>
         </div>
       </div>
 

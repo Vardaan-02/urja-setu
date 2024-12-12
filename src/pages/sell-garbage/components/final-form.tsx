@@ -22,6 +22,7 @@ import { removeAddress } from "@/api/user/removeAddress";
 import { addOrder } from "@/api/orders/addOrder";
 import axios from "axios";
 import { GoogleCloundVisionAPIKey } from "../../../../APIKey";
+import { useToast } from "@/hooks/use-toast";
 
 export function FinalForm() {
   const [addresses, setAddresses] = useState<
@@ -44,50 +45,56 @@ export function FinalForm() {
   >(null);
 
   const [labels, setLabels] = useState<string[]>([]);
+  const [isAnal, setIsAnal] = useState(false);
+  const {toast} = useToast();
 
-  const analyzeImage = async (data:FormValues) => {
+  const analyzeImage = async (data: FormValues): Promise<string[]> => {
+    setIsAnal(true);
+
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
     try {
       const reader = new FileReader();
       reader.readAsDataURL(data.image);
 
-      const processImage = new Promise<void>((resolve, reject) => {
+      return await new Promise((resolve, reject) => {
         reader.onloadend = async () => {
           try {
             const base64Image = reader.result?.toString().split(",")[1];
+
+            // Add delay
+            await delay(1000);
 
             const response = await axios.post(
               `https://vision.googleapis.com/v1/images:annotate?key=${GoogleCloundVisionAPIKey}`,
               {
                 requests: [
                   {
-                    image: {
-                      content: base64Image,
-                    },
-                    features: [
-                      {
-                        type: "LABEL_DETECTION",
-                        maxResults: 10,
-                      },
-                    ],
+                    image: { content: base64Image },
+                    features: [{ type: "LABEL_DETECTION", maxResults: 10 }],
                   },
                 ],
               }
             );
 
-            const labels = response.data.responses[0]?.labelAnnotations?.map(
-              (annotation: { description: string }) => annotation.description
-            );
-            setLabels(labels);
-            resolve();
+            const labels =
+              response.data.responses[0]?.labelAnnotations?.map(
+                (annotation: { description: string }) => annotation.description
+              ) || [];
+
+            setLabels(labels); // Update state for UI purposes
+            resolve(labels); // Resolve the promise with the labels
           } catch (error) {
             reject(error);
           }
         };
       });
-
-      await processImage;
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+      return [];
+    } finally {
+      setIsAnal(false);
     }
   };
 
@@ -96,8 +103,6 @@ export function FinalForm() {
     console.log("Unauthorized");
     return;
   }
-
-  
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -110,18 +115,29 @@ export function FinalForm() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
-    analyzeImage(data);
-    console.log(labels);
-    const seller = {
-      id: auth.auth.uid ?? "",
-      name: auth.auth.name ?? "",
-      image: auth.auth.photoURL ?? "",
-      phone: data.phoneNumbers ?? "",
-      address: data.addresses ?? "",
-    };
-    await addOrder(seller, data.itemName, data.weight, data.image);
-    // Handle form submission
+    try {
+      console.log(data);
+
+      // Get labels directly from analyzeImage
+      const labels = await analyzeImage(data);
+
+      console.log(labels); // This will now contain the updated labels
+
+      const seller = {
+        id: auth.auth.uid ?? "",
+        name: auth.auth.name ?? "",
+        image: auth.auth.photoURL ?? "",
+        phone: data.phoneNumbers ?? "",
+        address: data.addresses ?? "",
+      };
+
+      await addOrder(seller, data.itemName, data.weight, data.image,labels);
+
+      console.log("Form submission complete!");
+      toast({title:"Form Submission",description:"Form submission complete!"})
+    } catch (error) {
+      console.error("Error during form submission:", error);
+    }
   };
 
   const addAddress = (newAddress: {
