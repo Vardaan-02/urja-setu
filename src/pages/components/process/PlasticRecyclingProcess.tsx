@@ -30,8 +30,10 @@ export default function PlasticRecyclingProcess() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Plastic Recycling Process</h1>
-      <div className="relative">
+    <h1 className="text-4xl font-bold mb-8 text-green-800 text-center">Plastic Recycling Process</h1>
+    <div className="flex items-start">
+   
+      <div className="w-3/4">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <StepDot
@@ -47,7 +49,14 @@ export default function PlasticRecyclingProcess() {
           </React.Fragment>
         ))}
       </div>
+  
+    
+      <div className='w-1/4'>
+        <img src="plant.png" height={500} alt="Recycling Plant" className="w-full mt-24 " />
+      </div>
     </div>
+  </div>
+  
   )
 }
 
@@ -59,9 +68,9 @@ interface StepDotProps {
 
 function StepDot({ step, isActive, isCompleted }: StepDotProps) {
   return (
-    <div className="mb-16">
+    <div className="mb-16 w-full">
       <motion.div
-        className={`w-8 h-8 rounded-full transition-colors duration-300 flex items-center justify-center
+        className={`w-8 h-8 ml-2 rounded-full transition-colors duration-300 flex items-center justify-center
           ${isCompleted ? 'bg-green-500' : isActive ? 'bg-blue-500' : 'bg-gray-300'}`}
         initial={{ scale: 0 }}
         animate={{ scale: isActive ? 1 : 0 }}
@@ -76,7 +85,7 @@ function StepDot({ step, isActive, isCompleted }: StepDotProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5 }}
-            className="mt-2 p-4 bg-white rounded shadow-md w-3/5"
+            className="mt-2 p-4 bg-white rounded shadow-md w-4/5"
           >
             <h3 className="font-bold mb-2">{step.title}</h3>
             <p>{step.description}</p>
@@ -94,7 +103,7 @@ interface StepConnectorProps {
 function StepConnector({ isCompleted }: StepConnectorProps) {
   return (
     <motion.div
-      className={`absolute left-4 w-0.5 h-12 -mt-16 ${
+      className={`absolute left-36 w-0.5 h-12 -mt-16 ${
         isCompleted ? 'bg-green-500' : 'bg-gray-300'
       }`}
       initial={{ height: 0 }}

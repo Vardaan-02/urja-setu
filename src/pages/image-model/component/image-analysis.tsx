@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { GoogleCloundVisionAPIKey } from "../../../../APIKey";
+import { GoogleCloundVisionAPIKey } from "../../../APIKey";
 import { Upload, FileImage, Loader2, Tag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";

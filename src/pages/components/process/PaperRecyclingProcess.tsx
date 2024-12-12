@@ -29,7 +29,7 @@ const PaperRecyclingProcess = () => {
   }, [controls])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-100 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+    <div className="min-h-[80vh] py-12 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-green-800 mb-12">Paper Recycling Process</h1>
         
