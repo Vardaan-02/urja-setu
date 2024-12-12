@@ -6,13 +6,10 @@ import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import useDebounce from "@/hooks/useDebouce";
 
 interface productFilters {
     priceRange: Array<number>,
@@ -33,7 +30,7 @@ export default function ProductFilters({priceRange, setPriceRange}: productFilte
         <div className="px-2 py-4">
           <Slider
             min={0}
-            max={100}
+            max={1000}
             step={10}
             value={priceRange}
             onValueChange={setPriceRange}

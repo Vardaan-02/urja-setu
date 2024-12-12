@@ -111,6 +111,7 @@ export const fetchOrdersById = async (userId: string, dispatch: any): Promise<vo
             weight: data.weight,
             image: data.image,
             price: data.price,
+            category: data.category || [],
             deliveryPerson: {
               id: data.deliveryPerson?.id ?? "",
               name: data.deliveryPerson?.name,

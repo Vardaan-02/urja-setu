@@ -9,6 +9,7 @@ export const addOrder = async (
   itemName: string,
   weight: number,
   imageFile: File,
+  category: Array<any>
 ): Promise<void> => {
   try {
     const imageRef = ref(storage, `orders/${Date.now()}_${imageFile.name}`);
@@ -29,6 +30,7 @@ export const addOrder = async (
         itemName: itemName,
         weight: weight,
         image: imageURL,
+        category: category || [],
         price: 100,
         company: {
           id: "",

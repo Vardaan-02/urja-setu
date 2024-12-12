@@ -63,6 +63,7 @@ const OrderSummary = memo(({
         await checkout(auth.uid ?? " ", total);
         dispatch(setCart([]));
         dispatch(updateWallet(auth.details.wallet - total));
+        alert("CheckOut Successfull")
         window.location.reload();
       }
       else{

@@ -21,6 +21,7 @@ export default function ProductGrid({
 }: ProductGridProps) {
   const navigate = useNavigate();
   const productsPerPage = 12;
+  console.log(products);
   
   const debouncedPriceRange = useDebounce(priceRange);
   const [filteredProducts, setFilteredProducts] = useState<Array<Product>>();
@@ -41,10 +42,12 @@ export default function ProductGrid({
             );
         }
       }))
+      
+      
   }, [debouncedPriceRange, products, category])
 
   useEffect(()=>{
-    if(filteredProducts){
+    if(filteredProducts){      
       setCurrentProducts(filteredProducts.slice(
         (currentPage - 1) * productsPerPage,
         currentPage * productsPerPage

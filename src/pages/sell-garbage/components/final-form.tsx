@@ -69,7 +69,7 @@ export function FinalForm() {
       phone: data.phoneNumbers ?? "",
       address: data.addresses ?? ""
     }
-    await addOrder(seller, data.itemName, data.weight, data.image);
+    await addOrder(seller, data.itemName, data.weight, data.image, []);
     // Handle form submission
   };
 

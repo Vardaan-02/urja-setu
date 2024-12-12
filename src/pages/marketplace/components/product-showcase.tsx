@@ -19,7 +19,7 @@ export default function ProductShowcase() {
   const products = useAppSelector((state) => state.product);
   const [categories, setCategories] = React.useState<Array<string>>();
   const navigate = useNavigate();
-  const [priceRange, setPriceRange] = React.useState([0, 100])
+  const [priceRange, setPriceRange] = React.useState([0, 1000])
   const handleCategoryChange = (newCategory: string) => {
     navigate(`/marketplace/category/${newCategory}/page/1`);
   };
@@ -32,9 +32,10 @@ export default function ProductShowcase() {
   }, [auth])
 
   React.useEffect(() => {
-    const categoriesTemp = ["All", ...products.product.map((p) => p.category)];
+    const categoriesTemp = ["All", ...new Set(products.product.map((p) => p.category))];
     setCategories(categoriesTemp);
   }, [products]);
+  
 
   return (
     <div className="container w-[90%] mx-[5%] pt-12">
