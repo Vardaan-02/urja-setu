@@ -23,7 +23,6 @@ import { useEffect, useState } from "react";
 import { fetchRegisteredDrivers } from "@/api/organization/fetchRegisteredDrivers";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { assignOrder } from "@/api/orders/assignOrder";
-import { log } from "console";
 
 
 const schema = z.object({

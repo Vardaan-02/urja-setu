@@ -13,6 +13,7 @@ import BuyGarbage from "./pages/buy-garbage/page.tsx";
 import ImageModel from "./pages/image-model/page.tsx";
 import Data from "./pages/data.tsx";
 
+import { Toaster } from "./components/ui/toaster.tsx";
 export default function App() {
   return (
     <>
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/energy-prediction" element={<EnergyPrediction />} />
         <Route path="/image-model" element={<ImageModel />} />
       </Routes>
+      <Toaster />
     </>
   );
 }

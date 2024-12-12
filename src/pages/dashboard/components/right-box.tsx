@@ -40,9 +40,9 @@ export function RightBox() {
           <WasteChart />
         </Box>
         <Box className="bg-green-50 flex-1 aspect-square">
-          {type.length==2 && <SellGarbageUser />}
-          {type.length==1 && <SellGarbageDeliveryBoy />}
-          {type.length==1 && <SellGarbageCompany />}
+          {auth.auth.role==="User" && <SellGarbageUser />}
+          {auth.auth.role==="DeliveryPerson" && <SellGarbageDeliveryBoy />}
+          {auth.auth.role==="Organization" && <SellGarbageCompany />}
         </Box>
       </div>
       <Box className="flex-grow bg-green-50 overflow-scroll no-scrollbar max-h-[504px]">

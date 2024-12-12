@@ -16,8 +16,9 @@ import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import handleGoogleSignIn from "@/api/auth/google_auth";
 import { useDispatch } from "react-redux";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { resetAuth } from "@/redux/authSlice";
 
 const tabs = [
   { id: "", label: "Home" },
@@ -25,12 +26,14 @@ const tabs = [
   { id: "events", label: "Events" },
   { id: "marketplace", label: "Marketplace" },
   { id: "about", label: "About Us" },
-
+  { id: "image-model", label: "Waste Classification" },
 ];
 
 export default function NavBar() {
-  const {value:activeTab, setItem:setActiveTab} = useLocalStorage("tab","home");
-  const { isLogin, auth } = useIsAuthorized();
+  const { value: activeTab, setItem: setActiveTab } = useLocalStorage(
+    "tab",
+    "home"
+  );
   const dispatch = useDispatch();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const handleLogin = async (role: string | null) => {
@@ -38,11 +41,19 @@ export default function NavBar() {
     setLoginModalOpen();
     setIsPopupVisible(false);
   };
+  const navigate = useNavigate();
+  const { isLogin, auth, setIsLogin } = useIsAuthorized();
 
   const popupRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const togglePopup = () => {
     setIsPopupVisible((prevState) => !prevState);
+  };
+
+  const handleLogout = () => {
+    setIsLogin(false);
+    dispatch(resetAuth());
+    navigate("/")
   };
 
   return (
@@ -64,7 +75,6 @@ export default function NavBar() {
                 {tabs.map((tab) => (
                   <Link to={`/${tab.id}`} key={tab.id} className="">
                     <TabsTrigger
-                      
                       value={tab.id}
                       className={cn(
                         "relative px-4 py-2 text-sm font-medium transition-all  shadow-md bg-white/30",
@@ -95,7 +105,14 @@ export default function NavBar() {
           </div>
 
           <div className="flex items-center gap-4 md:w-auto">
-            <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8" />
+            <Link
+              to={"/cart"}
+              onClick={() => {
+                setActiveTab("marketplace");
+              }}
+            >
+              <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8" />
+            </Link>
             <Notifications />
             {!isLogin ? (
               <Button
@@ -143,7 +160,7 @@ export default function NavBar() {
                     >
                       <button
                         className="text-gray-900 w-full text-left"
-                        // onClick={handleLogout}
+                        onClick={handleLogout}
                       >
                         Logout
                       </button>

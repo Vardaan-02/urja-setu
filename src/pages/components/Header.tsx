@@ -6,12 +6,14 @@ import { useDispatch } from "react-redux";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { resetAuth } from "@/redux/authSlice";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Link } from "react-router-dom";
 
 const navigation = [
-  { name: "Home", href: "/" },
-  { name: "Marketplace", href: "/marketplace" },
-  { name: "Events", href: "/events" },
-  { name: "About", href: "/about" },
+  { name: "Home", href: "/", tab: "home" },
+  { name: "Marketplace", href: "/marketplace", tab: "marketplace" },
+  { name: "Events", href: "/events", tab: "events" },
+  { name: "About", href: "/about", tab: "about" },
 ];
 
 export default function Header() {
@@ -22,6 +24,10 @@ export default function Header() {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
+  const { value: activeTab, setItem: setActiveTab } = useLocalStorage(
+    "tab",
+    "home"
+  );
 
   const handleLogin = async (role: string | null) => {
     await handleGoogleSignIn(dispatch, role);
@@ -76,13 +82,14 @@ export default function Header() {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={`/${item.tab}`}
+              onClick={() => setActiveTab(item.tab)}
               className="text-gray-900 hover:translate-y-1 transition font-bold text-xl"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-2">
@@ -103,10 +110,14 @@ export default function Header() {
             </>
           ) : (
             <div className="relative flex items-center">
-              {isLogin && auth.details.wallet &&  (
+              {isLogin && auth.details.wallet && (
                 <div className="flex shadow-md p-2 rounded-xl mr-2 items-center h-12 bg-black/5 hover:bg-black/10 transition">
                   <p className="mr-2">{auth.details.wallet.toFixed(2)} </p>
-                  <img src="/images/urjacoins2.png" alt="" className="h-5 w-5" />
+                  <img
+                    src="/images/urjacoins2.png"
+                    alt=""
+                    className="h-5 w-5"
+                  />
                 </div>
               )}
               <div

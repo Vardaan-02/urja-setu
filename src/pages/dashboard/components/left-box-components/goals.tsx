@@ -22,7 +22,7 @@ export function Goals({
   total,
   better,
   trend = "neutral",
-  description = "Help me i want to sleep",
+  description = "Complete Your Weekly goals",
   deadline = new Date(),
   weeklyBreakdown = [],
 }: GoalsProps) {

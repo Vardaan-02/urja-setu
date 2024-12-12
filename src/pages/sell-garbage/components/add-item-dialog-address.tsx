@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -40,6 +40,10 @@ export function AddItemDialogAddress({
     lat: -1,
     lng: -1,
   });
+
+  useEffect(()=>{
+    console.log(coordinates)
+  },[coordinates])
 
   const auth = useIsAuthorized();
   if(!auth.auth.uid){
@@ -106,7 +110,7 @@ export function AddItemDialogAddress({
               <Label htmlFor={"Loation"} className="text-right">
                 Location
               </Label>
-              <LocationAutocomplete setCoordinates={setCoordinates} />
+              <LocationAutocomplete setCoordinates={setCoordinates}/>
             </div>
 
             {fields.map((field) => (

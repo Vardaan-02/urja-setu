@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +20,9 @@ import { removePhoneNumber } from "@/api/user/removePhoneNumber";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { removeAddress } from "@/api/user/removeAddress";
 import { addOrder } from "@/api/orders/addOrder";
+import axios from "axios";
+import { GoogleCloundVisionAPIKey } from "../../../../APIKey";
+import { useToast } from "@/hooks/use-toast";
 
 export function FinalForm() {
   const [addresses, setAddresses] = useState<
@@ -43,12 +44,65 @@ export function FinalForm() {
     string | null
   >(null);
 
+  const [labels, setLabels] = useState<string[]>([]);
+  const [isAnal, setIsAnal] = useState(false);
+  const {toast} = useToast();
+
+  const analyzeImage = async (data: FormValues): Promise<string[]> => {
+    setIsAnal(true);
+
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(data.image);
+
+      return await new Promise((resolve, reject) => {
+        reader.onloadend = async () => {
+          try {
+            const base64Image = reader.result?.toString().split(",")[1];
+
+            // Add delay
+            await delay(1000);
+
+            const response = await axios.post(
+              `https://vision.googleapis.com/v1/images:annotate?key=${GoogleCloundVisionAPIKey}`,
+              {
+                requests: [
+                  {
+                    image: { content: base64Image },
+                    features: [{ type: "LABEL_DETECTION", maxResults: 10 }],
+                  },
+                ],
+              }
+            );
+
+            const labels =
+              response.data.responses[0]?.labelAnnotations?.map(
+                (annotation: { description: string }) => annotation.description
+              ) || [];
+
+            setLabels(labels); // Update state for UI purposes
+            resolve(labels); // Resolve the promise with the labels
+          } catch (error) {
+            reject(error);
+          }
+        };
+      });
+    } catch (error) {
+      console.error(error);
+      return [];
+    } finally {
+      setIsAnal(false);
+    }
+  };
+
   const auth = useIsAuthorized();
-  if(!auth.auth.uid){
+  if (!auth.auth.uid) {
     console.log("Unauthorized");
     return;
   }
-
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -61,16 +115,29 @@ export function FinalForm() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
-    const seller = {
-      id: auth.auth.uid ?? "",
-      name: auth.auth.name ?? "",
-      image: auth.auth.photoURL ?? "",
-      phone: data.phoneNumbers ?? "",
-      address: data.addresses ?? ""
+    try {
+      console.log(data);
+
+      // Get labels directly from analyzeImage
+      const labels = await analyzeImage(data);
+
+      console.log(labels); // This will now contain the updated labels
+
+      const seller = {
+        id: auth.auth.uid ?? "",
+        name: auth.auth.name ?? "",
+        image: auth.auth.photoURL ?? "",
+        phone: data.phoneNumbers ?? "",
+        address: data.addresses ?? "",
+      };
+
+      await addOrder(seller, data.itemName, data.weight, data.image,labels);
+
+      console.log("Form submission complete!");
+      toast({title:"Form Submission",description:"Form submission complete!"})
+    } catch (error) {
+      console.error("Error during form submission:", error);
     }
-    await addOrder(seller, data.itemName, data.weight, data.image, []);
-    // Handle form submission
   };
 
   const addAddress = (newAddress: {
@@ -106,11 +173,12 @@ export function FinalForm() {
       city: "",
       coordinates: {
         lat: -1,
-        lng: -1
-      }
+        lng: -1,
+      },
     };
-    const updatedAddresses = addresses.filter((address) => {address.id !== id;
-      if(address.id == id) delAddress = address;
+    const updatedAddresses = addresses.filter((address) => {
+      address.id !== id;
+      if (address.id == id) delAddress = address;
     });
     setAddresses(updatedAddresses);
     form.setValue("addresses", updatedAddresses);
@@ -121,20 +189,17 @@ export function FinalForm() {
       address: delAddress.address,
       state: delAddress.state,
       city: delAddress.city,
-      coordinates: delAddress.coordinates
-    }
+      coordinates: delAddress.coordinates,
+    };
     await removeAddress(auth.auth.uid ?? "", remAddress);
-    
-    
   };
 
   const deletePhoneNumber = async (id: string) => {
     let phone = "";
-    const updatedPhoneNumbers = phoneNumbers.filter(
-      (phoneNumber) => {phoneNumber.id !== id
-        if(phoneNumber.id == id) phone = phoneNumber.value;
-        }
-    );
+    const updatedPhoneNumbers = phoneNumbers.filter((phoneNumber) => {
+      phoneNumber.id !== id;
+      if (phoneNumber.id == id) phone = phoneNumber.value;
+    });
     await removePhoneNumber(auth.auth.uid ?? "", phone);
     setPhoneNumbers(updatedPhoneNumbers);
     form.setValue("phoneNumbers", updatedPhoneNumbers);

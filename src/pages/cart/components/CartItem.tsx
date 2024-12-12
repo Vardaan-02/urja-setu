@@ -14,6 +14,7 @@ interface CartItemProps {
 }
 
 const CartItem = memo(({ item, onRemove, onIncrease, onDecrease }: CartItemProps) => {
+  console.log(item.rating);
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-white/30 rounded-xl shadow-lg px-4 py-2">
       <img

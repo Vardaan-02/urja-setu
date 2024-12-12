@@ -1,10 +1,13 @@
+import NavBar from "@/components/nav-bar";
 import ImageAnalysis from "./component/image-analysis";
 
 export default function Home() {
   return (
-    <div>
-      <ImageAnalysis />
-    </div>
-  )
+    <>
+      <NavBar />
+      <div className="absolute w-full top-0">
+        <ImageAnalysis />
+      </div>
+    </>
+  );
 }
-

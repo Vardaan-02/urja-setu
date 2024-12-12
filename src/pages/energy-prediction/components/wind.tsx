@@ -1,15 +1,24 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import axios from "axios"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  lat: z.number(),
-  lng: z.number(),
+  lat: z.string(),
+  lng: z.string(),
   startTime: z.string(),
   endTime: z.string(),
   turbineSpecs: z.number().positive(),
@@ -17,26 +26,29 @@ const formSchema = z.object({
 });
 
 export default function WindForm() {
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      lat: 0,
-      lng: 0,
+      lat: "",
+      lng: "",
       startTime: "",
       endTime: "",
       turbineSpecs: 0,
       turbineEfficiency: 0,
     },
   });
-  const API_KEY = import.meta.env.API_KEY;
+  const API_KEY = "AIzaSyCJaMIn4PaigEGGmjsTHZ4mevZljfYyZpM";
   const [arr, setArr] = useState<Array<string>>([]);
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const location = values.location;
+    const lat = values.lat;
+    const lng = values.lng;
     const startTime = values.startTime;
     const endTime = values.endTime;
     const turbineSpecs = values.turbineSpecs;
     const turbineEfficiency = values.turbineEfficiency;
-    const prompt = `The city is ${location}. The start time is ${startTime} and the end time is ${endTime}. the turbine efficiency is ${turbineEfficiency} and the turbine specs is ${turbineSpecs}. Give answers for latitude, longitude and energy generated with proper units separated by *.`;
+    const prompt = `The latitude is ${lat} and the longitude is ${lng}. The start time is ${startTime} and the end time is ${endTime}. the turbine efficiency is ${turbineEfficiency} and the turbine specs is ${turbineSpecs}. Give answers for and energy generated with proper units separated by * in format 45*KHW.`;
     const MLModel = async () => {
       try {
         const response = await axios({
@@ -63,10 +75,10 @@ export default function WindForm() {
       }
     };
     MLModel();
-    console.log("latitude", arr[0]);
-    console.log("longitude", arr[1]);
-    console.log("energy", arr[2]);
-    console.log("unit", arr[3]);
+    toast({
+      title: "Approx Power Produced",
+      description: `${arr[0]} KHW`,
+    });
   }
 
   return (
