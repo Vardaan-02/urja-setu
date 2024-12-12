@@ -2,10 +2,27 @@ import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { Event } from "@/types/event";
 
-export const fetchRegisteredEvents = async (eventsId: string[]) => {
+export const fetchRegisteredEvents = async (userId: string) => {
   try {
+    // Step 1: Fetch the user's document
+    const userDocRef = doc(db, "users", userId);
+    const userSnapshot = await getDoc(userDocRef);
+
+    if (!userSnapshot.exists()) {
+      console.error(`User with ID ${userId} does not exist.`);
+      return [];
+    }
+
+    const userData = userSnapshot.data();
+    const registeredEventIds: string[] = userData.events || []; 
+
+    if (registeredEventIds.length === 0) {
+      console.log(`No registered events found for userId ${userId}.`);
+      return [];
+    }
+
     const events = await Promise.all(
-      eventsId.map(async (eventId) => {
+      registeredEventIds.map(async (eventId) => {
         const eventDocRef = doc(collection(db, "events"), eventId);
         const eventSnapshot = await getDoc(eventDocRef);
 
@@ -34,11 +51,10 @@ export const fetchRegisteredEvents = async (eventsId: string[]) => {
     const validEvents = events.filter((event) => event !== null) as Event[];
 
     console.log("Fetched Registered Events: ", validEvents);
-
     return validEvents;
-  }
-  catch(error){
-    console.error("Error At fetchRegisteredEvents: ", error);
+  } catch (error) {
+    console.error("Error At fetchUserRegisteredEvents: ", error);
     return [];
   }
 };
+

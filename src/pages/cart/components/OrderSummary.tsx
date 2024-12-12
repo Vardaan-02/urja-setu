@@ -12,6 +12,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ShippingOption } from '@/types/product';
+import { checkout } from '@/api/user/checkout';
+import { useIsAuthorized } from '@/hooks/useIsAuthorized';
+import { useDispatch } from 'react-redux';
+import { setCart } from '@/redux/cartSlice';
+import { updateWallet } from '@/redux/authSlice';
+import { useToast } from '@/hooks/use-toast';
+import { Description } from '@/pages/components/Description';
+import { Toaster } from '@/components/ui/toaster';
+import { log } from 'node:console';
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -38,6 +47,35 @@ const OrderSummary = memo(({
   onCouponChange,
   onApplyCoupon
 }: OrderSummaryProps) => {
+
+  const dispatch = useDispatch();
+  const {toast} = useToast();
+  const {auth} = useIsAuthorized();
+  if(!auth.uid){
+    console.log("Unauthorized");
+    return;
+  }
+  const handleSubmit = async () => {
+    try {
+      if(auth.details.wallet && total.toFixed(2) <= auth.details.wallet?.toFixed(2)){
+        // console.log("hello");
+        
+        await checkout(auth.uid ?? " ", total);
+        dispatch(setCart([]));
+        dispatch(updateWallet(auth.details.wallet - total));
+        window.location.reload();
+      }
+      else{
+        alert("Insufficient Urja Coins");
+        // toast({title: "Insufficient Urja Coins", description: "Add More Coins By Selling Garbage"})
+      }
+    }
+    catch(error){
+      console.log("Error ", error);
+      return;
+    }
+  }
+
   return (
     <div className="bg-green-50 px-6 py-4 rounded-xl">
       <Card className="border-none bg-white shadow-xl">
@@ -156,11 +194,12 @@ const OrderSummary = memo(({
               </div>
             </div>
           </div>
-          <Button className="w-full mt-6" size="lg">
+          <Button className="w-full mt-6" size="lg" onClick={handleSubmit}>
             <ShoppingBag className="mr-2 h-5 w-5" /> Proceed to Checkout
           </Button>
         </CardContent>
       </Card>
+      <Toaster />
     </div>
   );
 });

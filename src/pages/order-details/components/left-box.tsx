@@ -9,6 +9,8 @@ export function RightBox() {
   const {id} = useParams();
   const order = useAppSelector(state => state.order.order);
   const selectedOrder = order.find((o) => o.id === id);
+  // console.log(selectedOrder);
+  
 
   return (
     <div className="flex flex-col space-y-4">

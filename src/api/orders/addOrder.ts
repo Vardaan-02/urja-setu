@@ -29,6 +29,7 @@ export const addOrder = async (
         itemName: itemName,
         weight: weight,
         image: imageURL,
+        price: 100,
         company: {
           id: "",
           name: "",

@@ -5,6 +5,8 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Clock, DollarSign, Weight } from "lucide-react";
+import { sellGarbage } from "@/types/order";
+import { sellWithId } from "@/api/orders/fetchPendingOrders";
 
 interface OrderDetailsProps {
   orderId: string;
@@ -22,9 +24,10 @@ interface Order {
 }
 
 
-export function OrderDetails({ orderDetails }: Order) {
+export function OrderDetails({ orderDetails }: sellWithId) {
   // const { orderId, itemName, price, weight, imageUrl, pickupTime, status } =
   //   orderDetails;
+  console.log(orderDetails);
   
   const isLoading = false;
 
@@ -84,8 +87,8 @@ export function OrderDetails({ orderDetails }: Order) {
                 >
                   <AspectRatio ratio={4 / 3}>
                     <img
-                      src={orderDetails.order.item.image}
-                      alt={orderDetails.order.item.name}
+                      src={orderDetails.order.image}
+                      alt={orderDetails.order.itemName}
                       className="w-full h-full object-cover rounded-md shadow-sm"
                     />
                   </AspectRatio>
@@ -96,21 +99,21 @@ export function OrderDetails({ orderDetails }: Order) {
                   {/* Item Details */}
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold text-gray-800">
-                      {orderDetails.order.item.name || "Item Name Unavailable"}
+                      {orderDetails.order.itemName || "Item Name Unavailable"}
                     </h2>
                     <motion.div
                       className="flex items-center gap-2 text-gray-600"
                     >
                       <DollarSign className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Price:</span>
-                      <span>${orderDetails.order.item.price || "N/A"}</span>
+                      <span>${orderDetails.order.price || "N/A"}</span>
                     </motion.div>
                     <motion.div
                       className="flex items-center gap-2 text-gray-600"
                     >
                       <Weight className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Weight:</span>
-                      <span>{orderDetails.order.item.weight || "N/A"}</span>
+                      <span>{orderDetails.order.weight || "N/A"}</span>
                     </motion.div>
                     <motion.div
                       className="flex items-center gap-2 text-gray-600"

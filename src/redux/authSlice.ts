@@ -113,11 +113,15 @@ export const authSlice = createSlice({
     updateCartId: (state, action) => {
         state.details.cartId = action.payload;
     },
+    
+    updateWallet: (state, action) => {
+        state.details.wallet = action.payload;
+    },
 
     resetAuth: () => initialState,
   },
 })
 
-export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents, updateUserEvents, updateCartId} = authSlice.actions
+export const {setAuthData, resetAuth, updateDetails, updateRole, updateOrders, updateLikedProducts, setUserEvents, updateUserEvents, updateCartId, updateWallet} = authSlice.actions
 
 export default authSlice.reducer

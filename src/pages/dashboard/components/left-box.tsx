@@ -5,9 +5,8 @@ import RedeemStoreDevileryBoy from "./delivery-boy-components/redeem-store";
 import { Calendar } from "./left-box-components/calender";import { Goals } from "./left-box-components/goals";
 import { UserCard } from "./left-box-components/user-card";
 import RedeemStoreUser from "./user-components/redeem-store";
-import { fetchRegisteredEvents } from "@/api/events/fetchRegisteredEvents";
 import { Event } from "@/types/event";
-import {  useState } from "react";
+import { useState } from "react";
 
 export function LeftBox() {
   // User

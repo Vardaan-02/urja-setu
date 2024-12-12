@@ -1,28 +1,42 @@
 import { collection, doc, setDoc } from "firebase/firestore";
-import { db } from "../../utils/firebase";
-import { Product } from "@/types/product";
+import { db, storage } from "../../utils/firebase";
+import {  Review } from "@/types/product";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-export const addProduct = async (product: Product) => {
-    try {
-        const productDocRef = doc(collection(db, "products"), product.id);
+interface formProd{
+    title: string;
+    price: number;
+    condition: string;
+    liked?: string[];
+    rating: number;
+    images: File[];
+    category: string;
+    description?: string;
+    features?: string[];
+    reviews?: Review[];
+    discount?: number;
+}
 
-        await setDoc(productDocRef, {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            condition: product.condition,
-            seller: product.seller,
-            liked: product.liked || [],
-            rating: product.rating || 0,
-            images: product.images,
-            category: product.category,
-            description: product.description || null, 
-            features: product.features || [],
-            reviews: product.reviews || [],
-            discount: product.discount || null,
+export const addProduct = async (product: formProd, sellerId: string) => {
+    try {  
+        const uploadPromises = product.images.map(async (image, index) => {
+            const storageRef = ref(storage, `products/${product.title}-${Date.now()}-${index}`);
+            const snapshot = await uploadBytes(storageRef, image);
+            return await getDownloadURL(snapshot.ref);
         });
 
-        console.log(`Product ${product.title} added successfully`);
+        const imageUrls = await Promise.all(uploadPromises);
+        const productsCollection = collection(db, "products");
+        const newProductRef = doc(productsCollection);
+        await setDoc(newProductRef, {
+            ...product,
+            images: imageUrls,
+            seller: sellerId,
+            liked: product.liked ?? [], 
+            reviews: product.reviews ?? [], 
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        });
     }
     catch(error){
         console.log("Error at adding product:", error);
