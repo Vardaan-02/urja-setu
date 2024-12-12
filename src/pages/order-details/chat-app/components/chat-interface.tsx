@@ -26,7 +26,39 @@ export default function ChatInterface() {
   const {id} = useParams();
   const order = useAppSelector(state => state.order.order);
   const chatOrder = order.find((o) => o.id === id);
-  if(chatID == ""){
+  // if(chatID == ""){
+  //   const fetchChatID = async () => {
+  //     if (!id) {
+  //       setChatID("");
+  //       return;
+  //     }
+
+  //     try {
+  //       let fetchedChatID = await getOrderById(id);
+  //       console.log(fetchedChatID);
+        
+  //       if(!fetchedChatID){
+  //         fetchedChatID = await createChat(chatOrder?.order.deliveryPerson?.id ?? "", chatOrder?.order.seller?.id ?? "", id, dispatch);
+  //       }
+  //       if(fetchedChatID){
+  //         setChatID(fetchedChatID);
+  //       }
+  //       else{
+  //         console.error("Failed to fetch or create a valid chat ID.");
+  //         setChatID("");
+  //       }
+  //     }
+  //     catch(error: any){
+  //       console.error("Error fetching chat ID:", error.message);
+  //       setChatID("");
+  //     }
+  //   };
+
+  //   fetchChatID();
+  //   // console.log(chatID);
+  // }
+
+  useEffect(() => {
     const fetchChatID = async () => {
       if (!id) {
         setChatID("");
@@ -36,27 +68,29 @@ export default function ChatInterface() {
       try {
         let fetchedChatID = await getOrderById(id);
         console.log(fetchedChatID);
-        
-        if(!fetchedChatID){
-          fetchedChatID = await createChat(chatOrder?.order.deliveryPerson?.id ?? "", chatOrder?.order.seller?.id ?? "", id, dispatch);
+
+        if (!fetchedChatID) {
+          fetchedChatID = await createChat(
+            chatOrder?.order.deliveryPerson?.id ?? "",
+            chatOrder?.order.seller?.id ?? "",
+            id,
+            dispatch
+          );
         }
-        if(fetchedChatID){
+        if (fetchedChatID) {
           setChatID(fetchedChatID);
-        }
-        else{
+        } else {
           console.error("Failed to fetch or create a valid chat ID.");
           setChatID("");
         }
-      }
-      catch(error: any){
+      } catch (error: any) {
         console.error("Error fetching chat ID:", error.message);
         setChatID("");
       }
     };
 
     fetchChatID();
-    // console.log(chatID);
-  }
+  }, [id, chatOrder, dispatch]);
    
   useEffect(() => {
     if(chatID != ""){

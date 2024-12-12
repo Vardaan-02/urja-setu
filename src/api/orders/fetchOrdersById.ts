@@ -110,6 +110,7 @@ export const fetchOrdersById = async (userId: string, dispatch: any): Promise<vo
             status: data.status || "pending",
             weight: data.weight,
             image: data.image,
+            price: data.price,
             deliveryPerson: {
               id: data.deliveryPerson?.id ?? "",
               name: data.deliveryPerson?.name,
