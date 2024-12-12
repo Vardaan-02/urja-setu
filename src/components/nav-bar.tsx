@@ -25,11 +25,14 @@ const tabs = [
   { id: "events", label: "Events" },
   { id: "marketplace", label: "Marketplace" },
   { id: "about", label: "About Us" },
-
+  { id: "image-model", label: "Waste Classification" },
 ];
 
 export default function NavBar() {
-  const {value:activeTab, setItem:setActiveTab} = useLocalStorage("tab","home");
+  const { value: activeTab, setItem: setActiveTab } = useLocalStorage(
+    "tab",
+    "home"
+  );
   const { isLogin, auth } = useIsAuthorized();
   const dispatch = useDispatch();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -64,7 +67,6 @@ export default function NavBar() {
                 {tabs.map((tab) => (
                   <Link to={`/${tab.id}`} key={tab.id} className="">
                     <TabsTrigger
-                      
                       value={tab.id}
                       className={cn(
                         "relative px-4 py-2 text-sm font-medium transition-all  shadow-md bg-white/30",
@@ -95,7 +97,14 @@ export default function NavBar() {
           </div>
 
           <div className="flex items-center gap-4 md:w-auto">
-            <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8" />
+            <Link
+              to={"/cart"}
+              onClick={() => {
+                setActiveTab("marketplace");
+              }}
+            >
+              <ShoppingCart fill="black" className="w-6 h-6 md:w-8 md:h-8" />
+            </Link>
             <Notifications />
             {!isLogin ? (
               <Button

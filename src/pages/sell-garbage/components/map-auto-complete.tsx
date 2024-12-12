@@ -5,6 +5,8 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
+import { Button } from "@/components/ui/button";
 
 // Function to dynamically load the Google Maps API script
 const loadGoogleMapsScript = () => {
@@ -41,6 +43,10 @@ export default function LocationAutocomplete({
 }: MapAutoCompleteProps) {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [apiKey] = useState(GoogleMapAPIKey); // Replace with your Google Maps API key
+
+  useCurrentLocation({ setCurrentPosition: setCoordinates });
+
+  const [used, setUsed] = useState(true);
 
   // Load Google Maps API script when the component is mounted
   useEffect(() => {
@@ -79,24 +85,45 @@ export default function LocationAutocomplete({
   }
 
   return (
-    <div className={cn("", className)}>
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        disabled={!ready}
-        placeholder="Enter a location"
-        className="p-2 border border-gray-300 rounded-md w-full"
-      />
-      {status === "OK" &&
-        data.map(({ place_id, description }) => (
-          <div
-            key={place_id}
-            onClick={() => handleSelect(description)}
-            className="cursor-pointer p-2 hover:bg-gray-200"
+    <>
+      <div className={cn("", className)}>
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={!ready || used}
+          placeholder={`${used ? "Current Location Used" : "Enter a location"}`}
+          className={`p-2 border border-gray-300 rounded-md w-full`}
+        />
+        {status === "OK" &&
+          data.map(({ place_id, description }) => (
+            <div
+              key={place_id}
+              onClick={() => handleSelect(description)}
+              className="cursor-pointer p-2 hover:bg-gray-200"
+            >
+              {description}
+            </div>
+          ))}
+      </div>
+      <div>
+        {used ? (
+          <Button
+            onClick={() => {
+              setUsed((state) => !state);
+            }}
           >
-            {description}
-          </div>
-        ))}
-    </div>
+            Enter Location
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              setUsed((state) => !state);
+            }}
+          >
+            Use Current Location
+          </Button>
+        )}
+      </div>
+    </>
   );
 }

@@ -6,10 +6,11 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import axios from "axios"
 import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
-  lat: z.number(),
-  lng: z.number(),
+  lat: z.string(),
+  lng: z.string(),
   startTime: z.string(),
   endTime: z.string(),
   panelEfficiency: z.number().min(0).max(100),
@@ -17,11 +18,12 @@ const formSchema = z.object({
 });
 
 export default function SolarForm() {
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      lat: 0,
-      lng: 0,
+      lat: "",
+      lng: "",
       startTime: "",
       endTime: "",
       panelEfficiency: 0,
@@ -29,14 +31,17 @@ export default function SolarForm() {
     },
   });
   const [arr, setArr] = useState<Array<string>>([]);
-  const API_KEY = import.meta.env.API_KEY;
+  
+  const API_KEY = "AIzaSyCJaMIn4PaigEGGmjsTHZ4mevZljfYyZpM"
+  
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const location = values.location;
+    const lat = values.lat;
+    const lng = values.lng;
     const startTime = values.startTime;
     const endTime = values.endTime;
     const panelEfficiency = values.panelEfficiency;
     const panelArea = values.panelArea;
-    const prompt = `The city is ${location}. The start time is ${startTime} and the end time is ${endTime}. the panel efficiency is ${panelEfficiency} and the panel area is ${panelArea}. Give answers for latitude, longitude and energy generated with proper units separated by *.`;
+    const prompt = `The latitude is ${lat}N and the longitude is ${lng}W. The start time is ${startTime} and the end time is ${endTime}. the panel efficiency is ${panelEfficiency} and the panel area is ${panelArea}. Give answers for energy generated with proper units in format 455*KWH.`;
     const MLModel = async () => {
       try {
         const response = await axios({
@@ -63,10 +68,10 @@ export default function SolarForm() {
       } 
     }
     MLModel();
-    console.log("latitude", arr[0]);
-    console.log("longitude", arr[1]);
-    console.log("energy", arr[2]);
-    console.log("unit", arr[3]);
+    toast({
+      title: "Approx Power Produced",
+      description: `${arr[0]} KHW`,
+    })
   }
 
   return (
@@ -91,7 +96,7 @@ export default function SolarForm() {
           />
           <FormField
             control={form.control}
-            name="lat"
+            name="lng"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Longitude</FormLabel>

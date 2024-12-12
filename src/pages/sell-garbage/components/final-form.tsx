@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +20,8 @@ import { removePhoneNumber } from "@/api/user/removePhoneNumber";
 import { useIsAuthorized } from "@/hooks/useIsAuthorized";
 import { removeAddress } from "@/api/user/removeAddress";
 import { addOrder } from "@/api/orders/addOrder";
+import axios from "axios";
+import { GoogleCloundVisionAPIKey } from "../../../../APIKey";
 
 export function FinalForm() {
   const [addresses, setAddresses] = useState<
@@ -43,12 +43,61 @@ export function FinalForm() {
     string | null
   >(null);
 
+  const [labels, setLabels] = useState<string[]>([]);
+
+  const analyzeImage = async (data:FormValues) => {
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(data.image);
+
+      const processImage = new Promise<void>((resolve, reject) => {
+        reader.onloadend = async () => {
+          try {
+            const base64Image = reader.result?.toString().split(",")[1];
+
+            const response = await axios.post(
+              `https://vision.googleapis.com/v1/images:annotate?key=${GoogleCloundVisionAPIKey}`,
+              {
+                requests: [
+                  {
+                    image: {
+                      content: base64Image,
+                    },
+                    features: [
+                      {
+                        type: "LABEL_DETECTION",
+                        maxResults: 10,
+                      },
+                    ],
+                  },
+                ],
+              }
+            );
+
+            const labels = response.data.responses[0]?.labelAnnotations?.map(
+              (annotation: { description: string }) => annotation.description
+            );
+            setLabels(labels);
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        };
+      });
+
+      await processImage;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const auth = useIsAuthorized();
-  if(!auth.auth.uid){
+  if (!auth.auth.uid) {
     console.log("Unauthorized");
     return;
   }
 
+  
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -62,13 +111,15 @@ export function FinalForm() {
 
   const onSubmit = async (data: FormValues) => {
     console.log(data);
+    analyzeImage(data);
+    console.log(labels);
     const seller = {
       id: auth.auth.uid ?? "",
       name: auth.auth.name ?? "",
       image: auth.auth.photoURL ?? "",
       phone: data.phoneNumbers ?? "",
-      address: data.addresses ?? ""
-    }
+      address: data.addresses ?? "",
+    };
     await addOrder(seller, data.itemName, data.weight, data.image);
     // Handle form submission
   };
@@ -106,11 +157,12 @@ export function FinalForm() {
       city: "",
       coordinates: {
         lat: -1,
-        lng: -1
-      }
+        lng: -1,
+      },
     };
-    const updatedAddresses = addresses.filter((address) => {address.id !== id;
-      if(address.id == id) delAddress = address;
+    const updatedAddresses = addresses.filter((address) => {
+      address.id !== id;
+      if (address.id == id) delAddress = address;
     });
     setAddresses(updatedAddresses);
     form.setValue("addresses", updatedAddresses);
@@ -121,20 +173,17 @@ export function FinalForm() {
       address: delAddress.address,
       state: delAddress.state,
       city: delAddress.city,
-      coordinates: delAddress.coordinates
-    }
+      coordinates: delAddress.coordinates,
+    };
     await removeAddress(auth.auth.uid ?? "", remAddress);
-    
-    
   };
 
   const deletePhoneNumber = async (id: string) => {
     let phone = "";
-    const updatedPhoneNumbers = phoneNumbers.filter(
-      (phoneNumber) => {phoneNumber.id !== id
-        if(phoneNumber.id == id) phone = phoneNumber.value;
-        }
-    );
+    const updatedPhoneNumbers = phoneNumbers.filter((phoneNumber) => {
+      phoneNumber.id !== id;
+      if (phoneNumber.id == id) phone = phoneNumber.value;
+    });
     await removePhoneNumber(auth.auth.uid ?? "", phone);
     setPhoneNumbers(updatedPhoneNumbers);
     form.setValue("phoneNumbers", updatedPhoneNumbers);

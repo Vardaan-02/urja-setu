@@ -7,7 +7,7 @@ import { UserCard } from "./left-box-components/user-card";
 import RedeemStoreUser from "./user-components/redeem-store";
 import { fetchRegisteredEvents } from "@/api/events/fetchRegisteredEvents";
 import { Event } from "@/types/event";
-import { useMemo, useState } from "react";
+import {  useState } from "react";
 
 export function LeftBox() {
   // User
@@ -46,16 +46,15 @@ export function LeftBox() {
       type: "type3",
     };
   });
-  const type = ['one','two'];
 
   return (
     <Box className="flex flex-col gap-2 backdrop-blur-sm rounded-lg p-4 bg-green-50 shadow-xl">
       <UserCard user={user} />
       <Calendar markedDates={markedDates} />
       <Goals better={20} title="Weekly target" progress={12} total={20} trend="up"/>
-      {type.length==1 && <RedeemStoreUser/>}
-      {type.length==2 &&<RedeemStoreCompany/>}
-      {type.length==1 &&<RedeemStoreDevileryBoy/>}
+      {auth.auth.role==="User" && <RedeemStoreUser/>}
+      {auth.auth.role==="Organization" &&<RedeemStoreCompany/>}
+      {auth.auth.role==="DeliveryPerson" &&<RedeemStoreDevileryBoy/>}
     </Box>
   );
 }

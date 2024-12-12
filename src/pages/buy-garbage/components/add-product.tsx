@@ -43,8 +43,7 @@ export default function AddProduct() {
     condition: z.string().nonempty({ message: "Condition is required." }),
     category: z.string().nonempty({ message: "Category is required." }),
     discount: z
-      .string()
-      .regex(/^\d+$/, { message: "Discount must be a number." })
+      .number()
       .optional(),
     files: z.array(z.instanceof(File)).optional(),
   });
@@ -58,7 +57,7 @@ export default function AddProduct() {
       price: 0,
       condition: "",
       category: "",
-      discount: "",
+      discount: 0,
       files: [],
     },
   });
@@ -247,7 +246,7 @@ export default function AddProduct() {
                 <FormItem>
                   <Label htmlFor="discount">Discount</Label>
                   <FormControl>
-                    <Input {...field} id="discount" placeholder="e.g., 10" />
+                    <Input {...field} type="number" id="discount" placeholder="e.g., 10" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
