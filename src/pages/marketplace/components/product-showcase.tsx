@@ -19,7 +19,7 @@ export default function ProductShowcase() {
   const products = useAppSelector((state) => state.product);
   const [categories, setCategories] = React.useState<Array<string>>();
   const navigate = useNavigate();
-  const [priceRange, setPriceRange] = React.useState([0, 1000])
+  const [priceRange, setPriceRange] = React.useState([0, 100])
   const handleCategoryChange = (newCategory: string) => {
     navigate(`/marketplace/category/${newCategory}/page/1`);
   };
